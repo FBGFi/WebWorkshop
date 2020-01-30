@@ -1,0 +1,1 @@
+Folder for visual workers to share materials in.
