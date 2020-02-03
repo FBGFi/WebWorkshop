@@ -1,5 +1,8 @@
 # WebWorkshop
-Repo for LAB Web Workshop course
+Repo for LAB Web Workshop course.
+
+Purpose for the project is to build a mobile app using React Native in order
+to provide easily accessible information for competitors in a sports event.
 
 Versions:
     
@@ -32,3 +35,13 @@ Handy extensions for VS code:
     - ES7 React/Redux/GraphQL/React-Native snippets
     
     - React Native Tools
+
+# Features to be included in the app
+
+Schedules for all the sports.
+
+Notification system.
+
+Map of the competitionarea.
+
+Display of placements in the sports.
