@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, Button, FlatList } from 'react-native';
+
 import GoalItem from './components/GoalItem';
 import GoalInput from './components/GoalInput';
 
@@ -11,6 +12,7 @@ export default function App() {
   // 2) hook name to be called to change the first parameter
   // 3) inside useState brackets the variable type to be passed for the hook
   const [courseGoals, setCourseGoals] = useState([]);
+  const [isAddMode, setIsAddMode] = useState(false);
 
   const addGoalHandler = goalTitle => {
     // debugging with console.log will send the message
@@ -26,6 +28,7 @@ export default function App() {
     // instead of string we add an object here, so every goal
     // has a key-value pair
     setCourseGoals(currentGoals => [...currentGoals, { id: Math.random().toString(), value: goalTitle }]);
+    setIsAddMode(false);
   };
 
   const removeGoalHandler = goalId => {
@@ -34,8 +37,13 @@ export default function App() {
     });
   }
 
+  const cancelGoalAddition = () => {
+    setIsAddMode(false);
+  };
+
   return (
     <View style={styles.screen}>
+      <Button title="Add New Goal" onPress={() => setIsAddMode(true)} />
       {/*
           Comments inside React native components are done like this.
 
@@ -50,7 +58,7 @@ export default function App() {
       */}
 
       {/* You can add your own properties to be passed on for the components */}
-      <GoalInput onAddGoal={addGoalHandler} />
+      <GoalInput visible={isAddMode} onAddGoal={addGoalHandler} onCancel={cancelGoalAddition} />
 
       {/*
           FlatList is a good option for long lists, unlike ScrollView, it doesn't render all the elements,
