@@ -15,6 +15,9 @@ export default function App() {
   const [isAddMode, setIsAddMode] = useState(false);
 
   const addGoalHandler = goalTitle => {
+    if(goalTitle.length === 0){
+      return;
+    }
     // debugging with console.log will send the message
     // to your terminal, even if executed on mobile device
     // console.log(enteredGoal);
