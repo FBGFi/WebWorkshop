@@ -7,13 +7,14 @@ import InfoScreen from './screens/InfoScreen';
 import MapScreen from "./screens/MapScreen";
 import ScheduleScreen from "./screens/ScheduleScreen";
 
+import Events from './data/events';
+
 export default function App() {
   let content = <InfoScreen/>;
 
   return (
     <View style={styles.container}>
       {content}
-      
     </View>
   );
 }
