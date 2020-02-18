@@ -1,10 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
+//Component import
+
+//Screens import
+import InfoScreen from './screens/InfoScreen';
+import MapScreen from "./screens/MapScreen";
+import ScheduleScreen from "./screens/ScheduleScreen";
 
 export default function App() {
+  let content = <InfoScreen/>;
+
   return (
     <View style={styles.container}>
-      <Text>Waiting for the day this app is done</Text>
+      {content}
+      
     </View>
   );
 }
