@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, View, StatusBar } from 'react-native';
 //Component import
 import Footer from './components/footer.js';
@@ -11,14 +11,24 @@ import ScheduleScreen from "./screens/ScheduleScreen";
 import Events from './data/events';
 
 export default function App() {
+  const [contents, setContents] = useState('');
   // components to variables
-  let content = <InfoScreen/>;
-  let footer = <Footer/>;
+  let content;
+  if(contents == '' || contents == 'info')
+  {
+    content = <InfoScreen/>;
+  } 
+  else if(contents == 'map')
+  {
+    content = <MapScreen />
+  }
+
+  
 
   return (
     <View style={styles.container}>
       {content}
-      {footer}
+      <Footer contentSetting = {setContents} />
     </View>
   );
 }

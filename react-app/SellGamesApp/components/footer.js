@@ -5,19 +5,19 @@ const Footer = props => {
   return (
     <View style = {styles.footer}>
       <Button
-        title="blyat"
+        title="Info"
         color="black"
-        onPress={() => console.log("button 1 pressed")}
+        onPress={() => props.contentSetting('info')}
+      />
+      <Button
+        title="Map"
+        color="black"
+        onPress={() => props.contentSetting('map')}
       />
       <Button
         title="blyat"
         color="black"
-        onPress={() => console.log("button 2 pressed")}
-      />
-      <Button
-        title="blyat"
-        color="black"
-        onPress={() => console.log("button 3 pressed")}
+        onPress={() => console.log("asd")}
       />
       <Button
         title="blyat"
