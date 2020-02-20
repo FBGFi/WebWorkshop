@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { Text, View } from 'react-native';
 
-
 const Events = props => {
   const [dataArray, setDataArray] = useState('');
   async function getData() {
@@ -14,10 +13,10 @@ const Events = props => {
               }); 
           const json = await response.json();
           let returnValue = "";
-          let length = Object.keys(json.data[0]).length;
+          let length = Object.keys(json.data).length;
           for(let i = 0; i < length; i++)
           {
-            returnValue += json.data[i].id;
+            returnValue += json.data[i].id + " ";
             
           }
           setDataArray(returnValue);

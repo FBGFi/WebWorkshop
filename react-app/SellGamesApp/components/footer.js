@@ -20,7 +20,7 @@ const Footer = props => {
         onPress={() => console.log("asd")}
       />
       <Button
-        title="blyat"
+        title="javascript:null(0)"
         color="black"
         onPress={() => console.log("button 4 pressed")}
       />

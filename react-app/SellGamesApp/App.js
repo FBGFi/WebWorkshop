@@ -16,7 +16,7 @@ export default function App() {
   let content;
   if(contents == '' || contents == 'info')
   {
-    content = <InfoScreen/>;
+    content = <InfoScreen styles={styles.infoScreen}/>;
   } 
   else if(contents == 'map')
   {
@@ -41,4 +41,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  infoScreen:{
+    backgroundColor: "blue"
+  }
 });
