@@ -7,6 +7,7 @@ import Footer from './components/footer.js';
 import InfoScreen from './screens/InfoScreen';
 import MapScreen from "./screens/MapScreen";
 import ScheduleScreen from "./screens/ScheduleScreen";
+import NotificationsScreen from "./screens/NotificationsScreen";
 
 import Events from './data/events';
 
@@ -14,7 +15,7 @@ export default function App() {
   const [contents, setContents] = useState('');
   // components to variables
   let content;
-  if(contents == '' || contents == 'info')
+  if(contents == 'info')
   {
     content = <InfoScreen styles={styles.infoScreen}/>;
   } 
@@ -22,13 +23,18 @@ export default function App() {
   {
     content = <MapScreen />
   }
+  else
+  {
+    //content = <NotificationsScreen />
+    content = <InfoScreen styles={styles.infoScreen}/>;
+  }
 
   
 
   return (
     <View style={styles.container}>
       {content}
-      <Footer contentSetting = {setContents} />
+      {/*<Footer contentSetting = {setContents} />*/}
     </View>
   );
 }

@@ -5,7 +5,7 @@ import { Card } from 'react-native-elements';
 const Cardbox = props => {
   return (
     <View>
-      <Card title="Hello world!">
+      <Card title={props.title}>
             {
               <View>
                 <Text>
