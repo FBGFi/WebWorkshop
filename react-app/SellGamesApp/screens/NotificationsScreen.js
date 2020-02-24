@@ -1,29 +1,50 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, FlatList, Button} from 'react-native';
 
-import Card from "../components/card";
+import Card from "../components/Card";
 
 const NotificationsScreen = props => {
-    const [events, setEvents] = useState([]);
-    async function getData() {
-      const response = await fetch("http://35.217.19.28/sell-games-2020/public/index.php/api/events", {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    }   
-                }); 
-                console.log("lol");
+    //const [events, setEvents] = useState([]);
+    let events;
+    
+    async function getDataAsync() {
+        //let eventArray;
+        try {
+            const response = await fetch("http://35.217.19.28/sell-games-2020/public/index.php/api/events", {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }   
+                })
+                 
             const json = await response.json();
             let length = Object.keys(json.data).length;
-            let eventArray = [];
-            console.log("lol" + length);
+            
+            let events = new Array(length);
+            
+            
             for(let i = 0; i < length; i++)
             {
-                eventArray += { id: "" + json.data[i].id, title: json.data[i].name, location: json.data[i].venue.name };      
+                events[i] = {id: ("" + json.data[i].id), title: ("" + json.data[i].name), location: ("" + json.data[i].venue.name) };                     
             }
-            setEvents(eventArray);
+            
+        } catch (error) {
+            events = [{id: "error", title: "Something went wrong :(", location: error.message}];
+        }
+            
     };
+   
+    getDataAsync();
+
+    for(let i = 0; i < 5; i++)
+    {
+        console.log(events);
+        
+        setTimeout(function(){
+        }, 1000);
+    }   
+    
     return (
         <View style={styles.screen}>
             <Text>Something</Text>
@@ -31,7 +52,6 @@ const NotificationsScreen = props => {
         data={events}
         renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.location} />
         } />
-        <Button title="Get data" onPress={getData} />
         </View>
     );
 }

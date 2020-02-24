@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { StyleSheet, View, StatusBar } from 'react-native';
 //Component import
-import Footer from './components/footer.js';
+import Footer from './components/Footer.js';
 
 //Screens import
 import InfoScreen from './screens/InfoScreen';
@@ -17,7 +17,7 @@ export default function App() {
   let content;
   if(contents == 'info')
   {
-    content = <InfoScreen styles={styles.infoScreen}/>;
+    content = <InfoScreen style={styles.infoScreen}/>;
   } 
   else if(contents == 'map')
   {
@@ -26,7 +26,7 @@ export default function App() {
   else
   {
     //content = <NotificationsScreen />
-    content = <InfoScreen styles={styles.infoScreen}/>;
+    content = <InfoScreen style={styles.infoScreen}/>;
   }
 
   
@@ -34,7 +34,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       {content}
-      {/*<Footer contentSetting = {setContents} />*/}
+      <Footer contentSetting = {setContents} />
     </View>
   );
 }
