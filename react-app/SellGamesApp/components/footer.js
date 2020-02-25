@@ -15,9 +15,9 @@ const Footer = props => {
         onPress={() => props.contentSetting('map')}
       />
       <Button
-        title="blyat"
+        title="Notifications"
         color="black"
-        onPress={() => console.log("asd")}
+        onPress={() => props.contentSetting('notifications')}
       />
       <Button
         title="javascript:null(0)"

@@ -13,6 +13,8 @@ import Events from './data/events';
 
 export default function App() {
   const [contents, setContents] = useState('');
+  // save events here to reduce time for rendering
+  const [allEvents, setAllEvents] = useState([]);
   // components to variables
   let content;
   if(contents == 'info')
@@ -23,13 +25,14 @@ export default function App() {
   {
     content = <MapScreen />
   }
+  else if(contents == 'notifications')
+  {
+    content = <NotificationsScreen events={allEvents} setEvents={setAllEvents}/>
+  }
   else
   {
-    //content = <NotificationsScreen />
     content = <InfoScreen style={styles.infoScreen}/>;
   }
-
-  
 
   return (
     <View style={styles.container}>

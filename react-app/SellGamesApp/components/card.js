@@ -6,13 +6,11 @@ const Cardbox = props => {
   return (
     <View>
       <Card title={props.title}>
-            {
               <View>
                 <Text>
                   {props.textContents}
                 </Text>
               </View>
-            }
       </Card>
     </View>
   );

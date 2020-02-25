@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, ScrollView, Animated, Dimensions} from 'react-native';
+import { StyleSheet, ScrollView, Animated, Dimensions} from 'react-native';
 
 import Colors from '../constants/colors';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 
 const MapScreen = props => {
-    
+    // not perfect, 2 scrollsviews allow both horizontal and vertical scrolling
     return (
         <ScrollView style={styles.screen} horizontal={true}>
             <ScrollView>
