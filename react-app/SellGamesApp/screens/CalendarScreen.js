@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
 import Card from "../components/Card";
 import { render } from 'react-dom';
 
-const NotificationsScreen = props => {
+const CalendarScreen = props => {
     const [events, setEvents] = useState([]);
     const [rendered, isRendered] = useState(false);
 
@@ -26,12 +26,18 @@ const NotificationsScreen = props => {
 
 
             for (let i = 0; i < length; i++) {
-                eventArray[i] = { id: ("" + json.data[i].id), title: ("" + json.data[i].name), location: ("" + json.data[i].venue.name) };
+                
+                eventArray[i] = { 
+                    id: ("" + json.data[i].id), 
+                    title: ("" + json.data[i].name), 
+                    time: ("" + json.data[i].start_time + " - " + json.data[i].end_time), 
+                    date: ("" + json.data[i].date) 
+                };
             }
             props.setEvents(eventArray);
 
         } catch (error) {
-            eventArray = [{ id: "error", title: "Something went wrong :(", location: error.message }];
+            eventArray = [{ id: "error", title: "Something went wrong :(", time: error.message }];
         }
         setEvents(eventArray);
         
@@ -41,7 +47,7 @@ const NotificationsScreen = props => {
         isRendered(true);
         getDataAsync();
     }
-    else if(!rendered && props.events.length > 0){ 
+    else if(!rendered && props.events.length > 0){   
         isRendered(true);
         setEvents(props.events);
     }
@@ -49,7 +55,7 @@ const NotificationsScreen = props => {
     return (
             <FlatList keyExtractor={(item, index) => item.id}
                 data={events}
-                renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.location} />
+                renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.time + "\n" + itemData.item.date} />
                 } />
     );
 
@@ -60,4 +66,4 @@ const styles = StyleSheet.create({
         backgroundColor: "red"
     }
 });
-export default NotificationsScreen;
+export default CalendarScreen;

@@ -8,18 +8,20 @@ import InfoScreen from './screens/InfoScreen';
 import MapScreen from "./screens/MapScreen";
 import ScheduleScreen from "./screens/ScheduleScreen";
 import NotificationsScreen from "./screens/NotificationsScreen";
+import CalendarScreen from "./screens/CalendarScreen";
 
 import Events from './data/events';
 
 export default function App() {
   const [contents, setContents] = useState('');
   // save events here to reduce time for rendering
-  const [allEvents, setAllEvents] = useState([]);
+  const [notificationEvents, setNotificationEvents] = useState([]);
+  const [calendarEvents, setCalendarEvents] = useState([]);
   // components to variables
   let content;
-  if(contents == 'info')
+  if(contents == 'calendar')
   {
-    content = <InfoScreen style={styles.infoScreen}/>;
+    content = <CalendarScreen events={calendarEvents} setEvents={setCalendarEvents} />;
   } 
   else if(contents == 'map')
   {
@@ -27,7 +29,7 @@ export default function App() {
   }
   else if(contents == 'notifications')
   {
-    content = <NotificationsScreen events={allEvents} setEvents={setAllEvents}/>
+    content = <NotificationsScreen events={notificationEvents} setEvents={setNotificationEvents}/>
   }
   else
   {

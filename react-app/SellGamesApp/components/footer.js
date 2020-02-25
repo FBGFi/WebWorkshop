@@ -20,9 +20,9 @@ const Footer = props => {
         onPress={() => props.contentSetting('notifications')}
       />
       <Button
-        title="javascript:null(0)"
+        title="Calendar"
         color="black"
-        onPress={() => console.log("button 4 pressed")}
+        onPress={() => props.contentSetting('calendar')}
       />
     </View>
   );
