@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, } from 'react-native';
+import { StyleSheet, Text, View, Button, } from 'react-native';
 import { Card } from 'react-native-elements';
 
 const Cardbox = props => {
@@ -10,6 +10,7 @@ const Cardbox = props => {
                 <Text>
                   {props.textContents}
                 </Text>
+                {props.button ? <Button title={props.buttonTitle} onPress={props.buttonOnPress.bind(this,props.id)}/> : null}
               </View>
       </Card>
     </View>

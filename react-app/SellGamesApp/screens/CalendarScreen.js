@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, ScrollView, TouchableOpacity, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Button, ScrollView, TouchableOpacity, SafeAreaView, TouchableWithoutFeedback, AsyncStorage, Alert } from 'react-native';
 
 import Card from "../components/Card";
 
@@ -14,11 +14,109 @@ const CalendarScreen = props => {
     const [saturdayButton, setSaturdayButton] = useState('+');
     const [sundayButton, setSundayButton] = useState('+');
 
-    const [eventTabBckgrnd, setEventTabBckgrnd] = useState(Colors.primary.white);
-    const [userTabBckgrnd, setUserTabBckgrnd] = useState('#ccc');
+    const [eventTabBckgrnd, setEventTabBckgrnd] = useState(Colors.primary.yellow);
+    const [userTabBckgrnd, setUserTabBckgrnd] = useState('#ab8b20');
 
     const [calendarDisplay, setCalendarDisplay] = useState('flex');
     const [userDisplay, setUserDisplay] = useState('none');
+
+    const [userContent, setUserContent] = useState([]);
+    const [savedContent, setSavedContent] = useState(0);
+    const [dataToBeFound, setDataToBeFound] = useState(true);
+   
+    if(userContent.length <= 0 && dataToBeFound)
+    {
+        console.log(dataToBeFound);
+        
+        retrieveData();
+    }
+    if(userContent.length != savedContent)
+    {
+        storeData();
+    }
+
+    async function retrieveData(){
+        try {
+          const value = await AsyncStorage.getItem('USER_SCHEDULES');
+          console.log(value);
+          
+          if(value.length > 2) {
+            setUserContent(JSON.parse(value));
+            setSavedContent(JSON.parse(value).length);
+          }
+          else{
+              setDataToBeFound(false);
+          }
+        } catch(e) {
+          console.log(e);
+          
+        }
+    }
+
+    async function storeData(){
+        try {
+            setSavedContent(userContent.length);
+            await AsyncStorage.setItem('USER_SCHEDULES', JSON.stringify(userContent));
+                   
+        } catch (e) {
+            console.log(e);      
+        }
+    }
+
+    function checkUserData(contentId){                        
+        let result = {};
+        
+        // check if already added to local storage        
+        result = userContent.find(obj => {
+            return obj.id === contentId
+        });
+        
+        if(result != undefined && Object.keys(result).length > 0){
+            Alert.alert(
+              'Already added!',
+              'This schedule has already been added!',
+              [
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
+              ],
+              { cancelable: false }
+            );
+            return;
+        }
+
+        while(true){            
+            result = fridayContent.find(obj => {
+                return obj.id === contentId
+            });
+            if(result != undefined) {break;}      
+            result = saturdayContent.find(obj => {
+                return obj.id === contentId
+            });
+            if(result != undefined) {break;}
+
+            result = sundayContent.find(obj => {
+                return obj.id === contentId
+              });
+            if(result != undefined) {break;}
+
+            break;
+        }
+        
+        // no local storage exists
+        if(userContent.length <= 0){
+            setUserContent([result]);
+        }
+        // exists
+        else{            
+            setUserContent(currentContent => [...currentContent, result]);
+        }
+    }
+
+    function removeFromUserContent(contentId){
+        let filtered = userContent.filter(obj => {
+            return obj.id !== contentId;
+        });
+        setUserContent(filtered);       
+    }
 
     async function getDataAsync(date, contentToSet) {
         let eventArray;
@@ -68,8 +166,8 @@ const CalendarScreen = props => {
     }
 
     function changeTabs(highLight, fadeOut, displayContent, hideContent){
-        highLight(Colors.primary.white);
-        fadeOut('#ccc');
+        highLight(Colors.primary.yellow);
+        fadeOut('#ab8b20');
         displayContent('flex');
         hideContent('none');
     }
@@ -94,7 +192,7 @@ const CalendarScreen = props => {
                     
                     <FlatList horizontal keyExtractor={(item, index) => item.id}
                     data={fridayContent}
-                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.time} />
+                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.time} button={true} buttonTitle="Add to calendar" buttonOnPress={checkUserData} id={itemData.item.id}/>
                     } />
 
                 </SafeAreaView>
@@ -109,7 +207,7 @@ const CalendarScreen = props => {
 
                     <FlatList horizontal keyExtractor={(item, index) => item.id}
                     data={saturdayContent}
-                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.time} />
+                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.time} button={true} buttonTitle="Add to calendar" buttonOnPress={checkUserData} id={itemData.item.id} />
                     } />
 
                 </SafeAreaView>
@@ -124,14 +222,22 @@ const CalendarScreen = props => {
 
                     <FlatList horizontal keyExtractor={(item, index) => item.id}
                     data={sundayContent}
-                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.time} />
+                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.time} button={true} buttonTitle="Add to calendar" buttonOnPress={checkUserData} id={itemData.item.id} />
                     } />
 
                 </SafeAreaView>
             </View>
 
             <View style={{...{display: userDisplay}, ...styles.userScheduleView}}>
-                    <Button title="lol" />
+                    {
+                        userContent.length > 0 ? 
+                            <FlatList keyExtractor={(item, index) => item.id}
+                            data={userContent}
+                            renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.time} button={true} buttonTitle="Remove" buttonOnPress={removeFromUserContent} id={itemData.item.id} />
+                            } /> 
+                        : 
+                            <Card title="Nothing saved yet!" textContents="Add items from the calendar"/>
+                    }
             </View>
 
         </ScrollView>
@@ -167,7 +273,7 @@ const styles = StyleSheet.create({
     },
     headerView: {
         flexDirection: 'row',
-        backgroundColor: Colors.primary.white,
+        backgroundColor: Colors.primary.yellow,
         minHeight: 50
     },
     contentView: {
