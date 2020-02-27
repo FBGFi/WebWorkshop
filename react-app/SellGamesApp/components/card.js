@@ -5,7 +5,7 @@ import { Card } from 'react-native-elements';
 const Cardbox = props => {
   return (
     <View>
-      <Card title={props.title}>
+      <Card title={props.title} containerStyle={{margin: 2}}>
               <View>
                 <Text>
                   {props.textContents}

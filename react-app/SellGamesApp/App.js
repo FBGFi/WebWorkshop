@@ -21,7 +21,7 @@ export default function App() {
   let content;
   if(contents == 'calendar')
   {
-    content = <CalendarScreen events={calendarEvents} setEvents={setCalendarEvents} />;
+    content = <CalendarScreen />;
   } 
   else if(contents == 'map')
   {
