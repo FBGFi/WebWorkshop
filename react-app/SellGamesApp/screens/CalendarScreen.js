@@ -1,35 +1,77 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, ScrollView, TouchableOpacity, SafeAreaView, TouchableWithoutFeedback, AsyncStorage, Alert } from 'react-native';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 import Card from "../components/Card";
 
 import Colors from "../constants/colors";
 
+const VirtualList = props => {
+    if(props.horizontal){       
+        return (
+            <FlatList horizontal keyExtractor={(item, index) => item.id}
+                        data={props.content}
+                        renderItem={itemData => 
+                            <Card 
+                            title={itemData.item.title} 
+                            textContents={itemData.item.time} 
+                            button={true} 
+                            buttonTitle={props.buttonTitle} 
+                            buttonOnPress={props.buttonOnPress} 
+                            id={itemData.item.id}/>
+                        } />);
+    }
+    else{    
+        return (
+            <FlatList keyExtractor={(item, index) => item.id}
+                        data={props.content}
+                        renderItem={itemData => 
+                            <Card 
+                            title={itemData.item.title} 
+                            textContents={itemData.item.time} 
+                            button={true} 
+                            buttonTitle={props.buttonTitle} 
+                            buttonOnPress={props.buttonOnPress} 
+                            id={itemData.item.id}/>
+                        } />);
+    }
+    
+};
+
 const CalendarScreen = props => {
+    // different states for all the days, no need to fetch all if user only wants friday
     const [fridayContent, setFridayContent] = useState([]);
     const [saturdayContent, setSaturdayContent] = useState([]);
     const [sundayContent, setSundayContent] = useState([]);
 
+    // this not ideal? this just sets the "icon" for the expanding button
     const [fridayButton, setFridayButton] = useState('+');
     const [saturdayButton, setSaturdayButton] = useState('+');
     const [sundayButton, setSundayButton] = useState('+');
 
+    // again, other solutions were buggy, so handling the color of the tab buttons this way
     const [eventTabBckgrnd, setEventTabBckgrnd] = useState(Colors.primary.yellow);
     const [userTabBckgrnd, setUserTabBckgrnd] = useState('#ab8b20');
 
+    // changes the visibility of tabs
     const [calendarDisplay, setCalendarDisplay] = useState('flex');
     const [userDisplay, setUserDisplay] = useState('none');
 
+    // array for users own schedules
     const [userContent, setUserContent] = useState([]);
+    // needed this length to be saved here for comparison with userContent length, otherwise data saving wouldnt work correctly
     const [savedContent, setSavedContent] = useState(0);
+    // program got into rendering loop without a flag to indicate if data was already retrieved from local storage
     const [dataToBeFound, setDataToBeFound] = useState(true);
+
+    const [alert, showAlert] = useState(false);
    
+    // empty array and havent already checked if something to be found
     if(userContent.length <= 0 && dataToBeFound)
-    {
-        console.log(dataToBeFound);
-        
+    {       
         retrieveData();
     }
+    // on re-render if length of users array is different than savedContent, go to save the data
     if(userContent.length != savedContent)
     {
         storeData();
@@ -38,8 +80,8 @@ const CalendarScreen = props => {
     async function retrieveData(){
         try {
           const value = await AsyncStorage.getItem('USER_SCHEDULES');
-          console.log(value);
           
+          // if theres empty array, it returns [] which is 2 characters long
           if(value.length > 2) {
             setUserContent(JSON.parse(value));
             setSavedContent(JSON.parse(value).length);
@@ -76,13 +118,14 @@ const CalendarScreen = props => {
               'Already added!',
               'This schedule has already been added!',
               [
-                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
+                {text: 'Cancel', onPress: () => ()=>{}, style: 'cancel'}
               ],
-              { cancelable: false }
+              { cancelable: true }
             );
             return;
         }
 
+        // not ideal?
         while(true){            
             result = fridayContent.find(obj => {
                 return obj.id === contentId
@@ -109,6 +152,7 @@ const CalendarScreen = props => {
         else{            
             setUserContent(currentContent => [...currentContent, result]);
         }
+        showAlert(true);
     }
 
     function removeFromUserContent(contentId){
@@ -118,6 +162,7 @@ const CalendarScreen = props => {
         setUserContent(filtered);       
     }
 
+    // date is a number from 15-17, contentToSet is one of data arrays state changers
     async function getDataAsync(date, contentToSet) {
         let eventArray;
         try {
@@ -151,6 +196,7 @@ const CalendarScreen = props => {
         
     };
 
+    // oldContent is the dates data array, contentToShow is the statechanger for the array, buttonToChange is statechanger for the dates expand button, date is 15-17
     async function showContent(oldContent, contentToShow, buttonToChange, date){
         
         if(oldContent.length <= 0)
@@ -165,6 +211,7 @@ const CalendarScreen = props => {
         }
     }
 
+    // which tab button to highlight and fadeout, and which content to hide and which to display
     function changeTabs(highLight, fadeOut, displayContent, hideContent){
         highLight(Colors.primary.yellow);
         fadeOut('#ab8b20');
@@ -189,11 +236,7 @@ const CalendarScreen = props => {
                             <Text style={styles.textStyle}>{fridayButton}</Text>
                         </TouchableOpacity>
                     </View>
-                    
-                    <FlatList horizontal keyExtractor={(item, index) => item.id}
-                    data={fridayContent}
-                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.time} button={true} buttonTitle="Add to calendar" buttonOnPress={checkUserData} id={itemData.item.id}/>
-                    } />
+                    <VirtualList buttonOnPress={checkUserData} content={fridayContent} buttonTitle="Add to calendar" horizontal={true} />                   
 
                 </SafeAreaView>
 
@@ -204,11 +247,7 @@ const CalendarScreen = props => {
                             <Text style={styles.textStyle}>{saturdayButton}</Text>
                         </TouchableOpacity>
                     </View>
-
-                    <FlatList horizontal keyExtractor={(item, index) => item.id}
-                    data={saturdayContent}
-                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.time} button={true} buttonTitle="Add to calendar" buttonOnPress={checkUserData} id={itemData.item.id} />
-                    } />
+                    <VirtualList buttonOnPress={checkUserData} content={saturdayContent} buttonTitle="Add to calendar" horizontal={true} />
 
                 </SafeAreaView>
 
@@ -219,11 +258,7 @@ const CalendarScreen = props => {
                             <Text style={styles.textStyle}>{sundayButton}</Text>
                         </TouchableOpacity>
                     </View>
-
-                    <FlatList horizontal keyExtractor={(item, index) => item.id}
-                    data={sundayContent}
-                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.time} button={true} buttonTitle="Add to calendar" buttonOnPress={checkUserData} id={itemData.item.id} />
-                    } />
+                    <VirtualList buttonOnPress={checkUserData} content={sundayContent} buttonTitle="Add to calendar" horizontal={true}/>
 
                 </SafeAreaView>
             </View>
@@ -231,15 +266,26 @@ const CalendarScreen = props => {
             <View style={{...{display: userDisplay}, ...styles.userScheduleView}}>
                     {
                         userContent.length > 0 ? 
-                            <FlatList keyExtractor={(item, index) => item.id}
-                            data={userContent}
-                            renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.time} button={true} buttonTitle="Remove" buttonOnPress={removeFromUserContent} id={itemData.item.id} />
-                            } /> 
+                            <VirtualList buttonOnPress={removeFromUserContent} content={userContent} buttonTitle="Remove" horizontal={false}/>
                         : 
                             <Card title="Nothing saved yet!" textContents="Add items from the calendar"/>
                     }
             </View>
 
+            <AwesomeAlert
+                show={alert}
+                showProgress={false}
+                title="Added!"
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={false}
+                cancelText="Cancel"
+                confirmButtonColor="#DD6B55"
+                onCancelPressed={() => {
+                    showAlert(false);
+                }}
+                />
         </ScrollView>
     );
 
