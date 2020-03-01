@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Button, ScrollView } from 'react-native';
 
+import AwesomeAlert from 'react-native-awesome-alerts';
 import Card from "../components/Card";
-import { render } from 'react-dom';
 
 const NotificationsScreen = props => {
     const [events, setEvents] = useState([]);
     const [rendered, isRendered] = useState(false);
+    const [progress, showProgress] = useState(false);
 
     async function getDataAsync() {
+        showProgress(true);
         let eventArray;
         try {
             const response = await fetch("http://35.217.19.28/sell-games-2020/public/index.php/api/events", {
@@ -34,6 +36,7 @@ const NotificationsScreen = props => {
             eventArray = [{ id: "error", title: "Something went wrong :(", location: error.message }];
         }
         setEvents(eventArray);
+        showProgress(false);
         
     };
 
@@ -47,10 +50,20 @@ const NotificationsScreen = props => {
     }
     
     return (
+        <ScrollView>
             <FlatList keyExtractor={(item, index) => item.id}
                 data={events}
                 renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.location} />
                 } />
+            <AwesomeAlert 
+                show={progress}
+                showProgress={true}
+                title="Loading..."
+                closeOnTouchOutside={false}
+                closeOnHardwareBackPress={false}
+                showCancelButton={false}
+                showConfirmButton={false}/>
+        </ScrollView>
     );
 
 }

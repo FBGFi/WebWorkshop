@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, ScrollView, TouchableOpacity, SafeAreaView, TouchableWithoutFeedback, AsyncStorage, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Button, ScrollView, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, Alert } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 import Card from "../components/Card";
@@ -48,6 +48,8 @@ const CalendarScreen = props => {
     const [fridayButton, setFridayButton] = useState('+');
     const [saturdayButton, setSaturdayButton] = useState('+');
     const [sundayButton, setSundayButton] = useState('+');
+
+    const [progress, setProgress] = useState(false);
 
     // again, other solutions were buggy, so handling the color of the tab buttons this way
     const [eventTabBckgrnd, setEventTabBckgrnd] = useState(Colors.primary.yellow);
@@ -164,6 +166,7 @@ const CalendarScreen = props => {
 
     // date is a number from 15-17, contentToSet is one of data arrays state changers
     async function getDataAsync(date, contentToSet) {
+        setProgress(true);
         let eventArray;
         try {
             const response = await fetch("http://35.217.19.28/sell-games-2020/public/index.php/api/events/date/2020-05-" + date, {
@@ -193,6 +196,7 @@ const CalendarScreen = props => {
             eventArray = [{ id: "error", title: "Something went wrong :(", time: error.message }];
         }
         contentToSet(eventArray);
+        setProgress(false);
         
     };
 
@@ -220,7 +224,7 @@ const CalendarScreen = props => {
     }
     
     return (
-
+        
         <ScrollView style={{...props.style, ...styles.screen}}>
 
         <View style={styles.tabsView}>
@@ -229,7 +233,8 @@ const CalendarScreen = props => {
         </View>
 
             <View style={{...{display: calendarDisplay}, ...styles.calendarView}}>
-                <SafeAreaView style={styles.wrapperView}>
+
+                <View style={styles.wrapperView}>
                     <View style={styles.headerView}>
                         <Text style={styles.textStyle}>Friday May 15th</Text>
                         <TouchableOpacity style={styles.buttonView} onPress={() => showContent(fridayContent, setFridayContent, setFridayButton, 15)}>
@@ -238,9 +243,9 @@ const CalendarScreen = props => {
                     </View>
                     <VirtualList buttonOnPress={checkUserData} content={fridayContent} buttonTitle="Add to calendar" horizontal={true} />                   
 
-                </SafeAreaView>
+                </View>
 
-                <SafeAreaView style={styles.wrapperView}>
+                <View style={styles.wrapperView}>
                     <View style={styles.headerView}>
                         <Text style={styles.textStyle}>Saturday May 16th</Text>
                         <TouchableOpacity style={styles.buttonView} onPress={() => showContent(saturdayContent, setSaturdayContent, setSaturdayButton, 16)}>
@@ -249,9 +254,9 @@ const CalendarScreen = props => {
                     </View>
                     <VirtualList buttonOnPress={checkUserData} content={saturdayContent} buttonTitle="Add to calendar" horizontal={true} />
 
-                </SafeAreaView>
+                </View>
 
-                <SafeAreaView style={styles.wrapperView}>
+                <View style={styles.wrapperView}>
                     <View style={styles.headerView}>
                         <Text style={styles.textStyle}>Sunday May 17th</Text>
                         <TouchableOpacity style={styles.buttonView} onPress={() => showContent(sundayContent, setSundayContent, setSundayButton, 17)}>
@@ -260,7 +265,7 @@ const CalendarScreen = props => {
                     </View>
                     <VirtualList buttonOnPress={checkUserData} content={sundayContent} buttonTitle="Add to calendar" horizontal={true}/>
 
-                </SafeAreaView>
+                </View>
             </View>
 
             <View style={{...{display: userDisplay}, ...styles.userScheduleView}}>
@@ -286,6 +291,14 @@ const CalendarScreen = props => {
                     showAlert(false);
                 }}
                 />
+            <AwesomeAlert 
+                show={progress}
+                showProgress={true}
+                title="Loading..."
+                closeOnTouchOutside={false}
+                closeOnHardwareBackPress={false}
+                showCancelButton={false}
+                showConfirmButton={false}/>
         </ScrollView>
     );
 
