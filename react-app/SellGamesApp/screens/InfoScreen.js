@@ -63,7 +63,6 @@ const InfoScreen = props => {
     return (
         // Current footer setup does not work without ScrollView. Most likely it would've been used anyway
         <ScrollView style={{...props.style, ...styles.screen}}>
-            <Cardbox title="Info page" textContents="Screen for event navigation"/>
             {content}
             
         </ScrollView>
