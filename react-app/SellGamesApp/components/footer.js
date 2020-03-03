@@ -33,7 +33,7 @@ export default Footer;
 const styles = StyleSheet.create({
   footer: {
     height: 60,
-    backgroundColor: 'black',
+    backgroundColor: "#fed13a",
     alignSelf: 'stretch', // stretch the footer to whole screen width
     alignItems: 'center', // align items to the center of parent
     flexDirection: 'row', // align children left to right
