@@ -50,19 +50,21 @@ const NotificationsScreen = props => {
     }
     
     return (
-        <ScrollView>
-            <FlatList keyExtractor={(item, index) => item.id}
-                data={events}
-                renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.location} />
-                } />
-            <AwesomeAlert 
-                show={progress}
-                showProgress={true}
-                title="Loading..."
-                closeOnTouchOutside={false}
-                closeOnHardwareBackPress={false}
-                showCancelButton={false}
-                showConfirmButton={false}/>
+        <ScrollView contentContainerStyle={styles.screen} horizontal={true}>
+            <ScrollView contentContainerStyle={styles.inner}>
+                <FlatList keyExtractor={(item, index) => item.id}
+                    data={events}
+                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.location} />
+                    } />
+                <AwesomeAlert 
+                    show={progress}
+                    showProgress={true}
+                    title="Loading..."
+                    closeOnTouchOutside={false}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={false}
+                    showConfirmButton={false}/>
+            </ScrollView>
         </ScrollView>
     );
 
@@ -70,7 +72,16 @@ const NotificationsScreen = props => {
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: "red"
-    }
+        backgroundColor: Colors.primary.blue,
+        flexDirection: 'row',
+        width: '100%'
+    },
+    
+    inner: {
+        backgroundColor: Colors.primary.yellow,
+        width: '80%',
+        alignSelf: 'center',
+        flexDirection: 'row',
+    },
 });
 export default NotificationsScreen;
