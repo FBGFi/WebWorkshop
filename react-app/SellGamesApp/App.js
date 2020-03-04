@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { StyleSheet, View, StatusBar } from 'react-native';
+
 //Component import
 import Footer from './components/Footer.js';
 
