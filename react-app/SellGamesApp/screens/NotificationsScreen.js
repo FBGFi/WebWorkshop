@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, ScrollView } from 'react-native';
-
 import AwesomeAlert from 'react-native-awesome-alerts';
+
 import Colors from '../constants/colors';
 import Card from "../components/Card";
 
@@ -14,7 +14,7 @@ const NotificationsScreen = props => {
         showProgress(true);
         let eventArray;
         try {
-            const response = await fetch("http://35.217.19.28/sell-games-2020/public/index.php/api/events", {
+            const response = await fetch("https://sellgames2020.fi/backend/api/events", {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
