@@ -14,7 +14,7 @@ const NotificationsScreen = props => {
         showProgress(true);
         let eventArray;
         try {
-            const response = await fetch("https://sellgames2020.fi/backend/api/events", {
+            const response = await fetch("https://sellgames2020.fi/backend/api/posts", {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -23,18 +23,19 @@ const NotificationsScreen = props => {
             })
 
             const json = await response.json();
-            let length = Object.keys(json.data).length;
+            let length = Object.keys(json.data.data).length;
+            
 
             eventArray = new Array(length);
 
 
             for (let i = 0; i < length; i++) {
-                eventArray[i] = { id: ("" + json.data[i].id), title: ("" + json.data[i].name), location: ("" + json.data[i].venue.name) };
+                eventArray[i] = { id: ("" + json.data.data[i].ID), title: ("" + json.data.data[i].post_title), content: ("" + json.data.data[i].post_content) };
             }
             props.setEvents(eventArray);
 
         } catch (error) {
-            eventArray = [{ id: "error", title: "Something went wrong :(", location: error.message }];
+            eventArray = [{ id: "error", title: "Something went wrong :(", content: error.message }];
         }
         setEvents(eventArray);
         showProgress(false);
@@ -55,7 +56,7 @@ const NotificationsScreen = props => {
             <ScrollView contentContainerStyle={styles.inner}>
                 <FlatList keyExtractor={(item, index) => item.id}
                     data={events}
-                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.location} />
+                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.content} />
                     } />
                 <AwesomeAlert 
                     show={progress}

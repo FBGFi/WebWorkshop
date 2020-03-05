@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, ScrollView, Animated, Dimensions, View } from 'react-native';
 
 import MapMarker from '../components/MapMarker';
+import OpenURLButton from '../components/OpenURLButton';
 
 import Colors from '../constants/colors';
 
@@ -19,6 +20,7 @@ const MapScreen = props => {
                 </View>
             </ScrollView>
             <View style={styles.markerViewTEMP}><MapMarker width={0.3} height={0.3} /></View>
+            <OpenURLButton url={"https://www.google.fi/maps/place/Mukkulankatu+19,+15210+Lahti/"} buttonText={"Open with Google Maps"}/>
         </ScrollView>
     );
 };
