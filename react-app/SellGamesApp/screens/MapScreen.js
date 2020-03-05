@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, ScrollView, Animated, Dimensions, View } from 'react-native';
 
+import MapMarker from '../components/MapMarker';
+
 import Colors from '../constants/colors';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
@@ -16,6 +18,7 @@ const MapScreen = props => {
                         style={styles.imageStyles} />
                 </View>
             </ScrollView>
+            <View style={styles.markerViewTEMP}><MapMarker width={0.3} height={0.3} /></View>
         </ScrollView>
     );
 };
@@ -23,11 +26,16 @@ const MapScreen = props => {
 const styles = StyleSheet.create({
     screen: {
         backgroundColor: Colors.primary.blue,
-        flexDirection: 'row',
+        flexDirection: 'column',
         width: '100%'
     },
     inner: {
         width: screenWidth
+    },
+    markerViewTEMP: {
+        height: 100,
+        justifyContent: "center",
+        alignContent: "center"
     },
     mapWrapper: {
         alignSelf: 'center',

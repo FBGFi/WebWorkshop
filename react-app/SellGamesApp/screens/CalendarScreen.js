@@ -169,7 +169,7 @@ const CalendarScreen = props => {
         setProgress(true);
         let eventArray;
         try {
-            const response = await fetch("http://35.217.19.28/sell-games-2020/public/index.php/api/events/date/2020-05-" + date, {
+            const response = await fetch("https://sellgames2020.fi/backend/api/events/date/2020-05-" + date, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
