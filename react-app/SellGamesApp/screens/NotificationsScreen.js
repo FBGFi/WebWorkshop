@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, ScrollView } from 'react-native';
 
 import AwesomeAlert from 'react-native-awesome-alerts';
+import Colors from '../constants/colors';
 import Card from "../components/Card";
 
 const NotificationsScreen = props => {
