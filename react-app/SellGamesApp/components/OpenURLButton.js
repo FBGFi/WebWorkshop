@@ -16,12 +16,14 @@ const OpenURLButton = props => {
       });
     };
       return (
-        <View style={{...styles.button, ...props.buttonStyles}}>
-        <TouchableOpacity onPress={handleClick}>
-          <View>
-            <Text style={{ ...styles.text, ...props.textStyles}}>{props.buttonText}</Text>
+        <View style={{justifyContent:"center", alignContent:"center", marginVertical: 10}}>
+          <View style={{...styles.button, ...props.buttonStyles}}>
+          <TouchableOpacity onPress={handleClick}>
+            <View>
+              <Text style={{ ...styles.text, ...props.textStyles}}>{props.buttonText}</Text>
+            </View>
+          </TouchableOpacity>
           </View>
-        </TouchableOpacity>
         </View>
       );
 }
@@ -29,14 +31,16 @@ const OpenURLButton = props => {
 const styles = StyleSheet.create({
     button: {
         backgroundColor: Colors.primary.red,
-        width: 100,
-        height: 50,
         justifyContent: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
+        alignSelf: "center",
+        padding: 10,
+        borderRadius: 8
     },    
     text: {
         color: Colors.primary.yellow,
-        alignSelf: "center"
+        alignSelf: "center",
+        textAlign: "center"
     },
 });
 export default OpenURLButton;
