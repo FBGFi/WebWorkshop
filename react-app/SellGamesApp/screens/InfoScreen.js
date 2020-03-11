@@ -70,12 +70,13 @@ const InfoScreen = props => {
     const infoscrollref = useRef(null);
     if(info != null){
         content = <Info title={info} infoSetting={setinfo} sportInfo={sinfo}/>
-        infoscrollref.current.scrollTo({x: 0, y:0, animated:true})
+        infoscrollref.current.scrollTo({x: 0, y:0, animated:false})
     }
     
     return (
-        // Current footer setup does not work without ScrollView. Most likely it would've been used anyway
+        // Current footer setup does not work without ScrollView. Most likely it would've been used anyway    
         <ScrollView style={{...props.style, ...styles.screen}} ref={infoscrollref}>
+            <Text style={{color:Colors.primary.yellow, fontSize:40, alignSelf:'center'}}>Information</Text>
             {content}
             
         </ScrollView>
