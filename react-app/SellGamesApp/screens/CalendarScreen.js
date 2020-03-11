@@ -181,14 +181,20 @@ const CalendarScreen = props => {
             let length = Object.keys(json.data).length;
 
             eventArray = new Array(length);
+            let startTimeFix = "";
+            let endTimeFix = "";
 
 
             for (let i = 0; i < length; i++) {
+                startTimeFix = json.data[i].start_time.split(':');
+                startTimeFix = startTimeFix[0] + "." + startTimeFix[1];
+                endTimeFix = json.data[i].end_time.split(':');
+                endTimeFix = endTimeFix[0] + "." + endTimeFix[1];
                 
                 eventArray[i] = { 
                     id: ("" + json.data[i].id), 
                     title: ("" + json.data[i].name), 
-                    time: ("" + json.data[i].start_time + " - " + json.data[i].end_time)
+                    time: ("" + startTimeFix + " - " + endTimeFix)
                 };
             }
 

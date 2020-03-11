@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {View, Button, Text, StyleSheet } from 'react-native';
 import Colors from '../constants/colors';
-import SportsInfo from '../constants/sportsInfo';
 
 const Info = props => {
     let i;
@@ -19,7 +18,7 @@ const Info = props => {
     infoBody = getSportsInfo(props.sportInfo); // Esim, SportsInfo.athletics
 
     return (
-        <View style={styles.infoPage}>
+        <View style={{...props.style, ...styles.infoPage}}>
             <Text style={{color: Colors.primary.yellow, fontSize: 30}}>{props.title}</Text>
             {infoBody}
             <Button title="Return" 

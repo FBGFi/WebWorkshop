@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, StatusBar } from 'react-native';
+import { StyleSheet, View, StatusBar, Dimensions, Animated } from 'react-native';
 
 //Component import
 import Footer from './components/Footer.js';
@@ -7,40 +7,53 @@ import Footer from './components/Footer.js';
 //Screens import
 import InfoScreen from './screens/InfoScreen';
 import MapScreen from "./screens/MapScreen";
-import ScheduleScreen from "./screens/ScheduleScreen";
 import NotificationsScreen from "./screens/NotificationsScreen";
 import CalendarScreen from "./screens/CalendarScreen";
 
-import Events from './data/events';
+import Colors from './constants/colors';
+
+const screenHeight = Math.round(Dimensions.get('window').height);
+
 
 export default function App() {
-  const [contents, setContents] = useState('');
+  const [contents, setContents] = useState(<InfoScreen style={styles.infoScreen}/>);
   // save events here to reduce time for rendering
   const [notificationEvents, setNotificationEvents] = useState([]);
-  const [calendarEvents, setCalendarEvents] = useState([]);
+  
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   // components to variables
-  let content;
-  if(contents == 'calendar')
-  {
-    content = <CalendarScreen />;
-  } 
-  else if(contents == 'map')
-  {
-    content = <MapScreen />
+  async function contentSetting(contentName){
+    setContents(<View style={{height: screenHeight - 60 - StatusBar.currentHeight, width: "100%", backgroundColor: Colors.primary.blue}}></View>);
+    if(contentName == 'calendar')
+    {
+      await sleep(5);
+      setContents(<CalendarScreen/>);
+    } 
+    else if(contentName == 'map')
+    {
+      await sleep(5);
+      setContents(<MapScreen/>);
+    }
+    else if(contentName == 'notifications')
+    {
+      await sleep(5);
+      setContents(<NotificationsScreen events={notificationEvents} setEvents={setNotificationEvents}/>);
+    }
+    else
+    {
+      await sleep(5);
+      setContents(<InfoScreen style={styles.infoScreen}/>);
+    }
   }
-  else if(contents == 'notifications')
-  {
-    content = <NotificationsScreen events={notificationEvents} setEvents={setNotificationEvents}/>
-  }
-  else
-  {
-    content = <InfoScreen style={styles.infoScreen}/>;
-  }
+  
 
   return (
     <View style={styles.container}>
-      {content}
-      <Footer contentSetting = {setContents} />
+      {contents}
+      <Footer contentSetting = {contentSetting} />
     </View>
   );
 }

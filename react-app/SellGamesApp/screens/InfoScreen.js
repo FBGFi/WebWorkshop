@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity, Button} from 'react-native';
-
-import Cardbox from '../components/Card';
-import Events from '../data/events';
+import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 import Colors from '../constants/colors';
 import Info from '../components/Info';

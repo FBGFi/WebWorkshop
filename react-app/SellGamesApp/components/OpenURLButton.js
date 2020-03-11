@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 
 import Colors from '../constants/colors';
-import Card from "../components/Card";
 
 const OpenURLButton = props => {
     //static propTypes = { url: React.PropTypes.string };
