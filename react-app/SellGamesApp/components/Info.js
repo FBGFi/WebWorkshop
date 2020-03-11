@@ -8,7 +8,7 @@ const Info = props => {
     function getSportsInfo(sportArray){
         let body = [];
         for(i = 0; i < sportArray.length; i++){
-            body[i] = (<View style={{width:'80%'}}>
+            body[i] = (<View style={{width:'90%'}}>
                 <Text style={{fontSize:25, color:Colors.primary.white}}>{sportArray[i].title}</Text>
                 <Text style={{fontSize:18,color:Colors.primary.white}}>{sportArray[i].content}</Text>
                 </View>)
@@ -21,9 +21,9 @@ const Info = props => {
         <View style={{...props.style, ...styles.infoPage}}>
             <Text style={{color: Colors.primary.yellow, fontSize: 30}}>{props.title}</Text>
             {infoBody}
-            <Button title="Return" 
+            {/*<Button title="Return" 
             color={Colors.primary.red}
-            onPress={() => props.infoSetting(null)}/>
+    onPress={() => props.infoSetting(null)}/>*/}
         </View>
     );
 }

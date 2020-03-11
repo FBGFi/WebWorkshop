@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 import Colors from '../constants/colors';
@@ -26,28 +26,40 @@ const Buttons = props => {
         <View style={styles.cont}>
             <ImageButton source={require('../assets/sports/athletics.png')} 
             name="Athletics" sinfoname={SportsInfo.athletics} infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo}/>
+            
             <ImageButton source={require('../assets/sports/basketball.png')} 
             name="Basketball" sinfoname={SportsInfo.basketball} infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            
             <ImageButton source={require('../assets/sports/discgolf.png')} 
-            name="Disc Golf" infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            name="Disc Golf" sinfoname={SportsInfo.discgolf} infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            
             <ImageButton source={require('../assets/sports/esports.png')} 
-            name="Esports" infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            name="Esports" sinfoname={SportsInfo.esports} infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            
             <ImageButton source={require('../assets/sports/floorball.png')} 
-            name="Floorball" infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            name="Floorball" sinfoname={SportsInfo.floorball} infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            
             <ImageButton source={require('../assets/sports/football.png')} 
-            name="Football" infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            name="Football" sinfoname={SportsInfo.football} infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            
             <ImageButton source={require('../assets/sports/judo.png')} 
-            name="Judo" infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            name="Judo" sinfoname={SportsInfo.judo} infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            
             <ImageButton source={require('../assets/sports/molkky.png')} 
-            name="Mölkky" infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            name="Mölkky" sinfoname={SportsInfo.molkky} infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            
             <ImageButton source={require('../assets/sports/orienteering.png')} 
-            name="Orienteering" infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            name="Orienteering" sinfoname={SportsInfo.orienteering} infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            
             <ImageButton source={require('../assets/sports/tabletennis.png')} 
-            name="Tabletennis" infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            name="Tabletennis" sinfoname={SportsInfo.tabletennis} infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+
             <ImageButton source={require('../assets/sports/volleyball.png')} 
-            name="Volleyball" infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            name="Volleyball" sinfoname={SportsInfo.volleyball} infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+
             <ImageButton source={require('../assets/sports/wrestling.png')} 
-            name="Wrestling" infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+            name="Wrestling" sinfoname={SportsInfo.wrestling} infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo} />
+
         </View>
     );
 };
@@ -55,14 +67,15 @@ const InfoScreen = props => {
     const [info, setinfo] = useState(null);
     const [sinfo, setsinfo] = useState(null);
     let content = <Buttons buttoninfo={setinfo} buttonsinfo={setsinfo}/>;
-
+    const infoscrollref = useRef(null);
     if(info != null){
         content = <Info title={info} infoSetting={setinfo} sportInfo={sinfo}/>
+        infoscrollref.current.scrollTo({x: 0, y:0, animated:true})
     }
-
+    
     return (
         // Current footer setup does not work without ScrollView. Most likely it would've been used anyway
-        <ScrollView style={{...props.style, ...styles.screen}}>
+        <ScrollView style={{...props.style, ...styles.screen}} ref={infoscrollref}>
             {content}
             
         </ScrollView>
