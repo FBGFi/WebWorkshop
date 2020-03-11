@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Button, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 
 const Footer = props => {
   return (

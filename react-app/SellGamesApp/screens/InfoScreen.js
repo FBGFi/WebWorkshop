@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity, BackHandler } from 'react-native';
 
 import Colors from '../constants/colors';
 import Info from '../components/Info';
@@ -21,7 +21,9 @@ const ImageButton = props =>{
         </TouchableOpacity>
     );
 };
+
 const Buttons = props => {
+    BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()}); // revert the back button functionality
     return(
         <View style={styles.cont}>
             <ImageButton source={require('../assets/sports/athletics.png')} 
@@ -63,6 +65,7 @@ const Buttons = props => {
         </View>
     );
 };
+
 const InfoScreen = props => {
     const [info, setinfo] = useState(null);
     const [sinfo, setsinfo] = useState(null);
@@ -74,7 +77,7 @@ const InfoScreen = props => {
     }
     
     return (
-        // Current footer setup does not work without ScrollView. Most likely it would've been used anyway    
+        // Current footer setup does not work without ScrollView  
         <ScrollView style={{...props.style, ...styles.screen}} ref={infoscrollref}>
             <Text style={{color:Colors.primary.yellow, fontSize:40, alignSelf:'center'}}>Information</Text>
             {content}

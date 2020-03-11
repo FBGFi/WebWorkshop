@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, StatusBar, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, View, StatusBar, Dimensions, ScrollView, BackHandler } from 'react-native';
 
 //Component import
 import Footer from './components/Footer.js';
@@ -32,14 +32,17 @@ export default function App() {
     if(contentName == 'calendar')
     {
       setContents(<CalendarScreen/>);
+      BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()}); // revert the back button functionality to app exit (originally changed in Info.js)
     } 
     else if(contentName == 'map')
     {
       setContents(<MapScreen/>);
+      BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()}); // back button ^
     }
     else if(contentName == 'notifications')
     {
       setContents(<NotificationsScreen events={notificationEvents} setEvents={setNotificationEvents}/>);
+      BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()}); // back button ^
     }
     else
     {
