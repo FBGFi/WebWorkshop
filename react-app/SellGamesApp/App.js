@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, StatusBar, Dimensions, Animated } from 'react-native';
+import { StyleSheet, View, StatusBar, Dimensions, ScrollView } from 'react-native';
 
 //Component import
 import Footer from './components/Footer.js';
@@ -13,6 +13,7 @@ import CalendarScreen from "./screens/CalendarScreen";
 import Colors from './constants/colors';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
+const screenWidth = Math.round(Dimensions.get('window').width);
 
 
 export default function App() {
@@ -26,25 +27,22 @@ export default function App() {
 
   // components to variables
   async function contentSetting(contentName){
-    setContents(<View style={{height: screenHeight - 60 - StatusBar.currentHeight, width: "100%", backgroundColor: Colors.primary.blue}}></View>);
+    setContents(<ScrollView contentContainerStyle={{backgroundColor: Colors.primary.blue}}><View style={{height: screenHeight, width: screenWidth}}></View></ScrollView>);
+    await sleep(5);
     if(contentName == 'calendar')
     {
-      await sleep(5);
       setContents(<CalendarScreen/>);
     } 
     else if(contentName == 'map')
     {
-      await sleep(5);
       setContents(<MapScreen/>);
     }
     else if(contentName == 'notifications')
     {
-      await sleep(5);
       setContents(<NotificationsScreen events={notificationEvents} setEvents={setNotificationEvents}/>);
     }
     else
     {
-      await sleep(5);
       setContents(<InfoScreen style={styles.infoScreen}/>);
     }
   }
