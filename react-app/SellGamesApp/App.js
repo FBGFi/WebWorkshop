@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, StatusBar, Dimensions, ScrollView, BackHandler, Text } from 'react-native';
+import { StyleSheet, View, StatusBar, Dimensions, ScrollView, BackHandler } from 'react-native';
+import * as Font from 'expo-font'; // this needed only in expo?
 
 //Component import
 import Footer from './components/Footer.js';
@@ -21,6 +22,9 @@ export default function App() {
   // save events here to reduce time for rendering
   const [notificationEvents, setNotificationEvents] = useState([]);
 
+  Font.loadAsync({
+    'StTransmission': require('./assets/fonts/StTransmission-800-ExtraBold.otf'),
+  });
   
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

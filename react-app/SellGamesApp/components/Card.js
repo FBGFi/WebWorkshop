@@ -7,7 +7,7 @@ const Cardbox = props => {
     <View>
       <Card title={props.title} containerStyle={{margin: 2}}>
               <View>
-                <Text>
+                <Text style={{...styles.text, ...props.textStyles}}>
                   {props.textContents}
                 </Text>
                 {props.button ? <Button title={props.buttonTitle} onPress={props.buttonOnPress.bind(this,props.id)}/> : null}
@@ -23,6 +23,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  text: {
+    fontFamily: "StTransmission"
+  }
 });
 
 export default Cardbox;

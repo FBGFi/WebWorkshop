@@ -12,6 +12,10 @@ import sportsInfo from '../constants/sportsInfo';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
+// height to width ratio
+const mapWidth = 886;
+const mapHeight = 2174;
+
 /**
  * @param content - data to make the list from
  * @param cancelPress - function to close the card
@@ -25,10 +29,10 @@ const MapCard = props => {
                 <View style={{paddingBottom:10}}>
                     <View style={{paddingLeft:10,paddingTop:10}}>
                         <TouchableOpacity onPress={props.cancelPress}>
-                            <Text style={{color: Colors.primary.red, fontSize:20}}>x</Text>
+                            <Text style={{...styles.textStyles, ...{color: Colors.primary.red, fontSize:20}}}>x</Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={{color: Colors.primary.red, textAlign: "center", fontSize:20}}>
+                    <Text style={{...styles.textStyles, ...{color: Colors.primary.red, textAlign: "center", fontSize:20}}}>
                         {props.place}
                     </Text>
                 </View>
@@ -39,11 +43,11 @@ const MapCard = props => {
                                     <View style={{backgroundColor: Colors.primary.red, borderRadius: 8}}>
                                         <TouchableOpacity onPress={() => props.eventPress(itemData.item.title)}>
                                             <View style={{padding:10}}>
-                                                <View style={{paddingBottom:5}}><Text style={{color: Colors.primary.yellow, fontSize:20, fontWeight: "bold"}}>{itemData.item.title}</Text></View>
-                                                <View style={{paddingBottom:5}}><Text style={{color: Colors.primary.yellow, fontSize:18}}>{itemData.item.date}</Text></View>
+                                                <View style={{paddingBottom:5}}><Text style={{...styles.textStyles, ...{color: Colors.primary.yellow, fontSize:20}}}>{itemData.item.title}</Text></View>
+                                                <View style={{paddingBottom:5}}><Text style={{...styles.textStyles, ...{color: Colors.primary.yellow, fontSize:18}}}>{itemData.item.date}</Text></View>
                                                 <View style={{flexDirection: 'row'}}>
-                                                    <View style={{flex:3}}><Text style={{color: Colors.primary.yellow, fontSize:18}}>{itemData.item.time}</Text></View>
-                                                    <View style={{flex:1, justifyContent: "center"}}><Text style={{color: Colors.primary.yellow, fontSize:20, textAlign:'right', alignSelf: 'flex-end'}}>+</Text></View>
+                                                    <View style={{flex:3}}><Text style={{...styles.textStyles, ...{color: Colors.primary.yellow, fontSize:18}}}>{itemData.item.time}</Text></View>
+                                                    <View style={{flex:1, justifyContent: "center"}}><Text style={{...styles.textStyles, ...{color: Colors.primary.yellow, fontSize:20, textAlign:'right', alignSelf: 'flex-end'}}}>+</Text></View>
                                                 </View>
                                             </View>
                                         </TouchableOpacity>
@@ -51,7 +55,7 @@ const MapCard = props => {
                                 </View>
                             } />
                 <View>
-                    <OpenURLButton url={props.url} buttonText={"Open with Google Maps"} textStyles={{color: Colors.primary.yellow, fontSize:20}} buttonStyles={{width:'70%'}}/>         
+                    <OpenURLButton url={props.url} buttonText={"Open with Google Maps"} textStyles={{...styles.textStyles, ...{color: Colors.primary.yellow, fontSize:20}}} buttonStyles={{width:'70%'}}/>         
                 </View>
             </View>
     );
@@ -100,7 +104,7 @@ const MapScreen = props => {
         setCardContent(<MapCard content={events} cancelPress={cancelPress} place={place} eventPress={eventPress} url={url}/>);
         isRendered(true);
     }
-
+    
     async function getDataAsync(place) {
         let eventArray;
         try {
@@ -143,7 +147,7 @@ const MapScreen = props => {
     };
 
     return (       
-        <ScrollView contentContainerStyle={styles.screen} scrollEnabled={false}>
+        <ScrollView contentContainerStyle={styles.screen} scrollEnabled={true}>
             <View style={styles.inner}>
                 <View style={styles.mapWrapper}>
                     <Animated.Image
@@ -154,11 +158,52 @@ const MapScreen = props => {
 
             {cardContent}
 
-                <MapMarker dimensions={0.2} place={"Athletics stadium\nSalpausselänkatu 8, 15110 Lahti"} url={"https://www.google.com/maps/place/Salpaussel%C3%A4nkatu+8,+15110+Lahti/"} fetchString={"Athletics stadium"}markerPress={markerPress}/>
+                <MapMarker 
+                dimensions={0.2} 
+                place={"Athletics stadium\nSalpausselänkatu 8, 15110 Lahti"} 
+                url={"https://www.google.com/maps/place/Salpaussel%C3%A4nkatu+8,+15110+Lahti/"} 
+                fetchString={"Athletics stadium"}
+                left={100*(screenWidth/mapWidth)}
+                top={1060*(screenWidth/mapWidth)}
+                markerPress={markerPress}/>
+                <MapMarker 
+                dimensions={0.2} 
+                place={"Kamppailuareena\nSuurmäenkatu 4, 15900 Lahti"} 
+                url={"https://www.google.com/maps/place/Suurm%C3%A4enkatu+4,+15900+Lahti/"} 
+                fetchString={"Kamppailuareena"}
+                left={10*(screenWidth/mapWidth)}
+                top={1110*(screenWidth/mapWidth)}
+                markerPress={markerPress}/>
+                <MapMarker 
+                dimensions={0.2} 
+                place={"Kisapuisto Sports Park\nLahdenkatu, 15140 Lahti"} 
+                url={"https://www.google.com/maps/place/Lahden+kisapuisto/"} 
+                fetchString={"Kisapuisto Sports Park"}
+                left={365*(screenWidth/mapWidth)}
+                top={950*(screenWidth/mapWidth)}
+                markerPress={markerPress}/>
+                <MapMarker 
+                dimensions={0.2} 
+                place={"Suurhalli Sports Hall\nSalpausselänkatu 7, 15110 Lahti"} 
+                url={"https://www.google.com/maps/place/Salpaussel%C3%A4nkatu+7,+15110+Lahti/"} 
+                fetchString={"Suurhalli Sports Hall"}
+                left={180*(screenWidth/mapWidth)}
+                top={1000*(screenWidth/mapWidth)}
+                markerPress={markerPress}/>
+                <MapMarker 
+                dimensions={0.2} 
+                place={"Mukkula DiscGolfPark\nTuhtokatu 2, 15240 Lahti"} 
+                url={"https://www.google.com/maps/place/Tuhtokatu+2,+15240+Lahti/"} 
+                fetchString={"Mukkula DiscGolfPark"}
+                left={745*(screenWidth/mapWidth)}
+                top={180*(screenWidth/mapWidth)}
+                markerPress={markerPress}/>
+
                 {eventContent}
             
 
-            <AwesomeAlert 
+            <View style={{position: "absolute", width: screenWidth, height: screenHeight}}>
+                <AwesomeAlert 
                     show={progress}
                     showProgress={true}
                     title="Loading..."
@@ -166,6 +211,7 @@ const MapScreen = props => {
                     closeOnHardwareBackPress={false}
                     showCancelButton={false}
                     showConfirmButton={false}/>
+            </View>
         </ScrollView>
     );
 };
@@ -178,16 +224,18 @@ const styles = StyleSheet.create({
     },
     inner: {
         width: screenWidth,
-        //height: screenHeight - 60,
     },
     mapWrapper: {
         alignSelf: 'center',
         flexDirection: 'row',
     },
     imageStyles: { 
-        height: screenWidth * (2174/886),
+        height: screenWidth * (mapHeight/mapWidth),
         width: screenWidth,
         resizeMode: "contain"
+    },
+    textStyles: {
+        fontFamily: "StTransmission"
     },
     mapCard:{
         borderWidth: 2,

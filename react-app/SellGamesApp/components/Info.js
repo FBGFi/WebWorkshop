@@ -10,8 +10,8 @@ const Info = props => {
         let body = [];
         for(i = 0; i < sportArray.length; i++){
             body[i] = (<View style={{width:'90%'}}>
-                <Text style={{fontSize:25, color:Colors.primary.white, fontWeight:'bold'}}>{sportArray[i].title}</Text>
-                <Text style={{fontSize:18,color:Colors.primary.white}}>{sportArray[i].content}</Text>
+                <Text style={{fontSize:25, color:Colors.primary.white, fontWeight:'bold', fontFamily:"StTransmission"}}>{sportArray[i].title}</Text>
+                <Text style={{fontSize:18,color:Colors.primary.white, fontFamily:"StTransmission"}}>{sportArray[i].content}</Text>
                 </View>)
         }
         return body;

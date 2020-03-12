@@ -349,7 +349,8 @@ const styles = StyleSheet.create({
         flex: 3,
         textAlign: 'center',
         textAlignVertical: 'center',
-        fontSize: 20
+        fontSize: 20,
+        fontFamily: "StTransmission"
     },
     buttonView: {
         flex: 1,

@@ -17,7 +17,8 @@ const ImageButton = props =>{
             />
             <Text style={{color:'white', 
             fontSize:27, 
-            textDecorationLine:'underline'}}>{props.name}</Text>
+            textDecorationLine:'underline',
+            fontFamily: "StTransmission"}}>{props.name}</Text>
         </TouchableOpacity>
     );
 };
@@ -79,7 +80,7 @@ const InfoScreen = props => {
     return (
         // Current footer setup does not work without ScrollView  
         <ScrollView style={{...props.style, ...styles.screen}} ref={infoscrollref}>
-            <Text style={{color:Colors.primary.yellow, fontSize:40, alignSelf:'center'}}>Information</Text>
+            <Text style={{color:Colors.primary.yellow, fontSize:40, alignSelf:'center', fontFamily: "StTransmission"}}>Information</Text>
             {content}
             
         </ScrollView>
