@@ -178,14 +178,14 @@ const styles = StyleSheet.create({
     },
     inner: {
         width: screenWidth,
-        //height: /*(1642 / 1345 * screenWidth)*/screenHeight - 60,
+        //height: screenHeight - 60,
     },
     mapWrapper: {
         alignSelf: 'center',
         flexDirection: 'row',
     },
     imageStyles: { 
-        height: screenHeight - 60,
+        height: screenWidth * (2174/886),
         width: screenWidth,
         resizeMode: "contain"
     },
