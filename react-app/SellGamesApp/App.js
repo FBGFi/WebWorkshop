@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, StatusBar, Dimensions, ScrollView, BackHandler } from 'react-native';
+import { StyleSheet, View, StatusBar, Dimensions, ScrollView, BackHandler, Text } from 'react-native';
 
 //Component import
 import Footer from './components/Footer.js';
@@ -20,6 +20,7 @@ export default function App() {
   const [contents, setContents] = useState(<InfoScreen style={styles.infoScreen}/>);
   // save events here to reduce time for rendering
   const [notificationEvents, setNotificationEvents] = useState([]);
+
   
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

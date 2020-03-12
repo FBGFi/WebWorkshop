@@ -27,7 +27,7 @@ const Info = props => {
     });
     return (
         <View style={{...props.style, ...styles.infoPage}}>
-            <Text style={{color: Colors.primary.yellow, fontSize: 30}}>{props.title}</Text>
+            <Text style={{color: Colors.primary.yellow, fontSize: 30, fontFamily:"StTransmission"}}>{props.title}</Text>
             {infoBody}
 
             <Button title="Return" 
