@@ -3,6 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native'
 
 import Colors from '../constants/colors';
 
+/**
+ * Button to open URL
+ * @param url - https://.....
+ * @param buttonStyles - styles to change in the button 
+ */
 const OpenURLButton = props => {
     //static propTypes = { url: React.PropTypes.string };
     function handleClick(){
@@ -39,7 +44,8 @@ const styles = StyleSheet.create({
     text: {
         color: Colors.primary.yellow,
         alignSelf: "center",
-        textAlign: "center"
+        textAlign: "center",
+        textDecorationLine: "underline"
     },
 });
 export default OpenURLButton;

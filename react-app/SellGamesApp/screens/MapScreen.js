@@ -70,6 +70,11 @@ const MapScreen = props => {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
     
+    /**
+     * @param {*} place 
+     * @param {*} url 
+     * @param {*} fetchString 
+     */
     async function markerPress(place, url, fetchString){
         showProgress(true);
         setPlace(place);

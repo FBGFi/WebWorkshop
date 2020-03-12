@@ -107,7 +107,7 @@ const CalendarScreen = props => {
         }
     }
 
-    function checkUserData(contentId){                        
+    async function checkUserData(contentId){                        
         let result = {};
         
         // check if already added to local storage        
@@ -155,6 +155,12 @@ const CalendarScreen = props => {
             setUserContent(currentContent => [...currentContent, result]);
         }
         showAlert(true);
+        await sleep(1000);
+        showAlert(false);
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     function removeFromUserContent(contentId){
@@ -287,15 +293,10 @@ const CalendarScreen = props => {
                 show={alert}
                 showProgress={false}
                 title="Added!"
-                closeOnTouchOutside={true}
+                closeOnTouchOutside={false}
                 closeOnHardwareBackPress={false}
-                showCancelButton={true}
+                showCancelButton={false}
                 showConfirmButton={false}
-                cancelText="Cancel"
-                confirmButtonColor="#DD6B55"
-                onCancelPressed={() => {
-                    showAlert(false);
-                }}
                 />
             <AwesomeAlert 
                 show={progress}
