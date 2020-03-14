@@ -5,7 +5,10 @@ import Colors from '../constants/colors';
 const Info = props => {
     let i;
     let infoBody = <View></View>;
-
+    /*
+        Funktio palauttaa <View><Text>Title</Text><Text>Content</Text></View> arrayn infoBodiin.
+        Kun info palauttaa infoBodyn, niin sieltä tulee jokainen arrayn alkio(?) järjestyksessä
+    */
     function getSportsInfo(sportArray){
         let body = [];
         for(i = 0; i < sportArray.length; i++){
