@@ -29,13 +29,12 @@ const ImageButton = props =>{ //Painike
 const Buttons = props => {
     BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()}); // revert the back button functionality
     /*
-        ImageButton: source on kuvan lähde, name on infon title, 
-        sinfoname on SportsInfon lajin array, 
-        info/sinfoSetting on ruudun muuttamista varten.
+    *    ImageButton: source on kuvan lähde, name on infon title, 
+    *    sinfoname on SportsInfon lajin array, 
+    *    info/sinfoSetting on ruudun muuttamista varten.
     */
     return(
         <View style={styles.cont}>
-            {/**/}
             <ImageButton source={require('../assets/sports/athletics.png')} 
             name="Athletics" sinfoname={SportsInfo.athletics} 
             infoSetting={props.buttoninfo} sinfoSetting={props.buttonsinfo}/>

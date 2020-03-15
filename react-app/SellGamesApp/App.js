@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import { StyleSheet, View, StatusBar, Dimensions, ScrollView, BackHandler } from 'react-native';
 import * as Font from 'expo-font'; // this needed only in expo?
 
-//Component import
+// Component import
 import Footer from './components/Footer.js';
 
-//Screens import
+// Screens import
 import InfoScreen from './screens/InfoScreen';
 import MapScreen from "./screens/MapScreen";
 import NotificationsScreen from "./screens/NotificationsScreen";
@@ -16,15 +16,16 @@ import Colors from './constants/colors';
 const screenHeight = Math.round(Dimensions.get('window').height);
 const screenWidth = Math.round(Dimensions.get('window').width);
 
+Font.loadAsync({
+'StTransmission': require('./assets/fonts/StTransmission-800-ExtraBold.otf'),
+});
+
 
 export default function App() {
-  const [contents, setContents] = useState(<InfoScreen style={styles.infoScreen}/>);
+  const [contents, setContents] = useState(null);
   // save events here to reduce time for rendering
   const [notificationEvents, setNotificationEvents] = useState([]);
-
-  Font.loadAsync({
-    'StTransmission': require('./assets/fonts/StTransmission-800-ExtraBold.otf'),
-  });
+  const [rendered, isRendered] = useState(false);
   
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -55,7 +56,10 @@ export default function App() {
     }
   }
   
-
+  if(!rendered){
+    isRendered(true);
+    setContents(<InfoScreen style={styles.infoScreen}/>);
+  } 
   return (
     <View style={styles.container}>
       {contents}

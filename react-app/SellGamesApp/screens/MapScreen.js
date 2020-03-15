@@ -17,6 +17,7 @@ const mapWidth = 886;
 const mapHeight = 2174;
 
 /**
+ * @author Aleksi - the card containing list of locations events
  * @param content - data to make the list from
  * @param cancelPress - function to close the card
  * @param place - address for the location
