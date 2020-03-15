@@ -103,7 +103,7 @@ const InfoScreen = props => {
         // Current footer setup does not work without ScrollView  
         <ScrollView style={{...props.style, ...styles.screen}} ref={infoscrollref}>
             <Text style={{color:Colors.primary.yellow, fontSize:40, alignSelf:'center', fontFamily: "StTransmission"}}>Information</Text>
-            {content} {/*sivun kontentti, painikkeet tai info*/}
+            {content}
             
         </ScrollView>
     );
