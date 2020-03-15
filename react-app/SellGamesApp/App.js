@@ -16,11 +16,6 @@ import Colors from './constants/colors';
 const screenHeight = Math.round(Dimensions.get('window').height);
 const screenWidth = Math.round(Dimensions.get('window').width);
 
-Font.loadAsync({
-'StTransmission': require('./assets/fonts/StTransmission-800-ExtraBold.otf'),
-});
-
-
 export default function App() {
   const [contents, setContents] = useState(null);
   // save events here to reduce time for rendering
@@ -55,11 +50,22 @@ export default function App() {
       setContents(<InfoScreen style={styles.infoScreen}/>);
     }
   }
+
+  /**
+   * @author Aleksi - ensures that assets have been loaded before loading content
+   */
+  async function openApp(){
+    await Font.loadAsync({
+      'StTransmission': require('./assets/fonts/StTransmission-800-ExtraBold.otf'),
+      });
+      contentSetting();
+  }
   
+  // on first time loading, load assets first
   if(!rendered){
+    openApp();
     isRendered(true);
-    setContents(<InfoScreen style={styles.infoScreen}/>);
-  } 
+  }
   return (
     <View style={styles.container}>
       {contents}

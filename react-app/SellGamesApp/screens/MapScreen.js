@@ -20,23 +20,29 @@ const mapHeight = 2174;
  * @author Aleksi - the card containing list of locations events
  * @param content - data to make the list from
  * @param cancelPress - function to close the card
- * @param place - address for the location
+ * @param address - address for the location
  * @param eventPress - what happens when you click an event
  * @param url - URL address to Google Maps with this location
+ * @param offSetTop - how far from top of the screen to set the card
  */
 const MapCard = props => {
     return(
-            <View style={styles.mapCard}>
+            <View style={{...styles.mapCard, ...{marginTop: (screenHeight * 0.05) + props.offSetTop}}}>
+
                 <View style={{paddingBottom:10}}>
+
                     <View style={{paddingLeft:10,paddingTop:10}}>
                         <TouchableOpacity onPress={props.cancelPress}>
                             <Text style={{...styles.textStyles, ...{color: Colors.primary.red, fontSize:20}}}>x</Text>
                         </TouchableOpacity>
                     </View>
+
                     <Text style={{...styles.textStyles, ...{color: Colors.primary.red, textAlign: "center", fontSize:20}}}>
-                        {props.place}
+                        {props.address}
                     </Text>
+
                 </View>
+
                 <FlatList keyExtractor={(item, index) => item.id}
                             data={props.content}
                             renderItem={itemData => 
@@ -62,54 +68,88 @@ const MapCard = props => {
     );
 }
 
+/**
+ * @author Aleksi - screen containing interactive map of the eventarea
+ */
 const MapScreen = props => {
     const [events, setEvents] = useState([]);
     const [progress, showProgress] = useState(false);
     const [cardContent, setCardContent] = useState(undefined);
     const [eventContent, setEventContent] = useState(undefined);
     const [rendered, isRendered] = useState(false);
-    const [place, setPlace] = useState("");
+    const [address, setAddress] = useState("");
     const [url, setUrl] = useState("");
+    // lock scrolling when marker is pressed
+    const [scrollable, isScrollable] = useState(true);
+    // how far is the card from top of screen
+    const [yOffset, setyOffset] = useState(0);
 
+    // changes every time user scrolls the map
+    let currentOffset = 0;
+
+    /**
+     * @author Aleksi - function to await in async functions to postpone functions progress 
+     * @param  ms - milliseconds
+     */
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
     
     /**
-     * @param {*} place 
-     * @param {*} url 
-     * @param {*} fetchString 
+     * @author Aleksi - function to open the locations event table
+     * @param address - address of the location
+     * @param url - url to Google Maps
+     * @param fetchString - location name to pull data from API with
      */
     async function markerPress(place, url, fetchString){
+        setyOffset(currentOffset);
+        isScrollable(false);
         showProgress(true);
-        setPlace(place);
+        setAddress(place);
         setUrl(url)
         await getDataAsync(fetchString);
-        await sleep(500);        
-        showProgress(false);     
+        await sleep(50);        
+        showProgress(false);    
     }
 
     function cancelPress(){
+        isScrollable(true);
         setCardContent(undefined);
         setEvents([]);
         isRendered(false);
     }
 
+    /**
+     * @author Aleksi - function to open info about the pressed event
+     * @param eventName - name of the event to send to infoscreen
+     */
     function eventPress(eventName){
-        setEventContent(<View style={styles.info}><ScrollView contentContainerStyle={{paddingBottom: 60}}><Info sportInfo={sportsInfo.athletics} infoSetting={setEventContent}/></ScrollView></View>);
+        setEventContent(<View style={styles.info}><ScrollView scrollEnabled={true} contentContainerStyle={{paddingBottom: 60}}><Info sportInfo={sportsInfo.athletics} infoSetting={setEventContent}/></ScrollView></View>);
         
     }
     
+    /**
+     * @author Aleksi - scrolling sets the position of the scrollview from top
+     * @param e - scrollview event(comes automatically) 
+     */
+    function setOffSet(e){
+        currentOffset = e.nativeEvent.contentOffset.y;        
+    }
 
+    // if data has been fetched and set to events, set content. not before
     if(events.length > 0 && !rendered){
-        setCardContent(<MapCard content={events} cancelPress={cancelPress} place={place} eventPress={eventPress} url={url}/>);
+        setCardContent(<MapCard content={events} cancelPress={cancelPress} address={address} eventPress={eventPress} url={url} offSetTop={yOffset}/>);
         isRendered(true);
     }
     
-    async function getDataAsync(place) {
+    /**
+     * @author Aleksi - function that sets eventarray to events
+     * @param fetchString - name of the location to fetch from API
+     */
+    async function getDataAsync(fetchString) {
         let eventArray;
         try {
-            const response = await fetch(("https://sellgames2020.fi/backend/api/events/venue/name/" + place), {
+            const response = await fetch(("https://sellgames2020.fi/backend/api/events/venue/name/" + fetchString), {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -119,6 +159,7 @@ const MapScreen = props => {
             
             const json = await response.json();
             let length = Object.keys(json.data).length;
+            // formatting for the texts
             let dateFix = "";
             let startTimeFix = "";
             let endTimeFix = "";
@@ -134,7 +175,11 @@ const MapScreen = props => {
                 endTimeFix = json.data[i].end_time.split(':');
                 endTimeFix = endTimeFix[0] + "." + endTimeFix[1];
                 
-                eventArray[i] = { id: ("" + json.data[i].id), title: ("" + json.data[i].name), date: ("May " + dateFix[2] + "th, 2020"), time: ("" + startTimeFix + " - " + endTimeFix) };                
+                eventArray[i] = { 
+                    id: ("" + json.data[i].id), 
+                    title: ("" + json.data[i].name), 
+                    date: ("May " + dateFix[2] + "th, 2020"), 
+                    time: ("" + startTimeFix + " - " + endTimeFix) };                
             }
             
 
@@ -148,12 +193,12 @@ const MapScreen = props => {
     };
 
     return (       
-        <ScrollView contentContainerStyle={styles.screen} scrollEnabled={true}>
-            <View style={styles.inner}>
+        <ScrollView contentContainerStyle={styles.screen} scrollEnabled={scrollable} onScroll={setOffSet}>
+            <View style={{width: screenWidth}}>
                 <View style={styles.mapWrapper}>
                     <Animated.Image
                         source={require('../assets/map_yellow.png')}
-                        style={styles.imageStyles} />
+                        style={styles.mapImageStyles} />
                 </View>
             </View>
 
@@ -161,7 +206,7 @@ const MapScreen = props => {
 
                 <MapMarker 
                 dimensions={0.2} 
-                place={"Athletics stadium\nSalpausselänkatu 8, 15110 Lahti"} 
+                address={"Athletics stadium\nSalpausselänkatu 8, 15110 Lahti"} 
                 url={"https://www.google.com/maps/place/Salpaussel%C3%A4nkatu+8,+15110+Lahti/"} 
                 fetchString={"Athletics stadium"}
                 left={100*(screenWidth/mapWidth)}
@@ -169,7 +214,7 @@ const MapScreen = props => {
                 markerPress={markerPress}/>
                 <MapMarker 
                 dimensions={0.2} 
-                place={"Kamppailuareena\nSuurmäenkatu 4, 15900 Lahti"} 
+                address={"Kamppailuareena\nSuurmäenkatu 4, 15900 Lahti"} 
                 url={"https://www.google.com/maps/place/Suurm%C3%A4enkatu+4,+15900+Lahti/"} 
                 fetchString={"Kamppailuareena"}
                 left={10*(screenWidth/mapWidth)}
@@ -177,7 +222,7 @@ const MapScreen = props => {
                 markerPress={markerPress}/>
                 <MapMarker 
                 dimensions={0.2} 
-                place={"Kisapuisto Sports Park\nLahdenkatu, 15140 Lahti"} 
+                address={"Kisapuisto Sports Park\nLahdenkatu, 15140 Lahti"} 
                 url={"https://www.google.com/maps/place/Lahden+kisapuisto/"} 
                 fetchString={"Kisapuisto Sports Park"}
                 left={365*(screenWidth/mapWidth)}
@@ -185,7 +230,7 @@ const MapScreen = props => {
                 markerPress={markerPress}/>
                 <MapMarker 
                 dimensions={0.2} 
-                place={"Suurhalli Sports Hall\nSalpausselänkatu 7, 15110 Lahti"} 
+                address={"Suurhalli Sports Hall\nSalpausselänkatu 7, 15110 Lahti"} 
                 url={"https://www.google.com/maps/place/Salpaussel%C3%A4nkatu+7,+15110+Lahti/"} 
                 fetchString={"Suurhalli Sports Hall"}
                 left={180*(screenWidth/mapWidth)}
@@ -193,7 +238,7 @@ const MapScreen = props => {
                 markerPress={markerPress}/>
                 <MapMarker 
                 dimensions={0.2} 
-                place={"Mukkula DiscGolfPark\nTuhtokatu 2, 15240 Lahti"} 
+                address={"Mukkula DiscGolfPark\nTuhtokatu 2, 15240 Lahti"} 
                 url={"https://www.google.com/maps/place/Tuhtokatu+2,+15240+Lahti/"} 
                 fetchString={"Mukkula DiscGolfPark"}
                 left={745*(screenWidth/mapWidth)}
@@ -203,7 +248,7 @@ const MapScreen = props => {
                 {eventContent}
             
 
-            <View style={{position: "absolute", width: screenWidth, height: screenHeight}}>
+            <View style={{position: "absolute", width: screenWidth, height: screenHeight, marginTop: yOffset}}>
                 <AwesomeAlert 
                     show={progress}
                     showProgress={true}
@@ -223,14 +268,11 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         width: '100%'
     },
-    inner: {
-        width: screenWidth,
-    },
     mapWrapper: {
         alignSelf: 'center',
         flexDirection: 'row',
     },
-    imageStyles: { 
+    mapImageStyles: { 
         height: screenWidth * (mapHeight/mapWidth),
         width: screenWidth,
         resizeMode: "contain"
@@ -241,14 +283,14 @@ const styles = StyleSheet.create({
     mapCard:{
         borderWidth: 2,
         borderColor: Colors.primary.red,
-        marginTop: (screenWidth * 0.05),
         maxHeight: (screenHeight * 0.8),
         backgroundColor: Colors.primary.yellow, 
         zIndex: 2,
         width: '90%',
         marginHorizontal: '5%',
         borderRadius: 8,
-        position: 'absolute'
+        position: 'absolute', 
+        marginBottom: '5%'
     },
     eventButton:{
         paddingHorizontal: 20,

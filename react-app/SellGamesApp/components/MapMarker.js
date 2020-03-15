@@ -15,7 +15,7 @@ const MapMarker = props => {
   
   return (
     <View style={{position: 'absolute', top: props.top, left: props.left}}>
-      <TouchableOpacity onPress={() => props.markerPress(props.place, props.url, props.fetchString)}>
+      <TouchableOpacity onPress={() => props.markerPress(props.address, props.url, props.fetchString)}>
         <Image
           style={{width:(styles.marker.width*props.dimensions),height:(styles.marker.height*props.dimensions)}}
           source={require('../assets/icons/MapMarker.png')}
