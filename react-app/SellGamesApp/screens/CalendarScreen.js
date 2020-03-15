@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, ScrollView, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ScrollView, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, Alert, Image } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 import Card from "../components/Card";
@@ -44,11 +44,11 @@ const CalendarScreen = props => {
     const [saturdayContent, setSaturdayContent] = useState([]);
     const [sundayContent, setSundayContent] = useState([]);
 
-    // this not ideal? this just sets the "icon" for the expanding button
-    const [fridayButton, setFridayButton] = useState('+');
-    const [saturdayButton, setSaturdayButton] = useState('+');
-    const [sundayButton, setSundayButton] = useState('+');
-
+    // this not ideal? this just sets the icon for the expanding button
+    const [fridayButton, setFridayButton] = useState(<Image source={require("../assets/icons/Union8.png")}/>);
+    const [saturdayButton, setSaturdayButton] = useState(<Image source={require("../assets/icons/Union8.png")}/>);
+    const [sundayButton, setSundayButton] = useState(<Image source={require("../assets/icons/Union8.png")}/>);
+    
     const [progress, setProgress] = useState(false);
 
     // again, other solutions were buggy, so handling the color of the tab buttons this way
@@ -218,12 +218,12 @@ const CalendarScreen = props => {
         if(oldContent.length <= 0)
         {
             getDataAsync(date, contentToShow);  
-            buttonToChange('-');    
+            buttonToChange(<Image source={require("../assets/icons/Line21.png")}/>);    
         } 
         else
         {
             contentToShow([]);
-            buttonToChange('+');    
+            buttonToChange(<Image source={require("../assets/icons/Union8.png")}/>);    
         }
     }
 
@@ -250,7 +250,9 @@ const CalendarScreen = props => {
                     <View style={styles.headerView}>
                         <Text style={styles.textStyle}>Friday May 15th</Text>
                         <TouchableOpacity style={styles.buttonView} onPress={() => showContent(fridayContent, setFridayContent, setFridayButton, 15)}>
-                            <Text style={styles.textStyle}>{fridayButton}</Text>
+                            <View style={{justifyContent: 'center'}}>
+                                {fridayButton}
+                            </View>
                         </TouchableOpacity>
                     </View>
                     <VirtualList buttonOnPress={checkUserData} content={fridayContent} buttonTitle="Add to calendar" horizontal={true} />                   
@@ -261,7 +263,9 @@ const CalendarScreen = props => {
                     <View style={styles.headerView}>
                         <Text style={styles.textStyle}>Saturday May 16th</Text>
                         <TouchableOpacity style={styles.buttonView} onPress={() => showContent(saturdayContent, setSaturdayContent, setSaturdayButton, 16)}>
-                            <Text style={styles.textStyle}>{saturdayButton}</Text>
+                            <View style={{justifyContent: 'center'}}>
+                                {saturdayButton}
+                            </View>
                         </TouchableOpacity>
                     </View>
                     <VirtualList buttonOnPress={checkUserData} content={saturdayContent} buttonTitle="Add to calendar" horizontal={true} />
@@ -272,7 +276,9 @@ const CalendarScreen = props => {
                     <View style={styles.headerView}>
                         <Text style={styles.textStyle}>Sunday May 17th</Text>
                         <TouchableOpacity style={styles.buttonView} onPress={() => showContent(sundayContent, setSundayContent, setSundayButton, 17)}>
-                            <Text style={styles.textStyle}>{sundayButton}</Text>
+                            <View style={{justifyContent: 'center'}}>
+                                {sundayButton}
+                            </View>
                         </TouchableOpacity>
                     </View>
                     <VirtualList buttonOnPress={checkUserData} content={sundayContent} buttonTitle="Add to calendar" horizontal={true}/>
@@ -350,14 +356,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textAlignVertical: 'center',
         fontSize: 20,
-        fontFamily: "StTransmission"
+        fontFamily: "StTransmission",
+        color: Colors.primary.red
     },
     buttonView: {
         flex: 1,
-        textAlign: 'center',
-        textAlignVertical: 'center',
+        flexDirection: 'row',
+        alignContent: 'center',
+        justifyContent: 'center',
         fontSize: 20,
-        backgroundColor: Colors.primary.red
+        backgroundColor: Colors.primary.yellow
     }
 });
 export default CalendarScreen;

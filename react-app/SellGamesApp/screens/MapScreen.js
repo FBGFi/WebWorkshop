@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, ScrollView, Animated, Dimensions, View, TouchableOpacity, Text, FlatList } from 'react-native';
+import { StyleSheet, ScrollView, Animated, Dimensions, View, TouchableOpacity, Text, FlatList, Image } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 import MapMarker from '../components/MapMarker';
@@ -33,7 +33,7 @@ const MapCard = props => {
 
                     <View style={{paddingLeft:10,paddingTop:10}}>
                         <TouchableOpacity onPress={props.cancelPress}>
-                            <Text style={{...styles.textStyles, ...{color: Colors.primary.red, fontSize:20}}}>x</Text>
+                            <Image source={require('../assets/icons/Union2.png')}/>
                         </TouchableOpacity>
                     </View>
 
