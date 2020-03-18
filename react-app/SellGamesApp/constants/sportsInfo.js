@@ -187,7 +187,7 @@ export default{
     [
         {
             title:"Organizers",
-            content:"LAB University of Applied Sciences together with Lahden Judoseura r.y.\n\nInquiries: Tatu Saarinen, tel. +358400350609, email: tatu.saarinen@lab.fi"
+            content:"LAB University of Applied Sciences together with Lahden Judoseura r.y.\n\nInquiries: Tatu Saarinen, tel. +358400350609, email: tatu.saarinen@lab.fi\n"
         },
         {
             title:"Time and place",
