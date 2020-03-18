@@ -19,7 +19,7 @@ const ImageButton = props =>{ //Painike
                 source={props.source}
             />
             <Text style={{color:'white', 
-            fontSize:27, 
+            fontSize:20, 
             textDecorationLine:'underline',
             fontFamily: "StTransmission"}}>{props.name}</Text>
         </TouchableOpacity>
