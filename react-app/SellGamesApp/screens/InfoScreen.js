@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity, BackHandler } from 'react-native';
+import { ScrollView, View, StyleSheet, Image, TouchableOpacity, BackHandler } from 'react-native';
 
 import Colors from '../constants/colors';
+import SportsInfo from '../constants/sportsInfo';
+
 import Info from '../components/Info';
-import SportsInfo from '../constants/sportsInfo'
+import StTransText from '../components/StTransText';
 
 const ImageButton = props =>{ //Painike
     /*
@@ -18,10 +20,9 @@ const ImageButton = props =>{ //Painike
                 style={styles.buttonimage}
                 source={props.source}
             />
-            <Text style={{color:'white', 
+            <StTransText style={{color:'white', 
             fontSize:20, 
-            textDecorationLine:'underline',
-            fontFamily: "StTransmission"}}>{props.name}</Text>
+            textDecorationLine:'underline'}}>{props.name}</StTransText>
         </TouchableOpacity>
     );
 };
@@ -102,7 +103,7 @@ const InfoScreen = props => {
     return (
         // Current footer setup does not work without ScrollView  
         <ScrollView style={{...props.style, ...styles.screen}} ref={infoscrollref}>
-            <Text style={{color:Colors.primary.yellow, fontSize:40, alignSelf:'center', fontFamily: "StTransmission"}}>Information</Text>
+            <StTransText style={{color:Colors.primary.yellow, fontSize:40, alignSelf:'center'}}>Information</StTransText>
             {content}
             
         </ScrollView>

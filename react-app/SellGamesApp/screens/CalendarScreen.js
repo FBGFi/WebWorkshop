@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ScrollView, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, Alert, Image } from 'react-native';
+import { View, StyleSheet, FlatList, ScrollView, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, Alert, Image } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 import Card from "../components/Card";
+import StTransText from '../components/StTransText';
 
 import Colors from "../constants/colors";
 
@@ -39,7 +40,8 @@ const VirtualList = props => {
                             button={true} 
                             buttonTitle={props.buttonTitle} 
                             buttonOnPress={props.buttonOnPress} 
-                            id={itemData.item.id}/>
+                            id={itemData.item.id}
+                            containerStyles={{width: '100%', borderRadius: 0}}/>
                         } />);
     }
     
@@ -264,15 +266,15 @@ const CalendarScreen = props => {
         <ScrollView style={{...props.style, ...styles.screen}}>
 
         <View style={styles.tabsView}>
-            <View style={{...{backgroundColor: eventTabBckgrnd}, ...styles.eventTabHeader}}><TouchableWithoutFeedback onPress={() => changeTabs(setEventTabBckgrnd, setUserTabBckgrnd, setCalendarDisplay, setUserDisplay)}><Text style={styles.textStyle}>Event Schedules</Text></TouchableWithoutFeedback></View>
-            <View style={{...{backgroundColor: userTabBckgrnd}, ...styles.userTabHeader}}><TouchableWithoutFeedback onPress={() => changeTabs(setUserTabBckgrnd, setEventTabBckgrnd, setUserDisplay, setCalendarDisplay)}><Text style={styles.textStyle}>User Schedules</Text></TouchableWithoutFeedback></View>
+            <View style={{...{backgroundColor: eventTabBckgrnd}, ...styles.eventTabHeader}}><TouchableWithoutFeedback onPress={() => changeTabs(setEventTabBckgrnd, setUserTabBckgrnd, setCalendarDisplay, setUserDisplay)}><StTransText style={styles.textStyle}>Event Schedules</StTransText></TouchableWithoutFeedback></View>
+            <View style={{...{backgroundColor: userTabBckgrnd}, ...styles.userTabHeader}}><TouchableWithoutFeedback onPress={() => changeTabs(setUserTabBckgrnd, setEventTabBckgrnd, setUserDisplay, setCalendarDisplay)}><StTransText style={styles.textStyle}>User Schedules</StTransText></TouchableWithoutFeedback></View>
         </View>
 
             <View style={{...{display: calendarDisplay}, ...styles.calendarView}}>
 
                 <View style={styles.wrapperView}>
                     <View style={styles.headerView}>
-                        <Text style={styles.textStyle}>Friday May 15th</Text>
+                        <StTransText style={styles.textStyle}>Friday May 15th</StTransText>
                         <TouchableOpacity style={styles.expandButtonView} onPress={() => showContent(fridayContent, setFridayContent, setFridayButton, 15)}>
                             <View style={{justifyContent: 'center'}}>
                                 {fridayButton}
@@ -285,7 +287,7 @@ const CalendarScreen = props => {
 
                 <View style={styles.wrapperView}>
                     <View style={styles.headerView}>
-                        <Text style={styles.textStyle}>Saturday May 16th</Text>
+                        <StTransText style={styles.textStyle}>Saturday May 16th</StTransText>
                         <TouchableOpacity style={styles.expandButtonView} onPress={() => showContent(saturdayContent, setSaturdayContent, setSaturdayButton, 16)}>
                             <View style={{justifyContent: 'center'}}>
                                 {saturdayButton}
@@ -298,7 +300,7 @@ const CalendarScreen = props => {
 
                 <View style={styles.wrapperView}>
                     <View style={styles.headerView}>
-                        <Text style={styles.textStyle}>Sunday May 17th</Text>
+                        <StTransText style={styles.textStyle}>Sunday May 17th</StTransText>
                         <TouchableOpacity style={styles.expandButtonView} onPress={() => showContent(sundayContent, setSundayContent, setSundayButton, 17)}>
                             <View style={{justifyContent: 'center'}}>
                                 {sundayButton}
@@ -315,7 +317,7 @@ const CalendarScreen = props => {
                         userContent.length > 0 ? 
                             <VirtualList buttonOnPress={removeFromUserContent} content={userContent} buttonTitle="Remove" horizontal={false}/>
                         : 
-                            <Card title="Nothing saved yet!" textContents="Add items from the calendar"/>
+                            <Card title="Nothing saved yet!" textContents="Add items from the Event Schedules tab" containerStyles={{width: '100%', borderRadius: 0}}/>
                     }
             </View>
 
@@ -352,13 +354,11 @@ const styles = StyleSheet.create({
     },
     eventTabHeader: {
         flex: 1,
-        minHeight: 50,
-        borderTopLeftRadius: 20
+        minHeight: 50
     },
     userTabHeader: {
         flex: 1,
-        minHeight: 50,
-        borderTopRightRadius: 20
+        minHeight: 50
     },
     wrapperView: {
         marginBottom: 2
@@ -376,7 +376,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textAlignVertical: 'center',
         fontSize: 20,
-        fontFamily: "StTransmission",
         color: Colors.primary.red
     },
     expandButtonView: {

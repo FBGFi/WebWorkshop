@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, ScrollView } from 'react-native';
+import { StyleSheet, FlatList, ScrollView } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 import Colors from '../constants/colors';
+
 import Card from "../components/Card";
 
 const NotificationsScreen = props => {
@@ -24,13 +25,21 @@ const NotificationsScreen = props => {
 
             const json = await response.json();
             let length = Object.keys(json.data.data).length;
+            let format = "";
             
 
             eventArray = new Array(length);
 
 
             for (let i = 0; i < length; i++) {
-                eventArray[i] = { id: ("" + json.data.data[i].ID), title: ("" + json.data.data[i].post_title), content: ("" + json.data.data[i].post_content) };
+                // remove some excess linebreaks
+                format = "" + json.data.data[i].post_content;
+                format = format.replace("\n\n\n\n\n\n", "\n\n");
+                format = format.replace("\n\n\n\n\n", "\n\n");
+                format = format.replace("\n\n\n\n", "\n\n");
+                format = format.replace("\n\n\n", "\n\n");
+
+                eventArray[i] = { id: ("" + json.data.data[i].ID), title: ("" + json.data.data[i].post_title), content: format };
             }
             props.setEvents(eventArray);
 
@@ -38,6 +47,7 @@ const NotificationsScreen = props => {
             eventArray = [{ id: "error", title: "Something went wrong :(", content: error.message }];
         }
         setEvents(eventArray);
+        await sleep(500);
         showProgress(false);
         
     };
@@ -50,13 +60,17 @@ const NotificationsScreen = props => {
         isRendered(true);
         setEvents(props.events);
     }
-    
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
     return (
         <ScrollView contentContainerStyle={styles.screen} horizontal={true}>
             <ScrollView contentContainerStyle={styles.inner}>
                 <FlatList keyExtractor={(item, index) => item.id}
                     data={events}
-                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.content} />
+                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.content} contentViewStyles={{marginTop: 0}} titleViewStyles={{borderBottomWidth: 2, borderColor: '#fff', paddingBottom: 5}} titleStyles={{fontSize: 25}} textContentStyles={{}}/>
                     } />
                 <AwesomeAlert 
                     show={progress}

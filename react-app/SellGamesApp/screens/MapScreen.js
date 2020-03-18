@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
-import { StyleSheet, ScrollView, Animated, Dimensions, View, TouchableOpacity, Text, FlatList, Image } from 'react-native';
+import { StyleSheet, ScrollView, Animated, Dimensions, View, TouchableOpacity, FlatList, Image } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 import MapMarker from '../components/MapMarker';
 import OpenURLButton from '../components/OpenURLButton';
 import Info from '../components/Info';
+import StTransText from '../components/StTransText';
 
 import Colors from '../constants/colors';
 import sportsInfo from '../constants/sportsInfo';
@@ -37,9 +38,9 @@ const MapCard = props => {
                         </TouchableOpacity>
                     </View>
 
-                    <Text style={{...styles.textStyles, ...{color: Colors.primary.red, textAlign: "center", fontSize:20}}}>
+                    <StTransText style={{color: Colors.primary.red, textAlign: "center", fontSize:20}}>
                         {props.address}
-                    </Text>
+                    </StTransText>
 
                 </View>
 
@@ -50,11 +51,11 @@ const MapCard = props => {
                                     <View style={{backgroundColor: Colors.primary.red, borderRadius: 8}}>
                                         <TouchableOpacity onPress={() => props.eventPress(itemData.item.title)}>
                                             <View style={{padding:10}}>
-                                                <View style={{paddingBottom:5}}><Text style={{...styles.textStyles, ...{color: Colors.primary.yellow, fontSize:20}}}>{itemData.item.title}</Text></View>
-                                                <View style={{paddingBottom:5}}><Text style={{...styles.textStyles, ...{color: Colors.primary.yellow, fontSize:18}}}>{itemData.item.date}</Text></View>
+                                                <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:20}}>{itemData.item.title}</StTransText></View>
+                                                <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{itemData.item.date}</StTransText></View>
                                                 <View style={{flexDirection: 'row'}}>
-                                                    <View style={{flex:3}}><Text style={{...styles.textStyles, ...{color: Colors.primary.yellow, fontSize:18}}}>{itemData.item.time}</Text></View>
-                                                    <View style={{flex:1, justifyContent: "center"}}><Text style={{...styles.textStyles, ...{color: Colors.primary.yellow, fontSize:20, textAlign:'right', alignSelf: 'flex-end'}}}>+</Text></View>
+                                                    <View style={{flex:3}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{itemData.item.time}</StTransText></View>
+                                                    <View style={{flex:1, justifyContent: "center"}}><StTransText style={{color: Colors.primary.yellow, fontSize:20, textAlign:'right', alignSelf: 'flex-end'}}>+</StTransText></View>
                                                 </View>
                                             </View>
                                         </TouchableOpacity>
@@ -62,7 +63,7 @@ const MapCard = props => {
                                 </View>
                             } />
                 <View>
-                    <OpenURLButton url={props.url} buttonText={"Open with Google Maps"} textStyles={{...styles.textStyles, ...{color: Colors.primary.yellow, fontSize:20}}} buttonStyles={{width:'70%'}}/>         
+                    <OpenURLButton url={props.url} buttonText={"Open with Google Maps"} textStyles={{color: Colors.primary.yellow, fontSize:20}} buttonStyles={{width:'70%'}}/>         
                 </View>
             </View>
     );
@@ -276,9 +277,6 @@ const styles = StyleSheet.create({
         height: screenWidth * (mapHeight/mapWidth),
         width: screenWidth,
         resizeMode: "contain"
-    },
-    textStyles: {
-        fontFamily: "StTransmission"
     },
     mapCard:{
         borderWidth: 2,

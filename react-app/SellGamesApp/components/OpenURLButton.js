@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 
 import Colors from '../constants/colors';
+
+import StTransText from '../components/StTransText';
 
 /**
  * Button to open URL
@@ -24,7 +26,7 @@ const OpenURLButton = props => {
           <View style={{...styles.button, ...props.buttonStyles}}>
           <TouchableOpacity onPress={handleClick}>
             <View>
-              <Text style={{ ...styles.text, ...props.textStyles}}>{props.buttonText}</Text>
+              <StTransText style={{ ...styles.text, ...props.textStyles}}>{props.buttonText}</StTransText>
             </View>
           </TouchableOpacity>
           </View>

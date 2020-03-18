@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import {View, Button, Text, StyleSheet, BackHandler } from 'react-native';
+import {View, Button, StyleSheet, BackHandler } from 'react-native';
 import Colors from '../constants/colors';
+
+import StTransText from '../components/StTransText';
 
 const Info = props => {
     let i;
@@ -13,8 +15,8 @@ const Info = props => {
         let body = [];
         for(i = 0; i < sportArray.length; i++){
             body[i] = (<View style={{width:'90%'}}>
-                <Text style={{fontSize:25, color:Colors.primary.white, fontFamily:"StTransmission"}}>{sportArray[i].title}</Text>
-                <Text style={{fontSize:18,color:Colors.primary.white, fontFamily:"StTransmission"}}>{sportArray[i].content}</Text>
+                <StTransText style={{fontSize:25, color:Colors.primary.white}}>{sportArray[i].title}</StTransText>
+                <StTransText style={{fontSize:18,color:Colors.primary.white}}>{sportArray[i].content}</StTransText>
                 </View>)
         }
         return body;
@@ -30,7 +32,7 @@ const Info = props => {
     });
     return (
         <View style={{...props.style, ...styles.infoPage}}>
-            <Text style={{color: Colors.primary.yellow, fontSize: 30, fontFamily:"StTransmission"}}>{props.title}</Text>
+            <StTransText style={{color: Colors.primary.yellow, fontSize: 30}}>{props.title}</StTransText>
             {infoBody}
 
             <Button title="Return" 
