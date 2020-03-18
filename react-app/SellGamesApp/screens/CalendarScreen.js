@@ -6,6 +6,13 @@ import Card from "../components/Card";
 
 import Colors from "../constants/colors";
 
+/**
+ * @author Aleksi - creates FlatList for the events
+ * @param content - data array to make the list from
+ * @param buttonTitle - text of the button in card
+ * @param buttonOnPress - function that is executed from button
+ * @param horizontal - boolean value, is list horizontal or not 
+ */
 const VirtualList = props => {
     if(props.horizontal){       
         return (
@@ -38,6 +45,10 @@ const VirtualList = props => {
     
 };
 
+/**
+ * @author Aleksi - screen to display schedules for the events
+ * @param style - pass styles for the screen 
+ */
 const CalendarScreen = props => {
     // different states for all the days, no need to fetch all if user only wants friday
     const [fridayContent, setFridayContent] = useState([]);
@@ -110,7 +121,7 @@ const CalendarScreen = props => {
     async function checkUserData(contentId){                        
         let result = {};
         
-        // check if already added to local storage        
+        // check if already added to local storage, returns the id or undefined        
         result = userContent.find(obj => {
             return obj.id === contentId
         });
@@ -146,7 +157,7 @@ const CalendarScreen = props => {
             break;
         }
         
-        // no local storage exists
+        // no storage in app exist
         if(userContent.length <= 0){
             setUserContent([result]);
         }
@@ -170,7 +181,10 @@ const CalendarScreen = props => {
         setUserContent(filtered);       
     }
 
-    // date is a number from 15-17, contentToSet is one of data arrays state changers
+    /**
+     * @param date - number from 15 to 17
+     * @param contentToSet - one of the data-arrays state changers
+     */
     async function getDataAsync(date, contentToSet) {
         setProgress(true);
         let eventArray;
@@ -212,22 +226,32 @@ const CalendarScreen = props => {
         
     };
 
-    // oldContent is the dates data array, contentToShow is the statechanger for the array, buttonToChange is statechanger for the dates expand button, date is 15-17
-    async function showContent(oldContent, contentToShow, buttonToChange, date){
+    /**
+     * @param oldContent - data array of the content to show/hide
+     * @param setContent - statechanger for the data array
+     * @param setButtonToChange - the dates buttons statechanger
+     * @param date - number from 15 to 17
+     */
+    async function showContent(oldContent, setContent, setButtonToChange, date){
         
         if(oldContent.length <= 0)
         {
-            getDataAsync(date, contentToShow);  
-            buttonToChange(<Image source={require("../assets/icons/Line21.png")}/>);    
+            getDataAsync(date, setContent);  
+            setButtonToChange(<Image source={require("../assets/icons/Line21.png")}/>);    
         } 
         else
         {
-            contentToShow([]);
-            buttonToChange(<Image source={require("../assets/icons/Union8.png")}/>);    
+            setContent([]);
+            setButtonToChange(<Image source={require("../assets/icons/Union8.png")}/>);    
         }
     }
 
-    // which tab button to highlight and fadeout, and which content to hide and which to display
+    /**
+     * @param highLight - statechanger for tab header that user clicks
+     * @param fadeOut - statechanger for tab header to hide
+     * @param displayContent - statechanger for tab to show
+     * @param hideContent - statechanger for tab to hide
+     */
     function changeTabs(highLight, fadeOut, displayContent, hideContent){
         highLight(Colors.primary.yellow);
         fadeOut('#ab8b20');
@@ -240,8 +264,8 @@ const CalendarScreen = props => {
         <ScrollView style={{...props.style, ...styles.screen}}>
 
         <View style={styles.tabsView}>
-            <View style={{...{backgroundColor: eventTabBckgrnd}, ...styles.eventTab}}><TouchableWithoutFeedback onPress={() => changeTabs(setEventTabBckgrnd, setUserTabBckgrnd, setCalendarDisplay, setUserDisplay)}><Text style={styles.textStyle}>Event Schedules</Text></TouchableWithoutFeedback></View>
-            <View style={{...{backgroundColor: userTabBckgrnd}, ...styles.userTab}}><TouchableWithoutFeedback onPress={() => changeTabs(setUserTabBckgrnd, setEventTabBckgrnd, setUserDisplay, setCalendarDisplay)}><Text style={styles.textStyle}>User Schedules</Text></TouchableWithoutFeedback></View>
+            <View style={{...{backgroundColor: eventTabBckgrnd}, ...styles.eventTabHeader}}><TouchableWithoutFeedback onPress={() => changeTabs(setEventTabBckgrnd, setUserTabBckgrnd, setCalendarDisplay, setUserDisplay)}><Text style={styles.textStyle}>Event Schedules</Text></TouchableWithoutFeedback></View>
+            <View style={{...{backgroundColor: userTabBckgrnd}, ...styles.userTabHeader}}><TouchableWithoutFeedback onPress={() => changeTabs(setUserTabBckgrnd, setEventTabBckgrnd, setUserDisplay, setCalendarDisplay)}><Text style={styles.textStyle}>User Schedules</Text></TouchableWithoutFeedback></View>
         </View>
 
             <View style={{...{display: calendarDisplay}, ...styles.calendarView}}>
@@ -249,7 +273,7 @@ const CalendarScreen = props => {
                 <View style={styles.wrapperView}>
                     <View style={styles.headerView}>
                         <Text style={styles.textStyle}>Friday May 15th</Text>
-                        <TouchableOpacity style={styles.buttonView} onPress={() => showContent(fridayContent, setFridayContent, setFridayButton, 15)}>
+                        <TouchableOpacity style={styles.expandButtonView} onPress={() => showContent(fridayContent, setFridayContent, setFridayButton, 15)}>
                             <View style={{justifyContent: 'center'}}>
                                 {fridayButton}
                             </View>
@@ -262,7 +286,7 @@ const CalendarScreen = props => {
                 <View style={styles.wrapperView}>
                     <View style={styles.headerView}>
                         <Text style={styles.textStyle}>Saturday May 16th</Text>
-                        <TouchableOpacity style={styles.buttonView} onPress={() => showContent(saturdayContent, setSaturdayContent, setSaturdayButton, 16)}>
+                        <TouchableOpacity style={styles.expandButtonView} onPress={() => showContent(saturdayContent, setSaturdayContent, setSaturdayButton, 16)}>
                             <View style={{justifyContent: 'center'}}>
                                 {saturdayButton}
                             </View>
@@ -275,7 +299,7 @@ const CalendarScreen = props => {
                 <View style={styles.wrapperView}>
                     <View style={styles.headerView}>
                         <Text style={styles.textStyle}>Sunday May 17th</Text>
-                        <TouchableOpacity style={styles.buttonView} onPress={() => showContent(sundayContent, setSundayContent, setSundayButton, 17)}>
+                        <TouchableOpacity style={styles.expandButtonView} onPress={() => showContent(sundayContent, setSundayContent, setSundayButton, 17)}>
                             <View style={{justifyContent: 'center'}}>
                                 {sundayButton}
                             </View>
@@ -326,19 +350,15 @@ const styles = StyleSheet.create({
     tabsView: {
         flexDirection: 'row'
     },
-    eventTab: {
+    eventTabHeader: {
         flex: 1,
         minHeight: 50,
         borderTopLeftRadius: 20
     },
-    userTab: {
+    userTabHeader: {
         flex: 1,
         minHeight: 50,
         borderTopRightRadius: 20
-    },
-    calendarView: {
-    },
-    userScheduleView: {
     },
     wrapperView: {
         marginBottom: 2
@@ -359,7 +379,7 @@ const styles = StyleSheet.create({
         fontFamily: "StTransmission",
         color: Colors.primary.red
     },
-    buttonView: {
+    expandButtonView: {
         flex: 1,
         flexDirection: 'row',
         alignContent: 'center',
