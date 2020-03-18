@@ -4,8 +4,8 @@ import { Card } from 'react-native-elements';
 
 const Cardbox = props => {
   return (
-    <View>
-      <Card title={props.title} containerStyle={{margin: 2}}>
+    <View style = {styles.cardbox}>
+      <Card title={props.title} containerStyle={{margin: 2, elevation:0, backgroundColor:'#be3a22', borderRadius: 20}}>
               <View>
                 <Text style={{...styles.text, ...props.textStyles}}>
                   {props.textContents}
@@ -19,12 +19,13 @@ const Cardbox = props => {
 
 const styles = StyleSheet.create({
   cardbox: {
-    backgroundColor: '#fff',
+    backgroundColor: '#fed13a',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   text: {
-    fontFamily: "StTransmission"
+    fontFamily: "StTransmission",
+    color: '#fff'
   }
 });
 
