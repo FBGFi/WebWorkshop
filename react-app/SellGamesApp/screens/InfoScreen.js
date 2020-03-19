@@ -95,6 +95,11 @@ const InfoScreen = props => {
 
     let content = <Buttons buttoninfo={setinfo} buttonsinfo={setsinfo}/>; //content on ensin painikkeet ruutu, joka muuttaa infon ja sinfon
     const infoscrollref = useRef(null); //Suora viittaus ScrollView, jotta ruutu on aina ylhäällä, kun painiketta painetaan. (Korjaus ongelmaan, jossa alemilla painikkeilla ruutu oli tekstin keskellä)
+    try{
+        infoscrollref.current.scrollTo({x: 0, y:0, animated:false}) 
+    }catch(e){
+        
+    }
     if(info != null){ //Jos info on muutettu
         content = <Info title={info} infoSetting={setinfo} sportInfo={sinfo}/> //Painikkeet ruutu vaihtuu Info ruuduksi. Title on ruudun otsikko, infoSetting on ruudun muutamista takaisin painike ruutuun, sportInfo on syötetty lajin sportsInfo array.
         infoscrollref.current.scrollTo({x: 0, y:0, animated:false}) //Liikuttaa scrollviewn ylös ruudun muutoksen jälkeen.(animated: true ei jotenkin toiminut kaikilla painikkeilla, false toimii kaikilla joten false pysyy)

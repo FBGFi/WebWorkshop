@@ -34,11 +34,12 @@ const Info = props => {
         <View style={{...props.style, ...styles.infoPage}}>
             <StTransText style={{color: Colors.primary.yellow, fontSize: 30}}>{props.title}</StTransText>
             {infoBody}
-
-            <Button title="Return" 
-            color={Colors.primary.red}
-            onPress={() => props.infoSetting(null)}/>
-        </View>
+            <View style={{marginBottom:30, marginTop:10}}>
+                <Button title="Return" 
+                color={Colors.primary.red}
+                onPress={() => props.infoSetting(null)}/>
+            </View>
+        </View>  
     );
 }
 
