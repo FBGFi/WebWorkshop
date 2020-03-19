@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, ScrollView, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, Alert, Image } from 'react-native';
+import { View, StyleSheet, FlatList, ScrollView, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, Alert, Image, Text } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 import Card from "../components/Card";
@@ -13,8 +13,10 @@ import Colors from "../constants/colors";
  * @param buttonTitle - text of the button in card
  * @param buttonOnPress - function that is executed from button
  * @param horizontal - boolean value, is list horizontal or not 
+ * @param displayDate - boolean if date wanted to be displayed
  */
 const VirtualList = props => {
+    
     if(props.horizontal){       
         return (
             <FlatList horizontal keyExtractor={(item, index) => item.id}
@@ -22,7 +24,9 @@ const VirtualList = props => {
                         renderItem={itemData => 
                             <Card 
                             title={itemData.item.title} 
-                            textContents={itemData.item.time} 
+                            titleStyles={{fontSize:22, textDecorationLine:'underline'}}
+                            textContents={props.displayDate ? itemData.item.venue + "\n" + itemData.item.date + "\n" + itemData.item.time : itemData.item.venue + "\n" + itemData.item.time} 
+                            contentViewStyles={{marginTop: 10}}
                             button={true} 
                             buttonTitle={props.buttonTitle} 
                             buttonOnPress={props.buttonOnPress} 
@@ -36,7 +40,9 @@ const VirtualList = props => {
                         renderItem={itemData => 
                             <Card 
                             title={itemData.item.title} 
-                            textContents={itemData.item.time} 
+                            titleStyles={{fontSize:22, textDecorationLine:'underline'}}
+                            textContents={props.displayDate ? itemData.item.venue + "\n" + itemData.item.date + "\n" + itemData.item.time : itemData.item.venue + "\n" + itemData.item.time} 
+                            contentViewStyles={{marginTop: 10}}
                             button={true} 
                             buttonTitle={props.buttonTitle} 
                             buttonOnPress={props.buttonOnPress} 
@@ -81,15 +87,15 @@ const CalendarScreen = props => {
 
     const [alert, showAlert] = useState(false);
    
-    // empty array and havent already checked if something to be found
-    if(userContent.length <= 0 && dataToBeFound)
-    {       
-        retrieveData();
-    }
     // on re-render if length of users array is different than savedContent, go to save the data
     if(userContent.length != savedContent)
     {
         storeData();
+    }
+    // empty array and havent already checked if something to be found
+    if(userContent.length <= 0 && dataToBeFound)
+    {       
+        retrieveData();
     }
 
     async function retrieveData(){
@@ -177,6 +183,7 @@ const CalendarScreen = props => {
     }
 
     function removeFromUserContent(contentId){
+
         let filtered = userContent.filter(obj => {
             return obj.id !== contentId;
         });
@@ -189,6 +196,8 @@ const CalendarScreen = props => {
      */
     async function getDataAsync(date, contentToSet) {
         setProgress(true);
+        console.log(date);
+        
         let eventArray;
         try {
             const response = await fetch("https://sellgames2020.fi/backend/api/events/date/2020-05-" + date, {
@@ -216,7 +225,9 @@ const CalendarScreen = props => {
                 eventArray[i] = { 
                     id: ("" + json.data[i].id), 
                     title: ("" + json.data[i].name), 
-                    time: ("" + startTimeFix + " - " + endTimeFix)
+                    time: ("" + startTimeFix + " - " + endTimeFix),
+                    date: ("May " + date + "th, 2020"),
+                    venue: ("" + json.data[i].venue.name)
                 };
             }
 
@@ -266,8 +277,8 @@ const CalendarScreen = props => {
         <ScrollView style={{...props.style, ...styles.screen}}>
 
         <View style={styles.tabsView}>
-            <View style={{...{backgroundColor: eventTabBckgrnd}, ...styles.eventTabHeader}}><TouchableWithoutFeedback onPress={() => changeTabs(setEventTabBckgrnd, setUserTabBckgrnd, setCalendarDisplay, setUserDisplay)}><StTransText style={styles.textStyle}>Event Schedules</StTransText></TouchableWithoutFeedback></View>
-            <View style={{...{backgroundColor: userTabBckgrnd}, ...styles.userTabHeader}}><TouchableWithoutFeedback onPress={() => changeTabs(setUserTabBckgrnd, setEventTabBckgrnd, setUserDisplay, setCalendarDisplay)}><StTransText style={styles.textStyle}>User Schedules</StTransText></TouchableWithoutFeedback></View>
+            <View style={{...{backgroundColor: eventTabBckgrnd}, ...styles.eventTabHeader}}><TouchableWithoutFeedback onPress={() => changeTabs(setEventTabBckgrnd, setUserTabBckgrnd, setCalendarDisplay, setUserDisplay)}><Text style={{...{fontFamily: "StTransmission"},...styles.textStyle}}>Event Schedules</Text></TouchableWithoutFeedback></View>
+            <View style={{...{backgroundColor: userTabBckgrnd}, ...styles.userTabHeader}}><TouchableWithoutFeedback onPress={() => changeTabs(setUserTabBckgrnd, setEventTabBckgrnd, setUserDisplay, setCalendarDisplay)}><Text style={{...{fontFamily: "StTransmission"},...styles.textStyle}}>User Schedules</Text></TouchableWithoutFeedback></View>
         </View>
 
             <View style={{...{display: calendarDisplay}, ...styles.calendarView}}>
@@ -315,7 +326,7 @@ const CalendarScreen = props => {
             <View style={{...{display: userDisplay}, ...styles.userScheduleView}}>
                     {
                         userContent.length > 0 ? 
-                            <VirtualList buttonOnPress={removeFromUserContent} content={userContent} buttonTitle="Remove" horizontal={false}/>
+                            <VirtualList buttonOnPress={removeFromUserContent} content={userContent} buttonTitle="Remove" horizontal={false} displayDate={true}/>
                         : 
                             <Card title="Nothing saved yet!" textContents="Add items from the Event Schedules tab" containerStyles={{width: '100%', borderRadius: 0}}/>
                     }

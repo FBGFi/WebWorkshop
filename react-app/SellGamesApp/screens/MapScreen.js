@@ -224,7 +224,7 @@ const MapScreen = props => {
                 <MapMarker 
                 dimensions={0.2} 
                 address={"Kisapuisto Sports Park\nLahdenkatu, 15140 Lahti"} 
-                url={"https://www.google.com/maps/place/Lahden+kisapuisto/"} 
+                url={"https://www.google.com/maps/place/Lahden+kisapuisto/@60.9873748,25.6470154,17z/data=!3m1!4b1!4m5!3m4!1s0x468e28550c22a22b:0xcc05c97e8dc88115!8m2!3d60.9873722!4d25.6492041"} 
                 fetchString={"Kisapuisto Sports Park"}
                 left={365*(screenWidth/mapWidth)}
                 top={950*(screenWidth/mapWidth)}

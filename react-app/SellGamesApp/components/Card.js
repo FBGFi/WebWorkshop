@@ -22,7 +22,7 @@ const CardButton = props => {
 }
 
 /**
- * @param containerStyles - styles to apply to card itself
+ * @param containerStyles - styles to apply to card itself 
  * @param textStyles - stylings for both title and contents
  * @param title - text for the title
  * @param titleStyles - styles for the title text
