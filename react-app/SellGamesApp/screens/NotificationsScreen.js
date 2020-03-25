@@ -1,85 +1,108 @@
 import React, { useState } from 'react';
-import { StyleSheet, FlatList, ScrollView } from 'react-native';
-import AwesomeAlert from 'react-native-awesome-alerts';
+import { StyleSheet, FlatList, ScrollView, View, TouchableOpacity, Image, AsyncStorage } from 'react-native';
 
 import Colors from '../constants/colors';
 
-import Card from "../components/Card";
+import StTransText from '../components/StTransText';
 
-const NotificationsScreen = props => {
-    const [events, setEvents] = useState([]);
-    const [rendered, isRendered] = useState(false);
-    const [progress, showProgress] = useState(false);
+/**
+ * @author Aleksi - button to open the news item
+ * @param id - id from the API 
+ * @param onPress - function to open the notification
+ * @param title - title from the API 
+ * @param textContents - text for the notification 
+ */
+const Notification = props => {
+    let defaultContent = <View style={{flexDirection: 'row'}}><StTransText style={{flex:3, fontSize: 25, color:Colors.primary.white}}>Read more</StTransText><Image style={{flex:1}} source={require("../assets/icons/Union8.png")}/></View>;
+    const [expanded, isExpanded] = useState(false);
+    const [content, setContent] = useState(defaultContent);
 
-    async function getDataAsync() {
-        showProgress(true);
-        let eventArray;
-        try {
-            const response = await fetch("https://sellgames2020.fi/backend/api/posts", {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }
-            })
-
-            const json = await response.json();
-            let length = Object.keys(json.data.data).length;
-            let format = "";
-            
-
-            eventArray = new Array(length);
-
-
-            for (let i = 0; i < length; i++) {
-                // remove some excess linebreaks
-                format = "" + json.data.data[i].post_content;
-                format = format.replace("\n\n\n\n\n\n", "\n\n");
-                format = format.replace("\n\n\n\n\n", "\n\n");
-                format = format.replace("\n\n\n\n", "\n\n");
-                format = format.replace("\n\n\n", "\n\n");
-
-                eventArray[i] = { id: ("" + json.data.data[i].ID), title: ("" + json.data.data[i].post_title), content: format };
-            }
-            props.setEvents(eventArray);
-
-        } catch (error) {
-            eventArray = [{ id: "error", title: "Something went wrong :(", content: error.message }];
+    function contentSetting(){
+        isExpanded(!expanded);
+        if(!expanded){
+            setContent(
+                <View>
+                    <StTransText style={{fontSize: 20, color: Colors.primary.white}}>
+                        {props.textContents}
+                    </StTransText>
+                </View>
+            );            
         }
-        setEvents(eventArray);
-        await sleep(500);
-        showProgress(false);
-        
-    };
-
-    if(!rendered && props.events.length <= 0){
-        isRendered(true);
-        getDataAsync();
+        else{
+            setContent(defaultContent);
+        }
     }
-    else if(!rendered && props.events.length > 0){ 
-        isRendered(true);
-        setEvents(props.events);
+
+    function isRead(){
+        let result = {};
+        
+        // check if already added to local storage, returns the id or undefined        
+        result = props.readIds.find(obj => {
+            return obj === props.id;
+        });
+
+        // was not read before
+        if(result == undefined){            
+            return false;
+        }
+        return true;
+    }
+
+    return(
+        <View key={"" + props.id} style={{backgroundColor: Colors.primary.red, borderRadius: 10, padding: 10, borderWidth: 2, borderColor: Colors.primary.yellow}}>
+            <TouchableOpacity onPress={() => {props.onPress(props.id); contentSetting();}}>
+                <View style={{borderBottomWidth: 2, borderColor: '#fff', paddingBottom: 5}}>
+                    <StTransText style={{fontSize: 25, color:Colors.primary.white}}>{props.title}</StTransText>                
+                </View>
+                {content}
+                {!isRead() ? <StTransText>NOT READ</StTransText> : null}
+            </TouchableOpacity>
+        </View>
+    );
+}
+
+/**
+ * @param notifications - notification array 
+ * @param readNotifications - array of IDs 
+ * @param setReadNotifications - statechanger for IDs 
+ * @param props 
+ */
+const NotificationsScreen = props => {
+    const [readIds, setReadIds] = useState(props.readNotifications);
+
+    async function markAsRead(id){
+      let result = {};
+      
+      // check if already added to local storage, returns the id or undefined        
+      result = readIds.find(obj => {
+          return obj === id;
+      });
+      
+      // was not read before
+      if(result == undefined){
+          setReadIds(currentIds => [...currentIds, id]);    
+          props.setReadNotifications(currentIds => [...currentIds, id]);
+      }
+      try {
+          await AsyncStorage.setItem('USER_READ_IDS', JSON.stringify(readIds));       
+      }catch(e){
+          console.log(e);
+      }
     }
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
 
+      
     return (
-        <ScrollView contentContainerStyle={styles.screen} horizontal={true}>
+        <ScrollView contentContainerStyle={styles.screen}>
             <ScrollView contentContainerStyle={styles.inner}>
-                <FlatList keyExtractor={(item, index) => item.id}
-                    data={events}
-                    renderItem={itemData => <Card title={itemData.item.title} textContents={itemData.item.content} contentViewStyles={{marginTop: 0}} titleViewStyles={{borderBottomWidth: 2, borderColor: '#fff', paddingBottom: 5}} titleStyles={{fontSize: 25}} textContentStyles={{}}/>
-                    } />
-                <AwesomeAlert 
-                    show={progress}
-                    showProgress={true}
-                    title="Loading..."
-                    closeOnTouchOutside={false}
-                    closeOnHardwareBackPress={false}
-                    showCancelButton={false}
-                    showConfirmButton={false}/>
+                {/*<FlatList keyExtractor={(item, index) => item.id}
+                    data={props.notifications}
+                    renderItem={itemData => <Notification readIds={readIds} id={itemData.item.id} title={itemData.item.title} textContents={itemData.item.content} onPress={markAsRead}/>
+                    } />*/}
+                <View>{props.notifications.map((item) => <View key={item.id}><Notification readIds={readIds} id={item.id} title={item.title} textContents={item.content} onPress={markAsRead}/></View>)}</View>
             </ScrollView>
         </ScrollView>
     );
@@ -90,13 +113,15 @@ const styles = StyleSheet.create({
     screen: {
         backgroundColor: Colors.primary.blue,
         flexDirection: 'row',
-        width: '100%'
+        width: '100%',
+        height: '100%'
     },
     
     inner: {
         backgroundColor: Colors.primary.yellow,
-        width: '80%',
+        width: '100%',
         alignSelf: 'center',
+        alignContent: 'flex-start',
         flexDirection: 'row',
     },
 });

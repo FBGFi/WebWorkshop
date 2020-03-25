@@ -107,8 +107,7 @@ const InfoScreen = props => {
     
     return (
         // Current footer setup does not work without ScrollView  
-        <ScrollView style={{...props.style, ...styles.screen}} ref={infoscrollref}>
-            <StTransText style={{color:Colors.primary.yellow, fontSize:40, alignSelf:'center'}}>Information</StTransText>
+        <ScrollView style={{...props.style, ...styles.screen}} contentContainerStyle={{paddingVertical: 10}} ref={infoscrollref}>
             {content}
             
         </ScrollView>
@@ -129,7 +128,7 @@ const styles = StyleSheet.create({
         width: 150,
         height:150,
         margin: 10,
-        marginBottom: 40,
+        marginBottom: 25,
         alignItems:'center'
     },
     buttonimage:{

@@ -125,7 +125,7 @@ const MapScreen = props => {
      * @param eventName - name of the event to send to infoscreen
      */
     function eventPress(eventName){
-        setEventContent(<View style={styles.info}><ScrollView scrollEnabled={true} contentContainerStyle={{paddingBottom: 60}}><Info sportInfo={sportsInfo.athletics} infoSetting={setEventContent}/></ScrollView></View>);
+        setEventContent(<View style={styles.info} key="eventContent"><ScrollView scrollEnabled={true} contentContainerStyle={{paddingBottom: 300}}><Info sportInfo={sportsInfo.athletics} infoSetting={setEventContent}/></ScrollView></View>);
         
     }
     
@@ -195,7 +195,7 @@ const MapScreen = props => {
 
     return (       
         <ScrollView contentContainerStyle={styles.screen} scrollEnabled={scrollable} onScroll={setOffSet}>
-            <View style={{width: screenWidth}}>
+            <View style={{width: screenWidth}} key="mapView">
                 <View style={styles.mapWrapper}>
                     <Animated.Image
                         source={require('../assets/map_yellow.png')}
@@ -249,7 +249,7 @@ const MapScreen = props => {
                 {eventContent}
             
 
-            <View style={{position: "absolute", width: screenWidth, height: screenHeight, marginTop: yOffset}}>
+            <View style={{position: "absolute", width: screenWidth, height: screenHeight, marginTop: yOffset}} key="alertView">
                 <AwesomeAlert 
                     show={progress}
                     showProgress={true}

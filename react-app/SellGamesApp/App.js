@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, StatusBar, Dimensions, ScrollView, BackHandler } from 'react-native';
+import { StyleSheet, View, StatusBar, Dimensions, ScrollView, BackHandler, AsyncStorage } from 'react-native';
 import * as Font from 'expo-font'; // this needed only in expo?
 
 // Component import
@@ -9,7 +9,8 @@ import Footer from './components/Footer.js';
 import InfoScreen from './screens/InfoScreen';
 import MapScreen from "./screens/MapScreen";
 import NotificationsScreen from "./screens/NotificationsScreen";
-import CalendarScreen from "./screens/CalendarScreen";
+import ScheduleScreen from "./screens/ScheduleScreen";
+import WelcomeScreen from "./screens/WelcomeScreen";
 
 import Colors from './constants/colors';
 
@@ -17,22 +18,86 @@ const screenHeight = Math.round(Dimensions.get('window').height);
 const screenWidth = Math.round(Dimensions.get('window').width);
 
 export default function App() {
-  const [contents, setContents] = useState(null);
+  const [contents, setContents] = useState(<ScrollView contentContainerStyle={{backgroundColor: Colors.primary.blue}}><View style={{height: screenHeight, width: screenWidth}}></View></ScrollView>);
   // save events here to reduce time for rendering
-  const [notificationEvents, setNotificationEvents] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [readNotifications, setReadNotifications] = useState([]);
   const [rendered, isRendered] = useState(false);
   
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  // fetch posts
+  async function getDataAsync() {
+    let eventArray;
+    try {
+      // uncomment this to reset storage on app reload
+      await AsyncStorage.setItem('USER_READ_IDS', "[]");
+        const response = await fetch("https://sellgames2020.fi/backend/api/posts", {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+
+        const json = await response.json();
+        let length = Object.keys(json.data.data).length;
+        let format = "";
+        
+
+        eventArray = new Array(length);
+
+
+        for (let i = 0; i < length; i++) {
+            // remove some excess linebreaks
+            format = "" + json.data.data[i].post_content;
+            format = format.replace("\n\n\n\n\n\n", "\n\n");
+            format = format.replace("\n\n\n\n\n", "\n\n");
+            format = format.replace("\n\n\n\n", "\n\n");
+            format = format.replace("\n\n\n", "\n\n");
+
+            eventArray[i] = { id: ("" + json.data.data[i].ID), title: ("" + json.data.data[i].post_title), content: format };
+        }
+        setNotifications(eventArray);
+
+    } catch (error) {
+        eventArray = [{ id: "error", title: "Something went wrong :(", content: error.message }];
+    }
+    await getReadNotifications();  
+  };
+
+  async function getReadNotifications(){      
+    let found = false; 
+    try {
+        const value = await AsyncStorage.getItem('USER_READ_IDS');           
+        // if theres empty array, it returns [] which is 2 characters long
+        if(value.length > 0) {
+          setReadNotifications(JSON.parse(value));
+          found = true;
+        }
+        }catch(e) {
+        console.log(e);          
+    }
+    if(!found){
+        try {
+            await AsyncStorage.setItem('USER_READ_IDS', "[]");
+            
+        }catch(e){
+            console.log(e);
+        }
+    }
+    
+  }
+
   // components to variables
   async function contentSetting(contentName){
     setContents(<ScrollView contentContainerStyle={{backgroundColor: Colors.primary.blue}}><View style={{height: screenHeight, width: screenWidth}}></View></ScrollView>);
     await sleep(5);
-    if(contentName == 'calendar')
+    if(contentName == 'schedule')
     {
-      setContents(<CalendarScreen/>);
+      setContents(<ScheduleScreen/>);
       BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()}); // revert the back button functionality to app exit (originally changed in Info.js)
     } 
     else if(contentName == 'map')
@@ -42,12 +107,17 @@ export default function App() {
     }
     else if(contentName == 'notifications')
     {
-      setContents(<NotificationsScreen events={notificationEvents} setEvents={setNotificationEvents}/>);
+      setContents(<NotificationsScreen notifications={notifications} setReadNotifications={setReadNotifications} readNotifications={readNotifications}/>);
       BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()}); // back button ^
     }
-    else
+    else if(contentName == 'info')
     {
       setContents(<InfoScreen style={styles.infoScreen}/>);
+      BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()}); // back button ^
+    }
+    else{
+      setContents(<WelcomeScreen />);
+      BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()}); // back button ^
     }
   }
 
@@ -58,7 +128,8 @@ export default function App() {
     await Font.loadAsync({
       'StTransmission': require('./assets/fonts/StTransmission-800-ExtraBold.otf'),
       });
-      contentSetting();
+    await getDataAsync();
+    contentSetting();    
   }
   
   // on first time loading, load assets first
@@ -69,7 +140,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       {contents}
-      <Footer contentSetting = {contentSetting} />
+      <Footer contentSetting = {contentSetting} unReadNotifications={notifications.length - readNotifications.length}/>
     </View>
   );
 }

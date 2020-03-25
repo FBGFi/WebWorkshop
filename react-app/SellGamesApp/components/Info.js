@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import {View, Button, StyleSheet, BackHandler } from 'react-native';
+import React from 'react';
+import {View, TouchableOpacity, StyleSheet, BackHandler } from 'react-native';
 import Colors from '../constants/colors';
 
 import StTransText from '../components/StTransText';
@@ -14,7 +14,7 @@ const Info = props => {
     function getSportsInfo(sportArray){
         let body = [];
         for(i = 0; i < sportArray.length; i++){
-            body[i] = (<View style={{width:'90%'}}>
+            body[i] = (<View style={{width:'90%'}} key={"" + i}>
                 <StTransText style={{fontSize:25, color:Colors.primary.white}}>{sportArray[i].title}</StTransText>
                 <StTransText style={{fontSize:18,color:Colors.primary.white}}>{sportArray[i].content}</StTransText>
                 </View>)
@@ -35,9 +35,11 @@ const Info = props => {
             <StTransText style={{color: Colors.primary.yellow, fontSize: 30}}>{props.title}</StTransText>
             {infoBody}
             <View style={{marginBottom:30, marginTop:10}}>
-                <Button title="Return" 
-                color={Colors.primary.red}
-                onPress={() => props.infoSetting(null)}/>
+                <TouchableOpacity onPress={() => props.infoSetting(null)}>
+                    <View style={{backgroundColor: Colors.primary.red, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5}}>
+                        <StTransText style={{color: Colors.primary.white, fontSize: 25}}>Return</StTransText>
+                    </View>
+                </TouchableOpacity>
             </View>
         </View>  
     );
