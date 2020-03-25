@@ -34,7 +34,7 @@ const MapCard = props => {
 
                     <View style={{paddingLeft:10,paddingTop:10}}>
                         <TouchableOpacity onPress={props.cancelPress}>
-                            <Image source={require('../assets/icons/Union2.png')}/>
+                            <Image source={require('../assets/icons/Union2.png')} style={{width: 30, height: 30}}/>
                         </TouchableOpacity>
                     </View>
 
@@ -43,25 +43,26 @@ const MapCard = props => {
                     </StTransText>
 
                 </View>
-
-                <FlatList keyExtractor={(item, index) => item.id}
-                            data={props.content}
-                            renderItem={itemData => 
-                                <View style={styles.eventButton}>
-                                    <View style={{backgroundColor: Colors.primary.red, borderRadius: 8}}>
-                                        <TouchableOpacity onPress={() => props.eventPress(itemData.item.title)}>
-                                            <View style={{padding:10}}>
-                                                <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:20}}>{itemData.item.title}</StTransText></View>
-                                                <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{itemData.item.date}</StTransText></View>
-                                                <View style={{flexDirection: 'row'}}>
-                                                    <View style={{flex:3}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{itemData.item.time}</StTransText></View>
-                                                    <View style={{flex:1, justifyContent: "center"}}><StTransText style={{color: Colors.primary.yellow, fontSize:20, textAlign:'right', alignSelf: 'flex-end'}}>+</StTransText></View>
-                                                </View>
-                                            </View>
-                                        </TouchableOpacity>
+         
+                <ScrollView>
+                    {props.content.map((item) => (
+                        <View key={item.id} style={styles.eventButton}>
+                            <View style={{backgroundColor: Colors.primary.red, borderRadius: 8}}>
+                                <TouchableOpacity onPress={() => props.eventPress(item.title)}>
+                                    <View style={{padding:10}}>
+                                        <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:20}}>{item.title}</StTransText></View>
+                                        <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{item.date}</StTransText></View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <View style={{flex:3}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{item.time}</StTransText></View>
+                                            <View style={{flex:1, justifyContent: "center"}}><StTransText style={{color: Colors.primary.yellow, fontSize:20, textAlign:'right', alignSelf: 'flex-end'}}>+</StTransText></View>
+                                        </View>
                                     </View>
-                                </View>
-                            } />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    ))}
+                </ScrollView>
+
                 <View>
                     <OpenURLButton url={props.url} buttonText={"Open with Google Maps"} textStyles={{color: Colors.primary.yellow, fontSize:20}} buttonStyles={{width:'70%'}}/>         
                 </View>

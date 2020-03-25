@@ -19,7 +19,7 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 
 export default function App() {
   const [contents, setContents] = useState(<ScrollView contentContainerStyle={{backgroundColor: Colors.primary.blue}}><View style={{height: screenHeight, width: screenWidth}}></View></ScrollView>);
-  // save events here to reduce time for rendering
+  // save notifications here to reduce time for rendering
   const [notifications, setNotifications] = useState([]);
   const [readNotifications, setReadNotifications] = useState([]);
   const [rendered, isRendered] = useState(false);
@@ -33,7 +33,7 @@ export default function App() {
     let eventArray;
     try {
       // uncomment this to reset storage on app reload
-      await AsyncStorage.setItem('USER_READ_IDS', "[]");
+      // await AsyncStorage.setItem('USER_READ_IDS', "[]");
         const response = await fetch("https://sellgames2020.fi/backend/api/posts", {
             method: 'GET',
             headers: {
@@ -68,6 +68,7 @@ export default function App() {
     await getReadNotifications();  
   };
 
+  // check which posts user has already read
   async function getReadNotifications(){      
     let found = false; 
     try {

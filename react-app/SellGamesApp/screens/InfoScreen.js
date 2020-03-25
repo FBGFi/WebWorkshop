@@ -7,10 +7,15 @@ import SportsInfo from '../constants/sportsInfo';
 import Info from '../components/Info';
 import StTransText from '../components/StTransText';
 
-const ImageButton = props =>{ //Painike
-    /*
-        Painauksesta infoSetting on name ja sinfoSetting on sinfoname, jotka välitetään ylös InfoScreenin.
-    */
+/**
+ * @author Simo - button with the sport image
+ * @param infoSetting - statechanger to bring out Info about the sport
+ * @param name - name of the sport 
+ * @param sinfoSetting - statechanger for the array to be displayed in Info 
+ * @param sinfoname - parameter from SportsInfo to be displayed (f.e SportsInfo.athletics)
+ * @param source - require() with path to the image for button 
+ */
+const ImageButton = props =>{ 
     return(
         <TouchableOpacity 
         style={styles.button}
@@ -27,13 +32,13 @@ const ImageButton = props =>{ //Painike
     );
 };
 
+/**
+ * @author Simo - container for all Buttons
+ * @param buttoninfo - statechanger for the info to be brought
+ * @param buttonsinfo - statechanger for the array to be brought from SportsInfo
+ */
 const Buttons = props => {
     BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()}); // revert the back button functionality
-    /*
-    *    ImageButton: source on kuvan lähde, name on infon title, 
-    *    sinfoname on SportsInfon lajin array, 
-    *    info/sinfoSetting on ruudun muuttamista varten.
-    */
     return(
         <View style={styles.cont}>
             <ImageButton source={require('../assets/sports/athletics.png')} 
@@ -89,20 +94,27 @@ const Buttons = props => {
 };
 
 const InfoScreen = props => {
-    const [info, setinfo] = useState(null); //Minkä lajin info ruutu näytetään
-    const [sinfo, setsinfo] = useState(null); //Minkä sportsinfo.js array näytetään (sinfo = sportinfo, Käyttö: SportsInfo.athletics)
-    //setinfon/sinfon kulku ImageButton -> Buttons -> InfoScreen
+    // which sports Info to be displayed
+    const [info, setinfo] = useState(null);
+    // which array from sportsInfo.js to be displayed
+    const [sinfo, setsinfo] = useState(null);
+    //setinfo/sinfo routing ImageButton -> Buttons -> InfoScreen
 
-    let content = <Buttons buttoninfo={setinfo} buttonsinfo={setsinfo}/>; //content on ensin painikkeet ruutu, joka muuttaa infon ja sinfon
-    const infoscrollref = useRef(null); //Suora viittaus ScrollView, jotta ruutu on aina ylhäällä, kun painiketta painetaan. (Korjaus ongelmaan, jossa alemilla painikkeilla ruutu oli tekstin keskellä)
+    // initial value
+    let content = <Buttons buttoninfo={setinfo} buttonsinfo={setsinfo}/>;
+    // scrolls to top when button pressed (Fixed a problem where lower buttons text was at middle of screen)
+    const infoscrollref = useRef(null);
     try{
         infoscrollref.current.scrollTo({x: 0, y:0, animated:false}) 
     }catch(e){
         
     }
-    if(info != null){ //Jos info on muutettu
-        content = <Info title={info} infoSetting={setinfo} sportInfo={sinfo}/> //Painikkeet ruutu vaihtuu Info ruuduksi. Title on ruudun otsikko, infoSetting on ruudun muutamista takaisin painike ruutuun, sportInfo on syötetty lajin sportsInfo array.
-        infoscrollref.current.scrollTo({x: 0, y:0, animated:false}) //Liikuttaa scrollviewn ylös ruudun muutoksen jälkeen.(animated: true ei jotenkin toiminut kaikilla painikkeilla, false toimii kaikilla joten false pysyy)
+    // if info changed
+    if(info != null){
+        // Changes content from Buttons to Info
+        content = <Info title={info} infoSetting={setinfo} sportInfo={sinfo}/>
+        // Scrolls the ScrollView to top after changes.(animated: true didnt somehow work with all of the buttons, false did)
+        infoscrollref.current.scrollTo({x: 0, y:0, animated:false}) 
     }
     
     return (

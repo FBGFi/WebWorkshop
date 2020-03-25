@@ -7,6 +7,9 @@ import StTransText from '../components/StTransText';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
+/**
+ * @author Aleksi - only shown when opening the app
+ */
 const WelcomeScreen = props => {
     return(
         <ScrollView style={styles.screen} contentContainerStyle={{justifyContent: 'center', alignContent: 'center', flexDirection: 'row'}} scrollEnabled={false}>

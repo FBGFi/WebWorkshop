@@ -4,6 +4,11 @@ import Colors from '../constants/colors';
 
 import StTransText from '../components/StTransText';
 
+/**
+ * @param title - header for the display
+ * @param infoSetting - statechanger for returning
+ * @param sportInfo - array for the info for the sport
+ */
 const Info = props => {
     let i;
     let infoBody = <View></View>;

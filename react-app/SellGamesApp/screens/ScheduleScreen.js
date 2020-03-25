@@ -64,9 +64,9 @@ const ScheduleScreen = props => {
     const [sundayContent, setSundayContent] = useState([]);
 
     // this not ideal? this just sets the icon for the expanding button
-    const [fridayButton, setFridayButton] = useState(<Image source={require("../assets/icons/Union8.png")}/>);
-    const [saturdayButton, setSaturdayButton] = useState(<Image source={require("../assets/icons/Union8.png")}/>);
-    const [sundayButton, setSundayButton] = useState(<Image source={require("../assets/icons/Union8.png")}/>);
+    const [fridayButton, setFridayButton] = useState(<Image source={require("../assets/icons/Union8.png")} style={{width: 30, height: 30}}/>);
+    const [saturdayButton, setSaturdayButton] = useState(<Image source={require("../assets/icons/Union8.png")} style={{width: 30, height: 30}}/>);
+    const [sundayButton, setSundayButton] = useState(<Image source={require("../assets/icons/Union8.png")} style={{width: 30, height: 30}}/>);
     
     const [progress, setProgress] = useState(false);
 
@@ -249,12 +249,12 @@ const ScheduleScreen = props => {
         if(oldContent.length <= 0)
         {
             getDataAsync(date, setContent);  
-            setButtonToChange(<Image source={require("../assets/icons/Line21.png")}/>);    
+            setButtonToChange(<Image source={require("../assets/icons/Line21.png")} style={{width: 30, height: 30}}/>);    
         } 
         else
         {
             setContent([]);
-            setButtonToChange(<Image source={require("../assets/icons/Union8.png")}/>);    
+            setButtonToChange(<Image source={require("../assets/icons/Union8.png")} style={{width: 30, height: 30}}/>);    
         }
     }
 

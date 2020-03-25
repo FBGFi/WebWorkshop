@@ -7,6 +7,7 @@ import StTransText from './StTransText';
 
 /**
  * @param unReadNotifications - if more than 0, there are unread posts 
+ * @param contentSetting - state changer for App content
  */
 const Footer = props => {
   let activeIndicator = <View style={styles.activeIndicator}></View>

@@ -13,7 +13,7 @@ import StTransText from '../components/StTransText';
  * @param textContents - text for the notification 
  */
 const Notification = props => {
-    let defaultContent = <View style={{flexDirection: 'row'}}><StTransText style={{flex:3, fontSize: 25, color:Colors.primary.white}}>Read more</StTransText><Image style={{flex:1}} source={require("../assets/icons/Union8.png")}/></View>;
+    let defaultContent = <View style={{flexDirection: 'row', padding: 10}}><StTransText style={{flex:3, fontSize: 25, color:Colors.primary.white}}>Read more</StTransText><Image style={{flex:1}} source={require("../assets/icons/UnionWhite.png")} style={{width: 30, height: 30}}/></View>;
     const [expanded, isExpanded] = useState(false);
     const [content, setContent] = useState(defaultContent);
 
