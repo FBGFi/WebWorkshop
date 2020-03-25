@@ -86,6 +86,7 @@ const ScheduleScreen = props => {
     const [dataToBeFound, setDataToBeFound] = useState(true);
 
     const [alert, showAlert] = useState(false);
+    const [alertAdded, showAlertAdded] = useState(false);
    
     // on re-render if length of users array is different than savedContent, go to save the data
     if(userContent.length != savedContent)
@@ -135,14 +136,17 @@ const ScheduleScreen = props => {
         });
         
         if(result != undefined && Object.keys(result).length > 0){
-            Alert.alert(
-              'Already added!',
-              'This schedule has already been added!',
-              [
-                {text: 'Cancel', onPress: () => ()=>{}, style: 'cancel'}
-              ],
-              { cancelable: true }
-            );
+            showAlertAdded(true);
+            await sleep(1000);
+            showAlertAdded(false);
+            // Alert.alert(
+            //   'Already added!',
+            //   'This schedule has already been added!',
+            //   [
+            //     {text: 'Cancel', onPress: () => ()=>{}, style: 'cancel'}
+            //   ],
+            //   { cancelable: true }
+            // );
             return;
         }
 
@@ -335,6 +339,15 @@ const ScheduleScreen = props => {
                 show={alert}
                 showProgress={false}
                 title="Added!"
+                closeOnTouchOutside={false}
+                closeOnHardwareBackPress={false}
+                showCancelButton={false}
+                showConfirmButton={false}
+                />
+            <AwesomeAlert
+                show={alertAdded}
+                showProgress={false}
+                title="Already Added!"
                 closeOnTouchOutside={false}
                 closeOnHardwareBackPress={false}
                 showCancelButton={false}

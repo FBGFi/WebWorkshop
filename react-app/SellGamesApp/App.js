@@ -33,7 +33,7 @@ export default function App() {
     let eventArray;
     try {
       // uncomment this to reset storage on app reload
-      // await AsyncStorage.setItem('USER_READ_IDS', "[]");
+       await AsyncStorage.setItem('USER_READ_IDS', "[]");
         const response = await fetch("https://sellgames2020.fi/backend/api/posts", {
             method: 'GET',
             headers: {

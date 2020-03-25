@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, FlatList, ScrollView, View, TouchableOpacity, Image, AsyncStorage } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, View, TouchableOpacity, Image, AsyncStorage } from 'react-native';
 
 import Colors from '../constants/colors';
 
 import StTransText from '../components/StTransText';
+
+const screenWidth = Math.round(Dimensions.get('window').width);
+const screenHeight = Math.round(Dimensions.get('window').height);
 
 /**
  * @author Aleksi - button to open the news item
@@ -13,24 +16,14 @@ import StTransText from '../components/StTransText';
  * @param textContents - text for the notification 
  */
 const Notification = props => {
-    let defaultContent = <View style={{flexDirection: 'row', padding: 10}}><StTransText style={{flex:3, fontSize: 25, color:Colors.primary.white}}>Read more</StTransText><Image style={{flex:1}} source={require("../assets/icons/UnionWhite.png")} style={{width: 30, height: 30}}/></View>;
     const [expanded, isExpanded] = useState(false);
-    const [content, setContent] = useState(defaultContent);
+    let textColor = Colors.primary.white;
+
+    textColor = !isRead() ? Colors.primary.yellow : Colors.primary.white;
 
     function contentSetting(){
+        props.onPress(props.id, true, props.title, props.textContents); 
         isExpanded(!expanded);
-        if(!expanded){
-            setContent(
-                <View>
-                    <StTransText style={{fontSize: 20, color: Colors.primary.white}}>
-                        {props.textContents}
-                    </StTransText>
-                </View>
-            );            
-        }
-        else{
-            setContent(defaultContent);
-        }
     }
 
     function isRead(){
@@ -49,15 +42,12 @@ const Notification = props => {
     }
 
     return(
-        <View key={"" + props.id} style={{backgroundColor: Colors.primary.red, borderRadius: 10, padding: 10, borderWidth: 2, borderColor: Colors.primary.yellow}}>
-            <TouchableOpacity onPress={() => {props.onPress(props.id); contentSetting();}}>
-                <View style={{borderBottomWidth: 2, borderColor: '#fff', paddingBottom: 5}}>
-                    <StTransText style={{fontSize: 25, color:Colors.primary.white}}>{props.title}</StTransText>                
+            <TouchableOpacity onPress={() => contentSetting()}>
+                <View style={{borderBottomWidth: 2, borderColor: '#fff', paddingHorizontal:5, paddingBottom: 10, flexDirection: 'row'}}>
+                    <View style={{flex: 1, justifyContent: 'center'}}><Image source={require("../assets/icons/UnionWhite.png")} style={{width: 30, height: 30}}/></View>
+                    <View style={{flex: 5}}><StTransText style={{fontSize: 20, color: textColor}}>{props.title}</StTransText></View>            
                 </View>
-                {content}
-                {!isRead() ? <StTransText>NOT READ</StTransText> : null}
             </TouchableOpacity>
-        </View>
     );
 }
 
@@ -69,6 +59,30 @@ const Notification = props => {
  */
 const NotificationsScreen = props => {
     const [readIds, setReadIds] = useState(props.readNotifications);
+    const [content, setContent] = useState(null);
+
+    
+    /**
+     * @param {*} id - id of the notification
+     * @param {*} show - boolean whether to show or hide the item
+     */
+    function notificationPress(id, show, title, content) {
+        if(show){
+            markAsRead(id);
+            setContent(
+                <View style={{position: 'absolute', paddingHorizontal: '8%', left: 0, top: 0, zIndex: 5, width: screenWidth, height: screenHeight}}>
+                    <ScrollView style={styles.inner} contentContainerStyle={{paddingBottom: 120}}>
+                        <View style={{padding:10}}><StTransText style={{fontSize: 20, color: Colors.primary.white, borderColor: Colors.primary.white, borderBottomWidth: 2, paddingBottom: 5}}>{title}</StTransText></View>
+                        <View style={{paddingHorizontal:10}}><StTransText style={{fontSize: 15, color: Colors.primary.white}}>{content}</StTransText></View>
+                        <TouchableOpacity onPress={() => setContent(null)}><View style={{width:150, height: 50, backgroundColor: Colors.primary.yellow, alignSelf: 'center', justifyContent: 'center', borderRadius: 10}}><StTransText style={{fontSize: 20, color: Colors.primary.red, textAlign: 'center'}}>Return</StTransText></View></TouchableOpacity>
+                    </ScrollView>
+                </View>
+            );
+        }
+        else{
+            setContent(null);
+        }
+    }
 
     async function markAsRead(id){
       let result = {};
@@ -96,14 +110,15 @@ const NotificationsScreen = props => {
 
       
     return (
-        <ScrollView contentContainerStyle={styles.screen}>
-            <ScrollView contentContainerStyle={styles.inner}>
-                {/*<FlatList keyExtractor={(item, index) => item.id}
-                    data={props.notifications}
-                    renderItem={itemData => <Notification readIds={readIds} id={itemData.item.id} title={itemData.item.title} textContents={itemData.item.content} onPress={markAsRead}/>
-                    } />*/}
-                <View>{props.notifications.map((item) => <View key={item.id}><Notification readIds={readIds} id={item.id} title={item.title} textContents={item.content} onPress={markAsRead}/></View>)}</View>
-            </ScrollView>
+        <ScrollView contentContainerStyle={styles.screen}>                
+            {content} 
+            <ScrollView style={styles.inner}>
+                {props.notifications.map((item) => 
+                    <View key={"" + item.id} style={{paddingHorizontal:18, paddingTop: 18}}>
+                        <Notification readIds={readIds} id={item.id} title={item.title} textContents={item.content} onPress={notificationPress}/>
+                    </View>
+                    )}
+            </ScrollView> 
         </ScrollView>
     );
 
@@ -114,15 +129,18 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primary.blue,
         flexDirection: 'row',
         width: '100%',
-        height: '100%'
+        height: '100%',
+        paddingHorizontal: '8%',
+        position: 'relative'
     },
     
     inner: {
-        backgroundColor: Colors.primary.yellow,
         width: '100%',
         alignSelf: 'center',
         alignContent: 'flex-start',
-        flexDirection: 'row',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        backgroundColor: Colors.primary.red
     },
 });
 export default NotificationsScreen;
