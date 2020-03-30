@@ -6,6 +6,8 @@ import Card from "../components/Card";
 import StTransText from '../components/StTransText';
 
 import Colors from "../constants/colors";
+import CommonConstants from "../constants/commonConstants";
+const Constants = new CommonConstants();
 
 /**
  * @author Aleksi - creates FlatList for the events
@@ -139,14 +141,6 @@ const ScheduleScreen = props => {
             showAlertAdded(true);
             await sleep(1000);
             showAlertAdded(false);
-            // Alert.alert(
-            //   'Already added!',
-            //   'This schedule has already been added!',
-            //   [
-            //     {text: 'Cancel', onPress: () => ()=>{}, style: 'cancel'}
-            //   ],
-            //   { cancelable: true }
-            // );
             return;
         }
 
@@ -203,13 +197,7 @@ const ScheduleScreen = props => {
         
         let eventArray;
         try {
-            const response = await fetch("https://sellgames2020.fi/backend/api/events/date/2020-05-" + date, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }
-            })
+            const response = await Constants.fetchFromAPI("events/date/2020-05-" + date);
 
             const json = await response.json();
             let length = Object.keys(json.data).length;

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, ScrollView, Animated, Dimensions, View, TouchableOpacity, FlatList, Image } from 'react-native';
+import { StyleSheet, ScrollView, Animated, View, TouchableOpacity, Image } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 import MapMarker from '../components/MapMarker';
@@ -9,13 +9,8 @@ import StTransText from '../components/StTransText';
 
 import Colors from '../constants/colors';
 import sportsInfo from '../constants/sportsInfo';
-
-const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
-
-// height to width ratio
-const mapWidth = 2656;
-const mapHeight = 6522;
+import CommonConstants from '../constants/commonConstants';
+const Constants = new CommonConstants();
 
 /**
  * @author Aleksi - the card containing list of locations events
@@ -28,7 +23,7 @@ const mapHeight = 6522;
  */
 const MapCard = props => {
     return(
-            <View style={{...styles.mapCard, ...{marginTop: (screenHeight * 0.05) + props.offSetTop}}}>
+            <View style={{...styles.mapCard, ...{marginTop: (Constants.deviceDimensions.screenHeight * 0.05) + props.offSetTop}}}>
 
                 <View style={{paddingBottom:10}}>
 
@@ -88,14 +83,6 @@ const MapScreen = props => {
 
     // changes every time user scrolls the map
     let currentOffset = 0;
-
-    /**
-     * @author Aleksi - function to await in async functions to postpone functions progress 
-     * @param  ms - milliseconds
-     */
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
     
     /**
      * @author Aleksi - function to open the locations event table
@@ -110,7 +97,7 @@ const MapScreen = props => {
         setAddress(place);
         setUrl(url)
         await getDataAsync(fetchString);
-        await sleep(50);        
+        await Constants.sleep(50);        
         showProgress(false);    
     }
 
@@ -151,16 +138,10 @@ const MapScreen = props => {
     async function getDataAsync(fetchString) {
         let eventArray;
         try {
-            const response = await fetch(("https://sellgames2020.fi/backend/api/events/venue/name/" + fetchString), {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }
-            })
-            
+            const response = await Constants.fetchFromAPI("events/venue/name/" + fetchString);            
             const json = await response.json();
             let length = Object.keys(json.data).length;
+            
             // formatting for the texts
             let dateFix = "";
             let startTimeFix = "";
@@ -196,7 +177,7 @@ const MapScreen = props => {
 
     return (       
         <ScrollView contentContainerStyle={styles.screen} scrollEnabled={scrollable} onScroll={setOffSet}>
-            <View style={{width: screenWidth}} key="mapView">
+            <View style={{width: Constants.deviceDimensions.screenWidth}} key="mapView">
                 <View style={styles.mapWrapper}>
                     <Animated.Image
                         source={require('../assets/map_yellow.png')}
@@ -211,46 +192,46 @@ const MapScreen = props => {
                 address={"Athletics stadium\nSalpausselänkatu 8, 15110 Lahti"} 
                 url={"https://www.google.com/maps/place/Salpaussel%C3%A4nkatu+8,+15110+Lahti/"} 
                 fetchString={"Athletics stadium"}
-                left={330*(screenWidth/mapWidth)}
-                top={3200*(screenWidth/mapWidth)}
+                left={Constants.mapCalculations.mapMarkerLeft(330)}
+                top={Constants.mapCalculations.mapMarkerTop(4180)}
                 markerPress={markerPress}/>
                 <MapMarker 
                 dimensions={0.2} 
                 address={"Kamppailuareena\nSuurmäenkatu 4, 15900 Lahti"} 
                 url={"https://www.google.com/maps/place/Suurm%C3%A4enkatu+4,+15900+Lahti/"} 
                 fetchString={"Kamppailuareena"}
-                left={30*(screenWidth/mapWidth)}
-                top={3320*(screenWidth/mapWidth)}
+                left={Constants.mapCalculations.mapMarkerLeft(30)}
+                top={Constants.mapCalculations.mapMarkerTop(4320)}
                 markerPress={markerPress}/>
                 <MapMarker 
                 dimensions={0.2} 
                 address={"Kisapuisto Sports Park\nLahdenkatu, 15140 Lahti"} 
                 url={"https://www.google.com/maps/place/Lahden+kisapuisto/@60.9873748,25.6470154,17z/data=!3m1!4b1!4m5!3m4!1s0x468e28550c22a22b:0xcc05c97e8dc88115!8m2!3d60.9873722!4d25.6492041"} 
                 fetchString={"Kisapuisto Sports Park"}
-                left={1100*(screenWidth/mapWidth)}
-                top={2850*(screenWidth/mapWidth)}
+                left={Constants.mapCalculations.mapMarkerLeft(1100)}
+                top={Constants.mapCalculations.mapMarkerTop(3750)}
                 markerPress={markerPress}/>
                 <MapMarker 
                 dimensions={0.2} 
                 address={"Suurhalli Sports Hall\nSalpausselänkatu 7, 15110 Lahti"} 
                 url={"https://www.google.com/maps/place/Salpaussel%C3%A4nkatu+7,+15110+Lahti/"} 
                 fetchString={"Suurhalli Sports Hall"}
-                left={520*(screenWidth/mapWidth)}
-                top={3000*(screenWidth/mapWidth)}
+                left={Constants.mapCalculations.mapMarkerLeft(520)}
+                top={Constants.mapCalculations.mapMarkerTop(3900)}
                 markerPress={markerPress}/>
                 <MapMarker 
                 dimensions={0.2} 
                 address={"Mukkula DiscGolfPark\nTuhtokatu 2, 15240 Lahti"} 
                 url={"https://www.google.com/maps/place/Tuhtokatu+2,+15240+Lahti/"} 
                 fetchString={"Mukkula DiscGolfPark"}
-                left={2200*(screenWidth/mapWidth)}
-                top={400*(screenWidth/mapWidth)}
+                left={Constants.mapCalculations.mapMarkerLeft(2200)}
+                top={Constants.mapCalculations.mapMarkerTop(500)}
                 markerPress={markerPress}/>
 
                 {eventContent}
             
 
-            <View style={{position: "absolute", width: screenWidth, height: screenHeight, marginTop: yOffset}} key="alertView">
+            <View style={{position: "absolute", width: Constants.deviceDimensions.screenWidth, height: Constants.deviceDimensions.screenHeight, marginTop: yOffset}} key="alertView">
                 <AwesomeAlert 
                     show={progress}
                     showProgress={true}
@@ -275,14 +256,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     mapImageStyles: { 
-        height: screenWidth * (mapHeight/mapWidth),
-        width: screenWidth,
+        height: Constants.deviceDimensions.screenWidth * (Constants.mapCalculations.mapHeight/Constants.mapCalculations.mapWidth),
+        width: Constants.deviceDimensions.screenWidth,
         resizeMode: "contain"
     },
     mapCard:{
         borderWidth: 2,
         borderColor: Colors.primary.red,
-        maxHeight: (screenHeight * 0.8),
+        maxHeight: (Constants.deviceDimensions.screenHeight * 0.8),
         backgroundColor: Colors.primary.yellow, 
         zIndex: 2,
         width: '90%',

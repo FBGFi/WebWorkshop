@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, StatusBar, Dimensions, ScrollView, BackHandler, AsyncStorage } from 'react-native';
+import { StyleSheet, View, StatusBar, ScrollView, BackHandler, AsyncStorage } from 'react-native';
 import * as Font from 'expo-font'; // this needed only in expo?
 
 // Component import
@@ -13,42 +13,29 @@ import ScheduleScreen from "./screens/ScheduleScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 
 import Colors from './constants/colors';
-
-const screenHeight = Math.round(Dimensions.get('window').height);
-const screenWidth = Math.round(Dimensions.get('window').width);
+import CommonConstants from './constants/commonConstants';
+const Constants = new CommonConstants();
 
 export default function App() {
-  const [contents, setContents] = useState(<ScrollView contentContainerStyle={{backgroundColor: Colors.primary.blue}}><View style={{height: screenHeight, width: screenWidth}}></View></ScrollView>);
+  const [contents, setContents] = useState(<ScrollView contentContainerStyle={{backgroundColor: Colors.primary.blue}}><View style={{height: Constants.deviceDimensions.screenHeight, width: Constants.deviceDimensions.screenWidth}}></View></ScrollView>);
   // save notifications here to reduce time for rendering
   const [notifications, setNotifications] = useState([]);
   const [readNotifications, setReadNotifications] = useState([]);
   const [rendered, isRendered] = useState(false);
-  
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
 
   // fetch posts
   async function getDataAsync() {
     let eventArray;
     try {
       // uncomment this to reset storage on app reload
-       await AsyncStorage.setItem('USER_READ_IDS', "[]");
-        const response = await fetch("https://sellgames2020.fi/backend/api/posts", {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-        })
-
+        await AsyncStorage.setItem('USER_READ_IDS', "[]");
+        await AsyncStorage.setItem('USER_SCHEDULES', "[]");
+        const response = await Constants.fetchFromAPI("posts");
         const json = await response.json();
         let length = Object.keys(json.data.data).length;
-        let format = "";
-        
 
+        let format = "";       
         eventArray = new Array(length);
-
 
         for (let i = 0; i < length; i++) {
             // remove some excess linebreaks
@@ -94,8 +81,8 @@ export default function App() {
 
   // components to variables
   async function contentSetting(contentName){
-    setContents(<ScrollView contentContainerStyle={{backgroundColor: Colors.primary.blue}}><View style={{height: screenHeight, width: screenWidth}}></View></ScrollView>);
-    await sleep(5);
+    setContents(<ScrollView contentContainerStyle={{backgroundColor: Colors.primary.blue}}><View style={{height: Constants.deviceDimensions.screenHeight, width: Constants.deviceDimensions.screenWidth}}></View></ScrollView>);
+    await Constants.sleep(5);
     if(contentName == 'schedule')
     {
       setContents(<ScheduleScreen/>);
