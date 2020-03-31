@@ -1,5 +1,6 @@
 export default{
-    athletics:[
+    athletics:{
+        data: [
         {
             title: "Organizers",
             content: "LAB University of Applied Sciences together with Lahden Ahkera ry.\n"  
@@ -20,7 +21,10 @@ export default{
             title: null,
             content: "Organizers are not responsible for the insurance of the participants.\n\nOrganizing committee reserves the right to make changes to these rules.\n"
         }],
-        basketball:[{
+        sportVenueTitles: "" // These are the names that API sends, if problems occur, look up if data there has changed
+    },
+    basketball:{
+        data: [{
             title: "Series",
             content: "Basketball will be played in the following series: Women and Men.\n"  
         },
@@ -55,9 +59,11 @@ export default{
         {
             title: "Timeouts",
             content: "Each team have 1 timeout per half.\nThe teams must enter the names of the players on the score sheet 15 minutes before the start of the game.\nEach team should have their own balls for warm-up.\nIt is on the teams’ responsibility to have game suits in two different colors.\nNumber of the player must be visible on the game suit.\nOrganizers are not responsible for the insurance of the participants.\nOrganizing committee reserves the right to make changes to these rules.\n"
-        }
-    ],
-    discgolf:[
+        }],
+        sportVenueTitles: ""
+    },
+    discgolf:{
+        data: [
         {
             title: "Series",
             content: "Open series for both men and women. No rating limits.\nMaximum number of 72 participants.\n"
@@ -77,9 +83,11 @@ export default{
         {
             title: "Transportation",
             content: "Information and options are released later by the organizing committee. Organizing committee reserves the right to make changes to these rules.\n"
-        }
-    ],
-    esports:[
+        }],
+        sportVenueTitles: ""
+    },
+    esports:{
+        data: [
         {
             title:"Time and place",
             content:"- May 15 – 17, 2020\n- M19 Kampus, Mukkulankatu 19, 15210 Lahti\n"
@@ -131,10 +139,11 @@ export default{
         {
             title:"General rules",
             content:"Players can take notes on piece of paper. Usage of all electrical devices will result in automatic disqualification.\n- List of banned cards can be found on blizz.ly/HSrules\n- Players must at all times observe the highest standards of personal integrity and good sportsmanship. Players are required to behave in a professional and sportsmanlike manner in their interactions with other competitors, Tournament organizers, members of the administration team, the media, sponsors, and fans.\n- All forms of cheating is prohibited and will be penalized by tournament administrators\n- Tournament organizers hold rights to do rulings not listed in this document. Rulings will be based on Blizzard’s official hearthstone tournament rules.\n"
-        }
-    ],
-    floorball:
-    [
+        }],
+        sportVenueTitles: ""
+    },
+    floorball:{
+        data: [
         {
             title:"RULES OF FLOORBALL",
             content:"- May 15 – 16, 2020\n- Lahden Urheilu- ja messukeskus, Suurhalli,\n- Salpausselänkatu 7, 15110 Lahti\n"
@@ -150,10 +159,11 @@ export default{
         {
             title:"Team",
             content:"Maximum of 15 players + 2 goalkeepers per team. Maximum 3 officials per team.\n\nOrganizers are not responsible for the insurance of the participants.\n\nOrganizing committee reserves the right to make changes to these rules.\n"
-        }
-    ],
-    football:
-    [
+        }],
+        sportVenueTitles: ""
+    },
+    football:{
+        data: [
         {
             title:"Time and place",
             content:"- May 16, 2020\n- Kisapuisto, 15140 Lahti\n"
@@ -181,10 +191,11 @@ export default{
         {
             title:"Points",
             content:"In group stage matches: win = 3 points, tie = 1 point, and loss = 0 point.\n\nIf two or more teams reach the same amount of points in group stage, the final position is decided as follows:\n- Goal difference from the matches played among the teams in question\n- Goals scored in the matches played among the teams in question\n- Goal difference from all group stage matches\n- Goals scored in all group stage matches\n- Draw\n\nA tie in knockout matches is followed by 3 penalty shots.\n\nOrganizers are not responsible for the insurance of the participants.\n\nOrganizing committee reserves the right to make changes to these rules. "
-        }
-    ],
-    judo:
-    [
+        }],
+        sportVenueTitles: "W football - semifinals, M football - semifinals, W football - final, M football - final, M football - 3rd place, W football - 3rd place, W football - group stage, M football - group stage"
+    },
+    judo:{
+        data:[
         {
             title:"Organizers",
             content:"LAB University of Applied Sciences together with Lahden Judoseura r.y.\n\nInquiries: Tatu Saarinen, tel. +358400350609, email: tatu.saarinen@lab.fi\n"
@@ -220,10 +231,11 @@ export default{
         {
             title:"Insurance",
             content:"All competitors must provide an international individual insurance for injures. No insurance is provided by the organizers.\n"
-        }
-    ],
-    molkky:
-    [
+        }],
+        sportVenueTitles: ""
+    },
+    molkky:{
+        data: [
         {
             title:"Time and place",
             content:"May 15, 2020 Kisapuisto, 15140 Lahti",
@@ -243,10 +255,11 @@ export default{
         {
             title:"Throwing on the wrong turn:",
             content:"If a team or a player throws on wrong turn, the throw is ruled as blank/a line. However if the points are 37 or over, the team or the player drops to 25 points.\n- If the next throws managed to be thrown, there is no punishment for wrong turn throw.\n- After the wrong throw the throwing turn returns immediately back to the right one.\n- The team/player must take care of their own throwing order.\nThe games are played with the official TacTic’s mölkky set. The pack is to be made 3 to 4 meters distance from the throwing area. In the official matches the distance is 3,5m. The game turn order can be arranged in many ways. For an example in one-on-one game the starter is decided by raffling and the winner of the raffle decides which one starts, and the next round is started by other team/contestant. When there are multiple teams playing together, all the teams start on their own turn.\nIn the case of points being even, the placement is decided by:\n    1. Mutual matches\n    2. The rounds of mutual matches\n    3. Little points of mutual matches\n    4. All rounds of all matches\n    5. Little points of all matches\n    6. Raffle\n\nIn the case of points being even, the draw can be settled by Mölkuti (quick game deciding the winner). When comparing the rounds and the little points, first comes the subtraction of the points at issue, then the amounts.\nMölkky Organisation preserves the right to interpret and change these given rules.\n"
-        }
-    ],
-    orienteering:
-    [
+        }],
+        sportVenueTitles: ""
+    },
+    orienteering:{
+        data: [
         {
             title:"Series",
             content:"Individual Middle Distance Men and Women, Individual Sprint Men and Women.\n",
@@ -270,10 +283,11 @@ export default{
         {
             title:"Competitions winning times",
             content:"Middle\n- H21: 30-40 min\n- D21: 25-30 min\nSprint\n- H21: 12-15 min\n- D21: 12-15 min\n",
-        }
-    ],
-    tabletennis:
-    [
+        }],
+        sportVenueTitles: ""
+    },
+    tabletennis:{
+        data: [
         {
             title: "Time and place",
             content:"- May 15 – 16, 2020.\n- Lahden Urheilu- ja messukeskus, Suurhalli\n- Salpausselänkatu 7, 15110 Lahti "
@@ -293,10 +307,11 @@ export default{
         {
             title: null,
             content:"Timetable will be specified once the number of participants is known."
-        }
-    ],
-    volleyball:
-    [
+        }],
+        sportVenueTitles: ""
+    },
+    volleyball:{
+        data: [
         {
             title:"Series",
             content:"- Women and Men.\n- Maximum number of the teams in both categories is 12.\n"
@@ -324,10 +339,11 @@ export default{
         {
             title:"Organizing committee reserves the right to make changes to these rules.",
             content:null
-        }
-    ],
-    wrestling:
-    [
+        }],
+        sportVenueTitles: ""
+    },
+    wrestling:{
+        data: [
         {
             title:"Organizers",
             content:"LAB University of Applied Sciences together with Lahden Ahkera ry.\n\nInquiries, Pekko Pirhonen, tel. +358407258826, email pekko.pirhonen@lut.fi \n\n"
@@ -347,6 +363,14 @@ export default{
         {
             title:"Insurance and first aid ",
             content:"Participants must have a valid insurance that cover any possible injuries related to the sport. LAB University of Applied Sciences or any other co-organizers are not responsible for insuring participants. The organizers will arrange first aid to all competition venues and make sure that accredited medical staff is present.\n\n"
+        }],
+        sportVenueTitles: ""
+    },
+    default: {
+        data:[
+        {
+            title: "This sport's information page hasn't been added yet.",
+            content: "Look up sportsInfo.js for included sports for each information page in sportVenueTitles variables."
         }
-    ]
+    ]}
 }

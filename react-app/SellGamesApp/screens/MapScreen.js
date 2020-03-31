@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, ScrollView, Animated, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, ScrollView, Animated, View, TouchableOpacity, Image, BackHandler } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 import MapMarker from '../components/MapMarker';
@@ -114,9 +114,18 @@ const MapScreen = props => {
      * @author Aleksi - function to open info about the pressed event
      * @param eventName - name of the event to send to infoscreen
      */
-    function eventPress(eventName){
-        setEventContent(<View style={styles.info} key="eventContent"><ScrollView scrollEnabled={true} contentContainerStyle={{paddingBottom: 300}}><Info title={eventName} sportInfo={sportsInfo.athletics} infoSetting={setEventContent}/></ScrollView></View>);
-        
+    async function eventPress(eventName){
+        let keys = Object.keys(sportsInfo);
+        let sportInfoKey = "default";
+
+        // last key is default key, we dont need to check that
+        for (let i = 0; i < keys.length - 1; i++) {  
+            if(sportsInfo[keys[i]].sportVenueTitles.includes(eventName)){
+                sportInfoKey = keys[i];              
+                break;
+            }     
+        }
+        setEventContent(<View style={styles.info} key="eventContent"><ScrollView scrollEnabled={true} contentContainerStyle={{paddingBottom: 300}}><Info title={eventName} sportInfo={sportsInfo[sportInfoKey].data} infoSetting={setEventContent}/></ScrollView></View>);
     }
     
     /**

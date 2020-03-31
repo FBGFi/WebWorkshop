@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 import StTransText from '../components/StTransText';

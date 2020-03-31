@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, TouchableOpacity, StyleSheet, BackHandler } from 'react-native';
+
 import Colors from '../constants/colors';
 
 import StTransText from '../components/StTransText';
@@ -33,6 +34,7 @@ const Info = props => {
     // back button functionality
     BackHandler.addEventListener('hardwareBackPress', function() {  
         props.infoSetting(null);
+        BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()});
         return true; // this makes sure that the back button does not close the app
     });
     return (

@@ -2,11 +2,9 @@ import React, { useState, useRef } from 'react';
 import { ScrollView, View, StyleSheet, BackHandler } from 'react-native';
 
 import Colors from '../constants/colors';
-import SportsInfo from '../data/sportsInfo';
 import InfoButtonData from '../data/infoButtonData'
 
 import Info from '../components/Info';
-import StTransText from '../components/StTransText';
 import ImageButton from '../components/ImageButton';
 
 /**
@@ -21,6 +19,7 @@ const Buttons = props => {
             {
                 InfoButtonData.buttonInfo.map((item)=>(              
                     <ImageButton
+                        key={item.name} // key is required in lists, this is not passed on as a prop although
                         source={item.imagesrc} 
                         name={item.name}
                         sinfoname={item.sinfoname} 
