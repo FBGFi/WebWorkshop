@@ -51,7 +51,7 @@ const MapCard = props => {
                                         <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{item.date}</StTransText></View>
                                         <View style={{flexDirection: 'row'}}>
                                             <View style={{flex:3}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{item.time}</StTransText></View>
-                                            <View style={{flex:1, justifyContent: "center"}}><StTransText style={{color: Colors.primary.yellow, fontSize:20, textAlign:'right', alignSelf: 'flex-end'}}>+</StTransText></View>
+                                            <View style={{flex:1, justifyContent: "center"}}><StTransText style={{color: Colors.primary.yellow, fontSize:30, textAlign:'right', alignSelf: 'flex-end'}}>+</StTransText></View>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -115,7 +115,7 @@ const MapScreen = props => {
      * @param eventName - name of the event to send to infoscreen
      */
     function eventPress(eventName){
-        setEventContent(<View style={styles.info} key="eventContent"><ScrollView scrollEnabled={true} contentContainerStyle={{paddingBottom: 300}}><Info sportInfo={sportsInfo.athletics} infoSetting={setEventContent}/></ScrollView></View>);
+        setEventContent(<View style={styles.info} key="eventContent"><ScrollView scrollEnabled={true} contentContainerStyle={{paddingBottom: 300}}><Info title={eventName} sportInfo={sportsInfo.athletics} infoSetting={setEventContent}/></ScrollView></View>);
         
     }
     
@@ -199,6 +199,7 @@ const MapScreen = props => {
                         fetchString={item.fetchString}
                         left={item.left}
                         top={item.top}
+                        markerPress={markerPress}
                     />
                 ))
             }

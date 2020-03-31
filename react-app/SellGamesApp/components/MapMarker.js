@@ -16,7 +16,7 @@ const Constants = new CommonConstants();
 const MapMarker = props => {
   
   return (
-    <View key={props.key} style={{position: 'absolute', top: Constants.mapCalculations.mapMarkerPos(props.top), left: Constants.mapCalculations.mapMarkerPos(props.left)}}>
+    <View key={props.address} style={{position: 'absolute', top: Constants.mapCalculations.mapMarkerPos(props.top), left: Constants.mapCalculations.mapMarkerPos(props.left)}}>
       <TouchableOpacity onPress={() => props.markerPress(props.address, props.url, props.fetchString)}>
         <Image
           style={{width:(styles.marker.width*props.dimensions),height:(styles.marker.height*props.dimensions)}}
