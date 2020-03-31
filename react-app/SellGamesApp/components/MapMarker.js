@@ -1,6 +1,8 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, Image, View } from 'react-native';
 
+import CommonConstants from '../constants/commonConstants';
+const Constants = new CommonConstants();
 /**
  * 
  * @param markerPress - function to open location information
@@ -14,7 +16,7 @@ import { TouchableOpacity, StyleSheet, Image, View } from 'react-native';
 const MapMarker = props => {
   
   return (
-    <View style={{position: 'absolute', top: props.top, left: props.left}}>
+    <View style={{position: 'absolute', top: Constants.mapCalculations.mapMarkerPos(props.top), left: Constants.mapCalculations.mapMarkerPos(props.left)}}>
       <TouchableOpacity onPress={() => props.markerPress(props.address, props.url, props.fetchString)}>
         <Image
           style={{width:(styles.marker.width*props.dimensions),height:(styles.marker.height*props.dimensions)}}
