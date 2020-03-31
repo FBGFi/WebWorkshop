@@ -8,9 +8,11 @@ import Info from '../components/Info';
 import StTransText from '../components/StTransText';
 
 import Colors from '../constants/colors';
-import sportsInfo from '../constants/sportsInfo';
 import CommonConstants from '../constants/commonConstants';
 const Constants = new CommonConstants();
+
+import MapMarkerData from '../data/mapMarkerData';
+import sportsInfo from '../data/sportsInfo';
 
 /**
  * @author Aleksi - the card containing list of locations events
@@ -83,7 +85,7 @@ const MapScreen = props => {
 
     // changes every time user scrolls the map
     let currentOffset = 0;
-    
+
     /**
      * @author Aleksi - function to open the locations event table
      * @param address - address of the location
@@ -187,49 +189,21 @@ const MapScreen = props => {
 
             {cardContent}
 
-                <MapMarker 
-                dimensions={0.2} 
-                address={"Athletics stadium\nSalpausselänkatu 8, 15110 Lahti"} 
-                url={"https://www.google.com/maps/place/Salpaussel%C3%A4nkatu+8,+15110+Lahti/"} 
-                fetchString={"Athletics stadium"}
-                left={330}
-                top={3220}
-                markerPress={markerPress}/>
-                <MapMarker 
-                dimensions={0.2} 
-                address={"Kamppailuareena\nSuurmäenkatu 4, 15900 Lahti"} 
-                url={"https://www.google.com/maps/place/Suurm%C3%A4enkatu+4,+15900+Lahti/"} 
-                fetchString={"Kamppailuareena"}
-                left={30}
-                top={3320}
-                markerPress={markerPress}/>
-                <MapMarker 
-                dimensions={0.2} 
-                address={"Kisapuisto Sports Park\nLahdenkatu, 15140 Lahti"} 
-                url={"https://www.google.com/maps/place/Lahden+kisapuisto/@60.9873748,25.6470154,17z/data=!3m1!4b1!4m5!3m4!1s0x468e28550c22a22b:0xcc05c97e8dc88115!8m2!3d60.9873722!4d25.6492041"} 
-                fetchString={"Kisapuisto Sports Park"}
-                left={1100}
-                top={2850}
-                markerPress={markerPress}/>
-                <MapMarker 
-                dimensions={0.2} 
-                address={"Suurhalli Sports Hall\nSalpausselänkatu 7, 15110 Lahti"} 
-                url={"https://www.google.com/maps/place/Salpaussel%C3%A4nkatu+7,+15110+Lahti/"} 
-                fetchString={"Suurhalli Sports Hall"}
-                left={520}
-                top={3000}
-                markerPress={markerPress}/>
-                <MapMarker 
-                dimensions={0.2} 
-                address={"Mukkula DiscGolfPark\nTuhtokatu 2, 15240 Lahti"} 
-                url={"https://www.google.com/maps/place/Tuhtokatu+2,+15240+Lahti/"} 
-                fetchString={"Mukkula DiscGolfPark"}
-                left={2200}
-                top={400}
-                markerPress={markerPress}/>
-
-                {eventContent}
+            {
+                MapMarkerData.markerInfo.map((item) => (
+                    <MapMarker 
+                        key={item.address}
+                        dimensions={MapMarkerData.dimensions}
+                        address={item.address}
+                        url={item.url}
+                        fetchString={item.fetchString}
+                        left={item.left}
+                        top={item.top}
+                    />
+                ))
+            }
             
+            {eventContent}        
 
             <View style={{position: "absolute", width: Constants.deviceDimensions.screenWidth, height: Constants.deviceDimensions.screenHeight, marginTop: yOffset}} key="alertView">
                 <AwesomeAlert 

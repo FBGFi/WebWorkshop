@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { ScrollView, View, StyleSheet, Image, TouchableOpacity, BackHandler } from 'react-native';
 
 import Colors from '../constants/colors';
-import SportsInfo from '../constants/sportsInfo';
+import SportsInfo from '../data/sportsInfo';
 
 import Info from '../components/Info';
 import StTransText from '../components/StTransText';
