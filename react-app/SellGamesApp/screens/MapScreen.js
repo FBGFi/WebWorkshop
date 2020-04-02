@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import { StyleSheet, ScrollView, Animated, View, TouchableOpacity, Image } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
@@ -17,9 +17,28 @@ import sportsInfo from '../data/sportsInfo';
 class States {
     constructor(){
         this.mapOffsetTop = 0;
+        // save the old offset to this when event pressed
+        this.eventOffSetTop = 0;
+        this.scrollable = true;
+        this.resetMapContainerHeight(); 
     }
     setMapOffsetTop(val){
         this.mapOffsetTop = val;
+    }
+    setEventOffsetTop(val){
+        this.eventOffSetTop = val;
+    }
+    setMapContainerHeight(val){
+        if(val > this.mapContainerHeight)
+        {
+            this.mapContainerHeight += val - this.mapContainerHeight;
+        }       
+    }
+    resetMapContainerHeight(){
+        this.mapContainerHeight = Constants.deviceDimensions.screenWidth * (Constants.mapCalculations.mapHeight/Constants.mapCalculations.mapWidth);
+    }
+    isScrollable(val){
+        this.scrollable = val;
     }
 }
 const states = new States();
@@ -33,6 +52,7 @@ const states = new States();
  * @param eventPress - what happens when you click an event
  * @param offSetTop - how far from top of the screen to set the card
  * @param markerData - object from mapMarkerData.js
+ * @param mapViewRef - useRef to set map back to position
  */
 const MapCard = props => { 
     let cardContent;
@@ -92,20 +112,12 @@ const MapCard = props => {
  * @param event - event object to display
  */
 const EventInfo = props => {
-    let currentOffset = 0;
-    const [yOffset, setYOffset] = useState(0);
     const [alert, showAlert] = useState(false);
     const [alertAdded, showAlertAdded] = useState(false);
-    const [scrollable, isScrollable] = useState(true);
-
-    function setOffSet(e){ 
-        currentOffset = e.nativeEvent.contentOffset.y;        
-    }
 
     async function saveToSchedules(event){
         let wasAdded = await Constants.checkUserData(event);
-        setYOffset(currentOffset);
-        isScrollable(false);
+        states.isScrollable(false);
         // wasn't previously added
         if(wasAdded){     
             showAlert(true);   
@@ -117,13 +129,12 @@ const EventInfo = props => {
             showAlertAdded(false);
         }    
         await Constants.sleep(100);
-        isScrollable(true); 
+        states.isScrollable(true); 
     }
 
-    return (<View style={styles.info} key="eventContent">
-                <ScrollView scrollEnabled={scrollable} contentContainerStyle={{paddingBottom: 300}} onScroll={setOffSet}>
-                    <Info titleStyle={{marginTop: 10}} title={sportsInfo[props.sportInfoKey].title} sportInfo={sportsInfo[props.sportInfoKey].data} infoSetting={props.setEventContent} setToCalendarButton={true} setToCalendar={saveToSchedules} eventInfo={props.event}/>
-                    <View style={{position: "absolute", width: Constants.deviceDimensions.screenWidth, height: Constants.deviceDimensions.screenHeight, marginTop: yOffset}} key="addedAlertView">
+    return (<View onLayout={(e) => states.setMapContainerHeight(e.nativeEvent.layout.height)} style={styles.info} key="eventContent">
+                <Info titleStyle={{marginTop: 10}} title={sportsInfo[props.sportInfoKey].title} sportInfo={sportsInfo[props.sportInfoKey].data} infoSetting={props.setEventContent} setToCalendarButton={true} setToCalendar={saveToSchedules} eventInfo={props.event}/>
+                <View style={{position: "absolute", width: Constants.deviceDimensions.screenWidth, height: Constants.deviceDimensions.screenHeight, marginTop: states.mapOffsetTop}} key="addedAlertView">
                         <AwesomeAlert
                         show={alert}
                         showProgress={false}
@@ -133,8 +144,8 @@ const EventInfo = props => {
                         showCancelButton={false}
                         showConfirmButton={false}
                         />
-                    </View>
-                    <View style={{position: "absolute", width: Constants.deviceDimensions.screenWidth, height: Constants.deviceDimensions.screenHeight, marginTop: yOffset}} key="notAddedAlertView">
+                </View>
+                <View style={{position: "absolute", width: Constants.deviceDimensions.screenWidth, height: Constants.deviceDimensions.screenHeight, marginTop: states.mapOffsetTop}} key="notAddedAlertView">
                         <AwesomeAlert
                         show={alertAdded}
                         showProgress={false}
@@ -144,8 +155,7 @@ const EventInfo = props => {
                         showCancelButton={false}
                         showConfirmButton={false}
                         />
-                    </View>
-                </ScrollView>
+                </View>
             </View>);
 }
 
@@ -154,16 +164,21 @@ const EventInfo = props => {
  */
 const MapScreen = props => {
     const [cardContent, setCardContent] = useState(undefined);
-    const [eventContent, setEventContent] = useState(undefined);
-    // lock scrolling when marker is pressed
-    const [scrollable, isScrollable] = useState(true);
-    // how far is the card from top of screen
-    const [yOffset, setyOffset] = useState(0);
-
+    const [eventContent, setEventContent] = useState(null);
+    const [rendered, isRendered] = useState(false);
     const [progress, showProgress] = useState(false);
+    const [containerHeight, setContainerHeight] = useState(states.mapContainerHeight);
 
-    // changes every time user scrolls the map
-    let currentOffset = 0;
+    const mapViewRef = useRef(null);
+
+    if(!rendered){
+        isRendered(true);
+        states.isScrollable(true);
+        states.setEventOffsetTop(0);
+        states.setMapOffsetTop(0);
+        states.resetMapContainerHeight();
+        setContainerHeight(states.mapContainerHeight);
+    }
 
     /**
      * @author Aleksi - function to open the locations event table
@@ -173,26 +188,21 @@ const MapScreen = props => {
      * @param hasEvents - if theres events to fetch
      */
     async function markerPress(markerData){
-        //let offSet = currentOffset;           
-        //setyOffset(offSet);
         setCardContent(undefined);
         let events;
-        isScrollable(false);
+        states.isScrollable(false);
         showProgress(true);
         if(markerData.hasEvents){
             events = await getDataAsync(markerData.fetchString);
         }
         await Constants.sleep(500);           
-        setCardContent(<MapCard markerData={markerData} content={events} cancelPress={cancelPress} eventPress={eventPress} offSetTop={states.mapOffsetTop}/>);        
-        showProgress(false); 
-        //currentOffset = offSet;    
+        setCardContent(<MapCard mapViewRef={mapViewRef} markerData={markerData} content={events} cancelPress={cancelPress} eventPress={eventPress} offSetTop={states.mapOffsetTop}/>);        
+        showProgress(false);  
     }
 
-    async function cancelPress(){
-        //let offSet = currentOffset;       
-        isScrollable(true);
-        setCardContent(undefined);        
-        //currentOffset = offSet;
+    async function cancelPress(){  
+        states.isScrollable(true);  
+        setCardContent(undefined);     
     }
 
     /**
@@ -210,16 +220,30 @@ const MapScreen = props => {
                 break;
             }     
         }
-        setEventContent(<EventInfo sportInfoKey={sportInfoKey} setEventContent={setEventContent} event={event} />);
+        states.setEventOffsetTop(states.mapOffsetTop);
+        states.setMapOffsetTop(0);
+        states.isScrollable(true);
+        setEventContent(<EventInfo sportInfoKey={sportInfoKey} setEventContent={closeEventContent} event={event} />);
+        await Constants.sleep(100);
+        mapViewRef.current.scrollTo({x: 0, y: 0, animated: false});   
+        await Constants.sleep(500);   
+        setContainerHeight(states.mapContainerHeight);
+    }
+    async function closeEventContent(value = null){
+        states.isScrollable(false);
+        states.setMapOffsetTop(states.eventOffSetTop); 
+        states.resetMapContainerHeight();       
+        mapViewRef.current.scrollTo({x: 0, y: states.eventOffSetTop, animated: false});
+        setEventContent(value);
+        setContainerHeight(states.mapContainerHeight);
     }
 
     /**
      * @author Aleksi - scrolling sets the position of the scrollview from top
      * @param e - scrollview event(comes automatically) 
      */
-    function setOffSet(e){
+    function setOffSet(e){         
         states.setMapOffsetTop(e.nativeEvent.contentOffset.y);
-        //currentOffset = e.nativeEvent.contentOffset.y;        
     }
     
     /**
@@ -268,7 +292,7 @@ const MapScreen = props => {
     };
 
     return (       
-        <ScrollView contentContainerStyle={styles.screen} scrollEnabled={scrollable} onScroll={setOffSet}>
+        <ScrollView contentContainerStyle={{...styles.screen, ...{height: containerHeight}}} scrollEnabled={states.scrollable} onScroll={setOffSet} ref={mapViewRef}>
             <View style={{width: Constants.deviceDimensions.screenWidth}} key="mapView">
                 <View style={styles.mapWrapper}>
                     <Animated.Image
@@ -338,12 +362,13 @@ const styles = StyleSheet.create({
         paddingVertical: 5
     },
     info: {
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         zIndex: 3,
         backgroundColor: Colors.primary.blue,
         width: "100%",
-        height: "100%"
+        paddingHorizontal: 15,
+        minHeight: states.mapContainerHeight 
     }
 });
 export default MapScreen;
