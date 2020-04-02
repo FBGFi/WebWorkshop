@@ -31,7 +31,7 @@ const VirtualList = props => {
                             contentViewStyles={{marginTop: 10}}
                             button={true} 
                             buttonTitle={props.buttonTitle} 
-                            buttonOnPress={props.buttonOnPress} 
+                            buttonOnPress={() => props.buttonOnPress(itemData.item)} 
                             id={itemData.item.id}/>
                         } />);
     }
@@ -82,20 +82,12 @@ const ScheduleScreen = props => {
 
     // array for users own schedules
     const [userContent, setUserContent] = useState([]);
-    // needed this length to be saved here for comparison with userContent length, otherwise data saving wouldnt work correctly
-    const [savedContent, setSavedContent] = useState(0);
     // program got into rendering loop without a flag to indicate if data was already retrieved from local storage
     const [dataToBeFound, setDataToBeFound] = useState(true);
 
     const [alert, showAlert] = useState(false);
     const [alertAdded, showAlertAdded] = useState(false);
    
-    // on re-render if length of users array is different than savedContent, go to save the data
-    if(userContent.length != savedContent)
-    {
-        setSavedContent(userContent.length);
-        Constants.storeData(userContent);
-    }
     // empty array and havent already checked if something to be found
     if(userContent.length <= 0 && dataToBeFound)
     {       
@@ -104,86 +96,42 @@ const ScheduleScreen = props => {
 
     async function retrieveData(){
         try {
-          const value = await AsyncStorage.getItem('USER_SCHEDULES');
+          const value = await AsyncStorage.getItem(Constants.userScheduleKey);
           
           // if theres empty array, it returns [] which is 2 characters long
           if(value.length > 2) {
             setUserContent(JSON.parse(value));
-            setSavedContent(JSON.parse(value).length);
+            //setSavedContent(JSON.parse(value).length);
           }
           else{
               setDataToBeFound(false);
           }
-        } catch(e) {
-          console.log(e);
-          
-        }
+        } catch {}
     }
 
-    // moved to commonconstants
-    // async function storeData(){
-    //     try {
-    //         setSavedContent(userContent.length);
-    //         await AsyncStorage.setItem('USER_SCHEDULES', JSON.stringify(userContent));
-                   
-    //     } catch (e) {
-    //         console.log(e);      
-    //     }
-    // }
+    async function checkUserData(event){
+        let wasAdded = await Constants.checkUserData(event);
 
-    async function checkUserData(contentId){                        
-        let result = {};
-        
-        // check if already added to local storage, returns the id or undefined        
-        result = userContent.find(obj => {
-            return obj.id === contentId
-        });
-        
-        if(result != undefined && Object.keys(result).length > 0){
+        // wasn't previously added
+        if(wasAdded){        
+            showAlert(true);
+            await Constants.sleep(300);
+            retrieveData();
+            await Constants.sleep(300);
+            showAlert(false);
+        } else {
             showAlertAdded(true);
             await Constants.sleep(1000);
             showAlertAdded(false);
-            return;
         }
-
-        // not ideal?
-        while(true){            
-            result = fridayContent.find(obj => {
-                return obj.id === contentId
-            });
-            if(result != undefined) {break;}      
-            result = saturdayContent.find(obj => {
-                return obj.id === contentId
-            });
-            if(result != undefined) {break;}
-
-            result = sundayContent.find(obj => {
-                return obj.id === contentId
-              });
-            if(result != undefined) {break;}
-
-            break;
-        }
-        
-        // no storage in app exist
-        if(userContent.length <= 0){
-            setUserContent([result]);
-        }
-        // exists
-        else{            
-            setUserContent(currentContent => [...currentContent, result]);
-        }
-        showAlert(true);
-        await Constants.sleep(1000);
-        showAlert(false);
     }
 
-    function removeFromUserContent(contentId){
-
+    async function removeFromUserContent(contentId){
         let filtered = userContent.filter(obj => {
             return obj.id !== contentId;
-        });
-        setUserContent(filtered);       
+        });       
+        setUserContent(filtered);
+        Constants.storeData(filtered);       
     }
 
     /**
@@ -224,8 +172,7 @@ const ScheduleScreen = props => {
             eventArray = [{ id: "error", title: "Something went wrong :(", time: error.message }];
         }
         contentToSet(eventArray);
-        setProgress(false);
-        
+        setProgress(false);       
     };
 
     /**

@@ -12,6 +12,7 @@ import StTransText from '../components/StTransText';
  * @param setToCalendarButton - boolean for the map screen, so we can add this event to user schedules
  * @param setToCalendar - function to save the event to calendar if the button is added
  * @param eventInfo - object to be saved to the calendar
+ * @param titleStyle - if title text needs styling
  */
 const Info = props => {
     let i;
@@ -42,7 +43,7 @@ const Info = props => {
     });
     return (
         <View style={{...props.style, ...styles.infoPage}}>
-            <StTransText style={{color: Colors.primary.yellow, fontSize: 30}}>{props.title}</StTransText>
+            <StTransText style={{...{color: Colors.primary.yellow, fontSize: 30}, ...props.titleStyle}}>{props.title}</StTransText>
             {infoBody}
             <View style={{marginBottom:30, marginTop:10}}>
 
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primary.red, 
         paddingVertical: 10, 
         paddingHorizontal: 20, 
-        borderRadius: 5
+        borderRadius: 5,
     },
     buttonTextStyles: {
         color: Colors.primary.white, 

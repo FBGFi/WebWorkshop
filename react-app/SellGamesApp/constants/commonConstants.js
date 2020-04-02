@@ -44,10 +44,46 @@ class CommonConstants {
      * @author Aleksi - save to local storage
      * @param data - event to be saved
      */
-    async storeData(data){
+    async storeData(data){       
         try {
             await AsyncStorage.setItem(this.userScheduleKey, JSON.stringify(data)); 
-        } catch {}
+        } catch (e){ console.log(e); }
+    }
+
+    /**
+     * @author Aleksi - check if already added, if not, proceed to add to local storage
+     * @param event - event object to be added
+     */
+    async checkUserData(event){                        
+        let result = {};
+        let localStorageObject;
+        let storageFound;
+
+        try {
+            localStorageObject = JSON.parse(await AsyncStorage.getItem(this.userScheduleKey));           
+            storageFound = true;
+        } catch {
+            storageFound = false;
+        }
+
+        if(storageFound && localStorageObject.length > 0){      
+            // check if already added to local storage, returns the id or undefined        
+            result = localStorageObject.find(obj => {
+                return obj.id === event.id
+            });
+            
+            // was added previously
+            if(result != undefined && Object.keys(result).length > 0){
+                return false;
+            }
+            
+            localStorageObject.push(event);
+            this.storeData(localStorageObject);
+            
+        } else {
+            this.storeData([event]);
+        }
+        return true;
     }
 }
 export default CommonConstants;

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, ScrollView, Animated, View, TouchableOpacity, Image, BackHandler } from 'react-native';
+import { StyleSheet, ScrollView, Animated, View, TouchableOpacity, Image } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 import MapMarker from '../components/MapMarker';
@@ -23,7 +23,7 @@ import sportsInfo from '../data/sportsInfo';
  * @param url - URL address to Google Maps with this location
  * @param offSetTop - how far from top of the screen to set the card
  */
-const MapCard = props => {
+const MapCard = props => {   
     return(
             <View style={{...styles.mapCard, ...{marginTop: (Constants.deviceDimensions.screenHeight * 0.05) + props.offSetTop}}}>
 
@@ -68,20 +68,80 @@ const MapCard = props => {
 }
 
 /**
+ * @param sportInfoKey - key for the JS object sportsInfo.js
+ * @param setEventContent - function for returning
+ * @param event - event object to display
+ */
+const EventInfo = props => {
+    let currentOffset = 0;
+    const [yOffset, setYOffset] = useState(0);
+    const [alert, showAlert] = useState(false);
+    const [alertAdded, showAlertAdded] = useState(false);
+    const [scrollable, isScrollable] = useState(true);
+
+    function setOffSet(e){ 
+        currentOffset = e.nativeEvent.contentOffset.y;        
+    }
+
+    async function saveToSchedules(event){
+        let wasAdded = await Constants.checkUserData(event);
+        setYOffset(currentOffset);
+        isScrollable(false);
+        // wasn't previously added
+        if(wasAdded){     
+            showAlert(true);   
+            await Constants.sleep(1000);
+            showAlert(false);           
+        } else {
+            showAlertAdded(true);
+            await Constants.sleep(1000);
+            showAlertAdded(false);
+        }    
+        await Constants.sleep(100);
+        isScrollable(true); 
+    }
+
+    return (<View style={styles.info} key="eventContent">
+                <ScrollView scrollEnabled={scrollable} contentContainerStyle={{paddingBottom: 300}} onScroll={setOffSet}>
+                    <Info titleStyle={{marginTop: 10}} title={sportsInfo[props.sportInfoKey].title} sportInfo={sportsInfo[props.sportInfoKey].data} infoSetting={props.setEventContent} setToCalendarButton={true} setToCalendar={saveToSchedules} eventInfo={props.event}/>
+                    <View style={{position: "absolute", width: Constants.deviceDimensions.screenWidth, height: Constants.deviceDimensions.screenHeight, marginTop: yOffset}} key="addedAlertView">
+                        <AwesomeAlert
+                        show={alert}
+                        showProgress={false}
+                        title="Added!"
+                        closeOnTouchOutside={false}
+                        closeOnHardwareBackPress={false}
+                        showCancelButton={false}
+                        showConfirmButton={false}
+                        />
+                    </View>
+                    <View style={{position: "absolute", width: Constants.deviceDimensions.screenWidth, height: Constants.deviceDimensions.screenHeight, marginTop: yOffset}} key="notAddedAlertView">
+                        <AwesomeAlert
+                        show={alertAdded}
+                        showProgress={false}
+                        title="Already Added!"
+                        closeOnTouchOutside={false}
+                        closeOnHardwareBackPress={false}
+                        showCancelButton={false}
+                        showConfirmButton={false}
+                        />
+                    </View>
+                </ScrollView>
+            </View>);
+}
+
+/**
  * @author Aleksi - screen containing interactive map of the eventarea
  */
 const MapScreen = props => {
-    const [events, setEvents] = useState([]);
-    const [progress, showProgress] = useState(false);
     const [cardContent, setCardContent] = useState(undefined);
     const [eventContent, setEventContent] = useState(undefined);
-    const [rendered, isRendered] = useState(false);
-    const [address, setAddress] = useState("");
-    const [url, setUrl] = useState("");
     // lock scrolling when marker is pressed
     const [scrollable, isScrollable] = useState(true);
     // how far is the card from top of screen
     const [yOffset, setyOffset] = useState(0);
+
+    const [progress, showProgress] = useState(false);
 
     // changes every time user scrolls the map
     let currentOffset = 0;
@@ -96,18 +156,15 @@ const MapScreen = props => {
         setyOffset(currentOffset);
         isScrollable(false);
         showProgress(true);
-        setAddress(place);
-        setUrl(url)
-        await getDataAsync(fetchString);
-        await Constants.sleep(50);        
-        showProgress(false);    
+        let events = await getDataAsync(fetchString);
+        await Constants.sleep(50);           
+        setCardContent(<MapCard content={events} cancelPress={cancelPress} address={place} eventPress={eventPress} url={url} offSetTop={currentOffset}/>);        
+        showProgress(false); 
     }
 
     function cancelPress(){
         isScrollable(true);
         setCardContent(undefined);
-        setEvents([]);
-        isRendered(false);
     }
 
     /**
@@ -125,12 +182,7 @@ const MapScreen = props => {
                 break;
             }     
         }
-        setEventContent(<View style={styles.info} key="eventContent"><ScrollView scrollEnabled={true} contentContainerStyle={{paddingBottom: 300}}><Info title={sportsInfo[sportInfoKey].title} sportInfo={sportsInfo[sportInfoKey].data} infoSetting={setEventContent} setToCalendarButton={true} setToCalendar={saveToSchedules} eventInfo={event}/></ScrollView></View>);
-    }
-    
-    function saveToSchedules(event){
-        console.log("asd");
-        
+        setEventContent(<EventInfo sportInfoKey={sportInfoKey} setEventContent={setEventContent} event={event} />);
     }
 
     /**
@@ -139,12 +191,6 @@ const MapScreen = props => {
      */
     function setOffSet(e){
         currentOffset = e.nativeEvent.contentOffset.y;        
-    }
-
-    // if data has been fetched and set to events, set content. not before
-    if(events.length > 0 && !rendered){
-        setCardContent(<MapCard content={events} cancelPress={cancelPress} address={address} eventPress={eventPress} url={url} offSetTop={yOffset}/>);
-        isRendered(true);
     }
     
     /**
@@ -178,7 +224,8 @@ const MapScreen = props => {
                     id: ("" + json.data[i].id), 
                     title: ("" + json.data[i].name), 
                     date: ("May " + dateFix[2] + "th, 2020"), 
-                    time: ("" + startTimeFix + " - " + endTimeFix) };                
+                    time: ("" + startTimeFix + " - " + endTimeFix),
+                    venue: ("" + json.data[i].venue.name)};                
             }
             
 
@@ -187,7 +234,7 @@ const MapScreen = props => {
             
             eventArray = [{ id: "error", title: "Something went wrong :(", date: error.message, time: "" }];
         }
-        setEvents(eventArray);
+        return eventArray;        
         
     };
 
@@ -208,6 +255,7 @@ const MapScreen = props => {
                     <MapMarker 
                         key={item.address}
                         dimensions={MapMarkerData.dimensions}
+                        markerData={item}
                         address={item.address}
                         url={item.url}
                         fetchString={item.fetchString}
@@ -271,8 +319,7 @@ const styles = StyleSheet.create({
         zIndex: 3,
         backgroundColor: Colors.primary.blue,
         width: "100%",
-        height: "100%",
-        paddingTop: 10
+        height: "100%"
     }
 });
 export default MapScreen;
