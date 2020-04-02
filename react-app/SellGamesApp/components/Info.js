@@ -9,6 +9,9 @@ import StTransText from '../components/StTransText';
  * @param title - header for the display
  * @param infoSetting - statechanger for returning
  * @param sportInfo - array for the info for the sport
+ * @param setToCalendarButton - boolean for the map screen, so we can add this event to user schedules
+ * @param setToCalendar - function to save the event to calendar if the button is added
+ * @param eventInfo - object to be saved to the calendar
  */
 const Info = props => {
     let i;
@@ -42,9 +45,17 @@ const Info = props => {
             <StTransText style={{color: Colors.primary.yellow, fontSize: 30}}>{props.title}</StTransText>
             {infoBody}
             <View style={{marginBottom:30, marginTop:10}}>
+
+                {props.setToCalendarButton ? 
+                (<TouchableOpacity onPress={() => props.setToCalendar(props.eventInfo)}>
+                    <View style={{...styles.buttonWrapStyles, ...{marginBottom: 10}}}>
+                        <StTransText style={styles.buttonTextStyles}>Save to Schedules</StTransText>
+                    </View>
+                </TouchableOpacity>) : null}
+
                 <TouchableOpacity onPress={() => props.infoSetting(null)}>
-                    <View style={{backgroundColor: Colors.primary.red, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5}}>
-                        <StTransText style={{color: Colors.primary.white, fontSize: 25}}>Return</StTransText>
+                    <View style={styles.buttonWrapStyles}>
+                        <StTransText style={styles.buttonTextStyles}>Return</StTransText>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -56,6 +67,17 @@ const styles = StyleSheet.create({
     infoPage:{
         width:'100%',
         alignItems: 'center'
+    },
+    buttonWrapStyles:{
+        backgroundColor: Colors.primary.red, 
+        paddingVertical: 10, 
+        paddingHorizontal: 20, 
+        borderRadius: 5
+    },
+    buttonTextStyles: {
+        color: Colors.primary.white, 
+        fontSize: 25, 
+        textAlign: 'center'
     }
 });
 export default Info;

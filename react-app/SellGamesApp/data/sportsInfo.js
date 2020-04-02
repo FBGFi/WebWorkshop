@@ -1,5 +1,6 @@
 export default{
     athletics:{
+        title: "Athletics",
         data: [
         {
             title: "Organizers",
@@ -21,9 +22,11 @@ export default{
             title: null,
             content: "Organizers are not responsible for the insurance of the participants.\n\nOrganizing committee reserves the right to make changes to these rules.\n"
         }],
-        sportVenueTitles: "" // These are the names that API sends, if problems occur, look up if data there has changed
+        // These are the names that API sends, if problems occur, look up if data there has changed   
+        sportVenueTitles: "W 100m - preliminary, M 100m - preliminary, W 200m - preliminary, W long jump, M 200m - preliminary, W 100m hurdles, M long jump, M 110m hurdles, W 4x100m relay, W triple jump, W shot put, M 4x100m relay, W 400m, M triple jump, M shot put, M 400m, W 800m, W high jump, W javelin throw, M 800m, W 1500m, M high jump, M javelin throw, M 1500m, W 3000m, W discus, W pole vault, M 3000m, W 200m - final, M discus, M pole vault, M 200m - final, W 100m - final, M 100m - final" 
     },
     basketball:{
+        title: "Basketball",
         data: [{
             title: "Series",
             content: "Basketball will be played in the following series: Women and Men.\n"  
@@ -60,9 +63,10 @@ export default{
             title: "Timeouts",
             content: "Each team have 1 timeout per half.\nThe teams must enter the names of the players on the score sheet 15 minutes before the start of the game.\nEach team should have their own balls for warm-up.\nIt is on the teams’ responsibility to have game suits in two different colors.\nNumber of the player must be visible on the game suit.\nOrganizers are not responsible for the insurance of the participants.\nOrganizing committee reserves the right to make changes to these rules.\n"
         }],
-        sportVenueTitles: ""
+        sportVenueTitles: "W basketball - final, M basketball - final, W basketball - group stage, M basketball - group stage, W basketball - semifinals, M basketball - semifinals, W basketball - 3rd place, M basketball - 3rd place"
     },
     discgolf:{
+        title: "Disc Golf",
         data: [
         {
             title: "Series",
@@ -84,9 +88,10 @@ export default{
             title: "Transportation",
             content: "Information and options are released later by the organizing committee. Organizing committee reserves the right to make changes to these rules.\n"
         }],
-        sportVenueTitles: ""
+        sportVenueTitles: "Disc Golf"
     },
     esports:{
+        title: "eSports",
         data: [
         {
             title:"Time and place",
@@ -143,6 +148,7 @@ export default{
         sportVenueTitles: ""
     },
     floorball:{
+        title: "Floorball",
         data: [
         {
             title:"RULES OF FLOORBALL",
@@ -160,9 +166,10 @@ export default{
             title:"Team",
             content:"Maximum of 15 players + 2 goalkeepers per team. Maximum 3 officials per team.\n\nOrganizers are not responsible for the insurance of the participants.\n\nOrganizing committee reserves the right to make changes to these rules.\n"
         }],
-        sportVenueTitles: ""
+        sportVenueTitles: "W floorball - Pool stage, M floorball - Pool stage, W floorball - semifinals, M floorball - semifinals, W floorball - 3rd place, M floorball - 3rd place, W floorball - final, M floorball - final"
     },
     football:{
+        title: "Football",
         data: [
         {
             title:"Time and place",
@@ -195,6 +202,7 @@ export default{
         sportVenueTitles: "W football - semifinals, M football - semifinals, W football - final, M football - final, M football - 3rd place, W football - 3rd place, W football - group stage, M football - group stage"
     },
     judo:{
+        title: "Judo",
         data:[
         {
             title:"Organizers",
@@ -235,6 +243,7 @@ export default{
         sportVenueTitles: ""
     },
     molkky:{
+        title: "Mölkky",
         data: [
         {
             title:"Time and place",
@@ -256,9 +265,10 @@ export default{
             title:"Throwing on the wrong turn:",
             content:"If a team or a player throws on wrong turn, the throw is ruled as blank/a line. However if the points are 37 or over, the team or the player drops to 25 points.\n- If the next throws managed to be thrown, there is no punishment for wrong turn throw.\n- After the wrong throw the throwing turn returns immediately back to the right one.\n- The team/player must take care of their own throwing order.\nThe games are played with the official TacTic’s mölkky set. The pack is to be made 3 to 4 meters distance from the throwing area. In the official matches the distance is 3,5m. The game turn order can be arranged in many ways. For an example in one-on-one game the starter is decided by raffling and the winner of the raffle decides which one starts, and the next round is started by other team/contestant. When there are multiple teams playing together, all the teams start on their own turn.\nIn the case of points being even, the placement is decided by:\n    1. Mutual matches\n    2. The rounds of mutual matches\n    3. Little points of mutual matches\n    4. All rounds of all matches\n    5. Little points of all matches\n    6. Raffle\n\nIn the case of points being even, the draw can be settled by Mölkuti (quick game deciding the winner). When comparing the rounds and the little points, first comes the subtraction of the points at issue, then the amounts.\nMölkky Organisation preserves the right to interpret and change these given rules.\n"
         }],
-        sportVenueTitles: ""
+        sportVenueTitles: "Mölkky - Groups stage, Mölkky -Playoffs, Mölkky - Semifinals, Mölkky - 3rd place, Mölkky -Final"
     },
     orienteering:{
+        title: "Orienteering",
         data: [
         {
             title:"Series",
@@ -287,6 +297,7 @@ export default{
         sportVenueTitles: ""
     },
     tabletennis:{
+        title: "Table tennis",
         data: [
         {
             title: "Time and place",
@@ -311,6 +322,7 @@ export default{
         sportVenueTitles: ""
     },
     volleyball:{
+        title: "Volleyball",
         data: [
         {
             title:"Series",
@@ -343,6 +355,7 @@ export default{
         sportVenueTitles: ""
     },
     wrestling:{
+        title: "Wrestling",
         data: [
         {
             title:"Organizers",
@@ -364,9 +377,10 @@ export default{
             title:"Insurance and first aid ",
             content:"Participants must have a valid insurance that cover any possible injuries related to the sport. LAB University of Applied Sciences or any other co-organizers are not responsible for insuring participants. The organizers will arrange first aid to all competition venues and make sure that accredited medical staff is present.\n\n"
         }],
-        sportVenueTitles: ""
+        sportVenueTitles: "W wrestling, M wrestling"
     },
     default: {
+        title: "Not found",
         data:[
         {
             title: "This sport's information page hasn't been added yet.",

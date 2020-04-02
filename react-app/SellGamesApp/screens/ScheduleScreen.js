@@ -93,7 +93,8 @@ const ScheduleScreen = props => {
     // on re-render if length of users array is different than savedContent, go to save the data
     if(userContent.length != savedContent)
     {
-        storeData();
+        setSavedContent(userContent.length);
+        Constants.storeData(userContent);
     }
     // empty array and havent already checked if something to be found
     if(userContent.length <= 0 && dataToBeFound)
@@ -119,15 +120,16 @@ const ScheduleScreen = props => {
         }
     }
 
-    async function storeData(){
-        try {
-            setSavedContent(userContent.length);
-            await AsyncStorage.setItem('USER_SCHEDULES', JSON.stringify(userContent));
+    // moved to commonconstants
+    // async function storeData(){
+    //     try {
+    //         setSavedContent(userContent.length);
+    //         await AsyncStorage.setItem('USER_SCHEDULES', JSON.stringify(userContent));
                    
-        } catch (e) {
-            console.log(e);      
-        }
-    }
+    //     } catch (e) {
+    //         console.log(e);      
+    //     }
+    // }
 
     async function checkUserData(contentId){                        
         let result = {};
@@ -139,7 +141,7 @@ const ScheduleScreen = props => {
         
         if(result != undefined && Object.keys(result).length > 0){
             showAlertAdded(true);
-            await sleep(1000);
+            await Constants.sleep(1000);
             showAlertAdded(false);
             return;
         }
@@ -172,12 +174,8 @@ const ScheduleScreen = props => {
             setUserContent(currentContent => [...currentContent, result]);
         }
         showAlert(true);
-        await sleep(1000);
+        await Constants.sleep(1000);
         showAlert(false);
-    }
-
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     function removeFromUserContent(contentId){

@@ -45,7 +45,7 @@ const MapCard = props => {
                     {props.content.map((item) => (
                         <View key={item.id} style={styles.eventButton}>
                             <View style={{backgroundColor: Colors.primary.red, borderRadius: 8}}>
-                                <TouchableOpacity onPress={() => props.eventPress(item.title)}>
+                                <TouchableOpacity onPress={() => props.eventPress(item)}>
                                     <View style={{padding:10}}>
                                         <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:20}}>{item.title}</StTransText></View>
                                         <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{item.date}</StTransText></View>
@@ -112,22 +112,27 @@ const MapScreen = props => {
 
     /**
      * @author Aleksi - function to open info about the pressed event
-     * @param eventName - name of the event to send to infoscreen
+     * @param event - object of the event
      */
-    async function eventPress(eventName){
+    async function eventPress(event){
         let keys = Object.keys(sportsInfo);
-        let sportInfoKey = "default";
+        let sportInfoKey = "default";      
 
         // last key is default key, we dont need to check that
         for (let i = 0; i < keys.length - 1; i++) {  
-            if(sportsInfo[keys[i]].sportVenueTitles.includes(eventName)){
+            if(sportsInfo[keys[i]].sportVenueTitles.includes(event.title)){
                 sportInfoKey = keys[i];              
                 break;
             }     
         }
-        setEventContent(<View style={styles.info} key="eventContent"><ScrollView scrollEnabled={true} contentContainerStyle={{paddingBottom: 300}}><Info title={eventName} sportInfo={sportsInfo[sportInfoKey].data} infoSetting={setEventContent}/></ScrollView></View>);
+        setEventContent(<View style={styles.info} key="eventContent"><ScrollView scrollEnabled={true} contentContainerStyle={{paddingBottom: 300}}><Info title={sportsInfo[sportInfoKey].title} sportInfo={sportsInfo[sportInfoKey].data} infoSetting={setEventContent} setToCalendarButton={true} setToCalendar={saveToSchedules} eventInfo={event}/></ScrollView></View>);
     }
     
+    function saveToSchedules(event){
+        console.log("asd");
+        
+    }
+
     /**
      * @author Aleksi - scrolling sets the position of the scrollview from top
      * @param e - scrollview event(comes automatically) 
@@ -266,7 +271,8 @@ const styles = StyleSheet.create({
         zIndex: 3,
         backgroundColor: Colors.primary.blue,
         width: "100%",
-        height: "100%"
+        height: "100%",
+        paddingTop: 10
     }
 });
 export default MapScreen;

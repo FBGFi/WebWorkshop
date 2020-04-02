@@ -1,4 +1,4 @@
-import {Dimensions} from 'react-native';
+import {Dimensions, AsyncStorage} from 'react-native';
 
 class CommonConstants {
     constructor() {
@@ -15,6 +15,7 @@ class CommonConstants {
                 return px * (this.deviceDimensions.screenWidth / this.mapCalculations.mapWidth);
             }
         };
+        this.userScheduleKey = "USER_SCHEDULES";
     }
 
     // Common functionalities
@@ -37,6 +38,16 @@ class CommonConstants {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             }});
+    }
+
+    /**
+     * @author Aleksi - save to local storage
+     * @param data - event to be saved
+     */
+    async storeData(data){
+        try {
+            await AsyncStorage.setItem(this.userScheduleKey, JSON.stringify(data)); 
+        } catch {}
     }
 }
 export default CommonConstants;
