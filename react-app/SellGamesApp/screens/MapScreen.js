@@ -18,12 +18,37 @@ import sportsInfo from '../data/sportsInfo';
  * @author Aleksi - the card containing list of locations events
  * @param content - data to make the list from
  * @param cancelPress - function to close the card
- * @param address - address for the location
  * @param eventPress - what happens when you click an event
- * @param url - URL address to Google Maps with this location
  * @param offSetTop - how far from top of the screen to set the card
+ * @param markerData - object from mapMarkerData.js
  */
-const MapCard = props => {   
+const MapCard = props => { 
+    let cardContent;
+    
+    if(props.markerData.hasEvents){
+        cardContent = (<ScrollView>
+                        {props.content.map((item) => (
+                            <View key={item.id} style={styles.eventButton}>
+                                <View style={{backgroundColor: Colors.primary.red, borderRadius: 8}}>
+                                    <TouchableOpacity onPress={() => props.eventPress(item)}>
+                                        <View style={{padding:10}}>
+                                            <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:20}}>{item.title}</StTransText></View>
+                                            <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{item.date}</StTransText></View>
+                                            <View style={{flexDirection: 'row'}}>
+                                                <View style={{flex:3}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{item.time}</StTransText></View>
+                                                <View style={{flex:1, justifyContent: "center"}}><StTransText style={{color: Colors.primary.yellow, fontSize:30, textAlign:'right', alignSelf: 'flex-end'}}>+</StTransText></View>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        ))}
+                    </ScrollView>);
+    } else {
+        cardContent = (<View style={{backgroundColor: Colors.primary.red, marginHorizontal: 10, borderRadius: 10}}>
+                            <StTransText style={{textAlign: 'center', fontSize: 20, color: Colors.primary.yellow, padding: 5}}>{props.markerData.information}</StTransText>
+                        </View>);
+    } 
     return(
             <View style={{...styles.mapCard, ...{marginTop: (Constants.deviceDimensions.screenHeight * 0.05) + props.offSetTop}}}>
 
@@ -36,32 +61,14 @@ const MapCard = props => {
                     </View>
 
                     <StTransText style={{color: Colors.primary.red, textAlign: "center", fontSize:20}}>
-                        {props.address}
+                        {props.markerData.address}
                     </StTransText>
 
                 </View>
          
-                <ScrollView>
-                    {props.content.map((item) => (
-                        <View key={item.id} style={styles.eventButton}>
-                            <View style={{backgroundColor: Colors.primary.red, borderRadius: 8}}>
-                                <TouchableOpacity onPress={() => props.eventPress(item)}>
-                                    <View style={{padding:10}}>
-                                        <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:20}}>{item.title}</StTransText></View>
-                                        <View style={{paddingBottom:5}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{item.date}</StTransText></View>
-                                        <View style={{flexDirection: 'row'}}>
-                                            <View style={{flex:3}}><StTransText style={{color: Colors.primary.yellow, fontSize:18}}>{item.time}</StTransText></View>
-                                            <View style={{flex:1, justifyContent: "center"}}><StTransText style={{color: Colors.primary.yellow, fontSize:30, textAlign:'right', alignSelf: 'flex-end'}}>+</StTransText></View>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    ))}
-                </ScrollView>
-
+                {cardContent}
                 <View>
-                    <OpenURLButton url={props.url} buttonText={"Open with Google Maps"} textStyles={{color: Colors.primary.yellow, fontSize:20}} buttonStyles={{width:'70%'}}/>         
+                    <OpenURLButton url={props.markerData.url} buttonText={"Open with Google Maps"} textStyles={{color: Colors.primary.yellow, fontSize:20}} buttonStyles={{width:'70%'}}/>
                 </View>
             </View>
     );
@@ -151,14 +158,18 @@ const MapScreen = props => {
      * @param address - address of the location
      * @param url - url to Google Maps
      * @param fetchString - location name to pull data from API with
+     * @param hasEvents - if theres events to fetch
      */
-    async function markerPress(place, url, fetchString){
+    async function markerPress(markerData){
+        let events;
         setyOffset(currentOffset);
         isScrollable(false);
         showProgress(true);
-        let events = await getDataAsync(fetchString);
+        if(markerData.hasEvents){
+            events = await getDataAsync(markerData.fetchString);
+        }
         await Constants.sleep(50);           
-        setCardContent(<MapCard content={events} cancelPress={cancelPress} address={place} eventPress={eventPress} url={url} offSetTop={currentOffset}/>);        
+        setCardContent(<MapCard markerData={markerData} content={events} cancelPress={cancelPress} eventPress={eventPress} offSetTop={currentOffset}/>);        
         showProgress(false); 
     }
 
@@ -254,13 +265,8 @@ const MapScreen = props => {
                 MapMarkerData.markerInfo.map((item) => (
                     <MapMarker 
                         key={item.address}
-                        dimensions={MapMarkerData.dimensions}
+                        dimensions={Constants.mapCalculations.mapMarkerRatio(MapMarkerData.dimensions)}
                         markerData={item}
-                        address={item.address}
-                        url={item.url}
-                        fetchString={item.fetchString}
-                        left={item.left}
-                        top={item.top}
                         markerPress={markerPress}
                     />
                 ))

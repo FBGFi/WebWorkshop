@@ -6,18 +6,13 @@ const Constants = new CommonConstants();
 /**
  * 
  * @param markerPress - function to open location information
- * @param top - position from top of screen
- * @param left - position from left of screen
+ * @param markerData - object to fetch the data from, look mapMarkerData.js
  * @param dimensions - multiplier for the markers size
- * @param fetchString - string to fetch data from venues
- * @param url - url of the location on Google Maps
- * @param place - title for the information box
  */
 const MapMarker = props => {
-  
   return (
-    <View key={props.address} style={{position: 'absolute', top: Constants.mapCalculations.mapMarkerPos(props.top), left: Constants.mapCalculations.mapMarkerPos(props.left)}}>
-      <TouchableOpacity onPress={() => props.markerPress(props.address, props.url, props.fetchString)}>
+    <View key={props.markerData.address} style={{position: 'absolute', top: Constants.mapCalculations.mapMarkerRatio(props.markerData.top), left: Constants.mapCalculations.mapMarkerRatio(props.markerData.left)}}>
+      <TouchableOpacity onPress={() => props.markerPress(props.markerData)}>
         <Image
           style={{width:(styles.marker.width*props.dimensions),height:(styles.marker.height*props.dimensions)}}
           source={require('../assets/icons/MapMarker.png')}

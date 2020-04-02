@@ -10,9 +10,9 @@ class CommonConstants {
         this.mapCalculations = {
             mapWidth: 2656,
             mapHeight: 6522,
-            /** @param px - how many pixels the location is from the left side or top of the image, the ratio is same for both */
-            mapMarkerPos: (px) => {
-                return px * (this.deviceDimensions.screenWidth / this.mapCalculations.mapWidth);
+            /** @param unit - the unit we need the calculation for (pixels from top or left of screen forexample) */
+            mapMarkerRatio: (unit) => {
+                return unit * (this.deviceDimensions.screenWidth / this.mapCalculations.mapWidth);
             }
         };
         this.userScheduleKey = "USER_SCHEDULES";
