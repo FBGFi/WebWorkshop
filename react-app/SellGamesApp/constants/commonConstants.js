@@ -60,11 +60,14 @@ class CommonConstants {
         let storageFound;
 
         try {
-            localStorageObject = JSON.parse(await AsyncStorage.getItem(this.userScheduleKey));           
-            storageFound = true;
+            localStorageObject = JSON.parse(await AsyncStorage.getItem(this.userScheduleKey));   
+            if(localStorageObject == null){
+                storageFound = false;
+            }        
+            else storageFound = true;
         } catch {
             storageFound = false;
-        }
+        }        
 
         if(storageFound && localStorageObject.length > 0){      
             // check if already added to local storage, returns the id or undefined        

@@ -30,6 +30,7 @@ export default function App() {
         // uncomment these to reset storage on app reload
         // await AsyncStorage.setItem('USER_READ_IDS', "[]");
         // await AsyncStorage.setItem('USER_SCHEDULES', "[]");
+        // await AsyncStorage.removeItem('USER_SCHEDULES');
         const response = await Constants.fetchFromAPI("posts");
         const json = await response.json();
         let length = Object.keys(json.data.data).length;
