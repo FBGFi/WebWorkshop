@@ -14,6 +14,18 @@ const Constants = new CommonConstants();
 import MapMarkerData from '../data/mapMarkerData';
 import sportsInfo from '../data/sportsInfo';
 
+class States {
+    constructor(){
+        this.mapOffsetTop = 0;
+    }
+    setMapOffsetTop(val){
+        this.mapOffsetTop = val;
+    }
+}
+const states = new States();
+
+
+
 /**
  * @author Aleksi - the card containing list of locations events
  * @param content - data to make the list from
@@ -161,21 +173,26 @@ const MapScreen = props => {
      * @param hasEvents - if theres events to fetch
      */
     async function markerPress(markerData){
+        //let offSet = currentOffset;           
+        //setyOffset(offSet);
+        setCardContent(undefined);
         let events;
-        setyOffset(currentOffset);
         isScrollable(false);
         showProgress(true);
         if(markerData.hasEvents){
             events = await getDataAsync(markerData.fetchString);
         }
-        await Constants.sleep(50);           
-        setCardContent(<MapCard markerData={markerData} content={events} cancelPress={cancelPress} eventPress={eventPress} offSetTop={currentOffset}/>);        
+        await Constants.sleep(500);           
+        setCardContent(<MapCard markerData={markerData} content={events} cancelPress={cancelPress} eventPress={eventPress} offSetTop={states.mapOffsetTop}/>);        
         showProgress(false); 
+        //currentOffset = offSet;    
     }
 
-    function cancelPress(){
+    async function cancelPress(){
+        //let offSet = currentOffset;       
         isScrollable(true);
-        setCardContent(undefined);
+        setCardContent(undefined);        
+        //currentOffset = offSet;
     }
 
     /**
@@ -201,7 +218,8 @@ const MapScreen = props => {
      * @param e - scrollview event(comes automatically) 
      */
     function setOffSet(e){
-        currentOffset = e.nativeEvent.contentOffset.y;        
+        states.setMapOffsetTop(e.nativeEvent.contentOffset.y);
+        //currentOffset = e.nativeEvent.contentOffset.y;        
     }
     
     /**
@@ -274,7 +292,7 @@ const MapScreen = props => {
             
             {eventContent}        
 
-            <View style={{position: "absolute", width: Constants.deviceDimensions.screenWidth, height: Constants.deviceDimensions.screenHeight, marginTop: yOffset}} key="alertView">
+            <View style={{position: "absolute", width: Constants.deviceDimensions.screenWidth, height: Constants.deviceDimensions.screenHeight, marginTop: states.mapOffsetTop}} key="alertView">
                 <AwesomeAlert 
                     show={progress}
                     showProgress={true}
