@@ -104,11 +104,11 @@ const NotificationsScreen = props => {
       
       // was not read before
       if(result == undefined){
-          setReadIds(currentIds => [...currentIds, id]);    
+          await setReadIds(currentIds => [...currentIds, id]);    
           props.setReadNotifications(currentIds => [...currentIds, id]);
       }
-      try {
-          await AsyncStorage.setItem('USER_READ_IDS', JSON.stringify(readIds));       
+      try {                   
+          await AsyncStorage.setItem('USER_READ_IDS', JSON.stringify([...readIds, id]));       
       }catch(e){
           console.log(e);
       }
