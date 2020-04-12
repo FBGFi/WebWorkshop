@@ -16,7 +16,7 @@ import Colors from './constants/colors';
 import CommonConstants from './constants/commonConstants';
 const Constants = new CommonConstants();
 
-export default function App() {
+export default function App() {  
   const [contents, setContents] = useState(<ScrollView contentContainerStyle={{backgroundColor: Colors.primary.blue}}><View style={{height: Constants.deviceDimensions.screenHeight, width: Constants.deviceDimensions.screenWidth}}></View></ScrollView>);
   // save notifications here to reduce time for rendering
   const [notifications, setNotifications] = useState([]);
@@ -30,7 +30,6 @@ export default function App() {
         // uncomment these to reset storage on app reload
         // await AsyncStorage.setItem('USER_READ_IDS', "[]");
         // await AsyncStorage.setItem('USER_SCHEDULES', "[]");
-        // await AsyncStorage.removeItem('USER_SCHEDULES');
         const response = await Constants.fetchFromAPI("posts");
         const json = await response.json();
         let length = Object.keys(json.data.data).length;
