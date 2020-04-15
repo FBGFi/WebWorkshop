@@ -45,3 +45,15 @@ Notification system.
 Map of the competitionarea.
 
 Display of placements in the sports.
+
+# Things to change for future use
+
+If app will be used in future events somewhere else, look into these files:
+
+- data/infoButtonData.js (handles the buttons in the opening screen)
+- data/sportsInfo.js (the text displayed when infobutton is clicked, if this will be added to API change accordingly. here also sportVenueTitles tells what events to link the data to from API, would be easier just to add the general sport name to each item in the API instead of this)
+- data/mapMarkerData.js (each object here is a marker in the map. delete these and add new ones for new locations)
+- constants/commonConstants.js (mapWidth and mapHeight are map's dimensions in pixels. if new map added, change these accordingly. also if API changes, change the API address)
+- screen/ScheduleScreen.js (data is pulled from API with date, change the string that is sent to Constants.fetchFromApi() according to your needs)
+
+Questions about the app can be forwarded to previous teams scrum leader, get more info about that from your teacher.
