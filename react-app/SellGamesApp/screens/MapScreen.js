@@ -278,7 +278,7 @@ const MapScreen = props => {
                     title: ("" + json.data[i].name), 
                     date: ("May " + dateFix[2] + "th, 2020"), 
                     time: ("" + startTimeFix + " - " + endTimeFix),
-                    venue: ("" + json.data[i].venue.name)};                
+                    venue: ("" + json.data[i].venue.name + "\n" + json.data[i].venue.address + ", " + json.data[i].venue.postcode + " Lahti")};                
             }
             
 

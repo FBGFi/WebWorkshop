@@ -88,6 +88,51 @@ export default{
             hasEvents: false
         },
         {
+            address: "Salpausselkä Ski Jumping hills\nSalpausselänkatu 8, 15110 Lahti",
+            information: "Ski jumping venue consisting of three ski jumping hills.",
+            url: "https://www.google.com/maps/place/Salpaussel%C3%A4n+hyppyrim%C3%A4et/@60.9841699,25.6253408,17z/data=!3m1!4b1!4m5!3m4!1s0x468e29fe21b97ead:0xfc9adaf989588580!8m2!3d60.9841699!4d25.6275295",
+            fetchString: "",
+            left: 200,
+            top: 3270,
+            hasEvents: false
+        },
+        {
+            address: "Länsiharju school\nHelsingintie 52, 15700 Lahti",
+            information: "No events added to API yet.",
+            url: "https://www.google.com/maps/place/Helsingintie+52,+15700+Lahti/",
+            fetchString: "",
+            left: 600,
+            top: 4320,
+            hasEvents: false
+        },
+        {
+            address: "Koulutuskeskus Salpaus\nSvinhufvudinkatu 8, 15110 Lahti",
+            information: "No events added to API yet.",
+            url: "https://www.google.com/maps/place/Svinhufvudinkatu+8,+15110+Lahti/",
+            fetchString: "",
+            left: 750,
+            top: 3300,
+            hasEvents: false
+        },
+        {
+            address: "Lahti Lyceum\nLahdenkatu 6, 15110 Lahti",
+            information: "No events added to API yet.",
+            url: "https://www.google.com/maps/place/Lahdenkatu+6,+15110+Lahti/",
+            fetchString: "",
+            left: 1370,
+            top: 3000,
+            hasEvents: false
+        },
+        {
+            address: "Lahti Co-ed school\nKirkkokatu 2, 15110 Lahti",
+            information: "No events added to API yet.",
+            url: "https://www.google.com/maps/place/Kirkkokatu+2,+15110+Lahti/",
+            fetchString: "",
+            left: 1470,
+            top: 3150,
+            hasEvents: false
+        },
+        {
             address: "Lahti Central Plaza\nVapaudenkatu 7, 15110 Lahti",
             information: "Central market place in Lahti, opening ceremony will be held here.",
             url: "https://www.google.com/maps/place/Lahden+kauppatori/@60.9834908,25.6540214,17z/data=!3m1!4b1!4m5!3m4!1s0x468e285397ca32bf:0xd9180acaa46e1193!8m2!3d60.9834908!4d25.6562101",

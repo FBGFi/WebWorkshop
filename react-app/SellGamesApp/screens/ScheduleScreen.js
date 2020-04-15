@@ -164,7 +164,7 @@ const ScheduleScreen = props => {
                     title: ("" + json.data[i].name), 
                     time: ("" + startTimeFix + " - " + endTimeFix),
                     date: ("May " + date + "th, 2020"),
-                    venue: ("" + json.data[i].venue.name)
+                    venue: ("" + json.data[i].venue.name + "\n" + json.data[i].venue.address + ", " + json.data[i].venue.postcode + " Lahti")
                 };
             }
 
